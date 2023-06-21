@@ -1,62 +1,115 @@
-absl-py @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_493uzkifo2/croot/absl-py_1686852448732/work
-aiohttp @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_4c_8pz93lf/croot/aiohttp_1670009562783/work
-aiosignal @ file:///tmp/build/80754af9/aiosignal_1637843061372/work
-astor==0.8.1
-astunparse==1.6.3
-async-timeout @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_19fv27ehgp/croots/recipe/async-timeout_1664876371666/work
-attrs @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_978y9aqcd7/croot/attrs_1668696180911/work
-blinker==1.4
-brotlipy==0.7.0
-cachetools @ file:///tmp/build/80754af9/cachetools_1619597386817/work
-certifi @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_5c4sjwommo/croot/certifi_1683875376620/work/certifi
-cffi @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_ab19r4bji3/croot/cffi_1670423206034/work
-charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
-click @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_croot-quwchbn8/click_1646123324461/work
-coverage @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_a112jw__hp/croot/coverage_1680092732043/work
-cryptography @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_a9zjqvif1f/croot/cryptography_1677533099634/work
-Cython @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_99rc0zwf1n/croot/cython_1686665664022/work
-flatbuffers @ file:///tmp/build/80754af9/python-flatbuffers_1614345733764/work
-frozenlist @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_38d0xkqt7k/croot/frozenlist_1670004509129/work
-gast==0.3.3
-google-auth @ file:///opt/conda/conda-bld/google-auth_1646735974934/work
-google-auth-oauthlib @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_0av74z0qnx/croots/recipe/google-auth-oauthlib_1660687786936/work
-google-pasta @ file:///Users/ktietz/demo/mc3/conda-bld/google-pasta_1630577991354/work
-grpcio @ file:///Users/ktietz/demo/mc3/conda-bld/grpcio_1628724614448/work
-h5py @ file:///Users/runner/miniforge3/conda-bld/h5py_1617739685813/work
-idna @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_771olrhiqw/croot/idna_1666125579282/work
-importlib-metadata @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_84cgjb624t/croot/importlib-metadata_1678997087058/work
-joblib==1.2.0
-Keras-Preprocessing @ file:///tmp/build/80754af9/keras-preprocessing_1612283640596/work
-krb5==0.5.0
-Markdown @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_160njdxnjs/croot/markdown_1671541913695/work
-MarkupSafe @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_12c133f5-0720-4727-9c18-599a3af825723lzwham3/croots/recipe/markupsafe_1654597866058/work
-multidict @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_bd3x0mcjpv/croot/multidict_1665674237951/work
-numpy @ file:///Users/ktietz/demo/mc3/conda-bld/numpy_1629115584384/work
-oauthlib @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_5cxgjn8mz4/croot/oauthlib_1679489641676/work
-opt-einsum @ file:///tmp/build/80754af9/opt_einsum_1621500238896/work
-protobuf==3.15.8
-pyasn1 @ file:///Users/ktietz/demo/mc3/conda-bld/pyasn1_1629708007385/work
-pyasn1-modules==0.2.8
-pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
-PyJWT @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_83311740-c3bc-48a8-9688-62d7e2d625f5s6jo920w/croots/recipe/pyjwt_1657544592579/work
-pyOpenSSL @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_38h4axtq38/croot/pyopenssl_1677607699670/work
-PySocks @ file:///Users/ktietz/Code/oss/ci_pkgs/pysocks_1626781349491/work
-requests @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_37wt8ycste/croot/requests_1682607533309/work
-requests-oauthlib==1.3.0
-rsa @ file:///tmp/build/80754af9/rsa_1614366226499/work
-scikit-learn==0.24.1
-scipy @ file:///Users/runner/miniforge3/conda-bld/scipy_1633645172612/work
-six @ file:///tmp/build/80754af9/six_1644875935023/work
-tensorboard @ file:///home/builder/ktietz/aggregate/tensorflow_recipes/ci_te/tensorboard_1614593728657/work/tmp_pip_dir
-tensorboard-plugin-wit @ file:///Users/lundby/miniconda3/envs/tensorflow_build_osx/conda-bld/tensorboard-plugin-wit_1685213377990/work/tensorboard_plugin_wit-1.8.1-py3-none-any.whl
-tensorflow @ file:///Users/uwe/mambaforge/conda-bld/tensorflow-split_1617948182924/work/tensorflow_pkg/tensorflow-2.4.0-cp38-cp38-macosx_11_0_arm64.whl
-tensorflow-estimator @ file:///home/conda/feedstock_root/build_artifacts/tensorflow-estimator_1610655765755/work/tensorflow_estimator-2.4.0-py2.py3-none-any.whl
-termcolor @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_38l403w1_s/croot/termcolor_1668084649802/work
-threadpoolctl==3.1.0
-tomli @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_d0e5ffbf-5cf1-45be-8693-c5dff8108a2awhthtjlq/croots/recipe/tomli_1657175508477/work
-typing_extensions @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_41_yntae63/croot/typing_extensions_1686601680082/work
-urllib3 @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_e9usuw__8i/croot/urllib3_1686166332689/work
-Werkzeug @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_fc9kcczuwd/croot/werkzeug_1679489745296/work
-wrapt @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_37a5af2b-c563-4ec6-9258-35772bae6a6agcs4j3hx/croots/recipe/wrapt_1657814428573/work
-yarl @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_a5sx8bz_hq/croots/recipe/yarl_1661437083380/work
-zipp @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_8cv5zqoqed/croot/zipp_1672387131277/work
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+@EXPLICIT
+https://repo.anaconda.com/pkgs/main/linux-64/_libgcc_mutex-0.1-main.conda
+https://repo.anaconda.com/pkgs/main/linux-64/blas-1.0-openblas.conda
+https://repo.anaconda.com/pkgs/main/linux-64/ca-certificates-2023.05.30-h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/ld_impl_linux-64-2.38-h1181459_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libgfortran5-11.2.0-h1234567_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libstdcxx-ng-11.2.0-h1234567_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libgfortran-ng-11.2.0-h00389a5_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libgomp-11.2.0-h1234567_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/_openmp_mutex-5.1-1_gnu.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libgcc-ng-11.2.0-h1234567_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/abseil-cpp-20200923.3-h2531618_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/c-ares-1.19.0-h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/giflib-5.2.1-h5eee18b_3.conda
+https://repo.anaconda.com/pkgs/main/linux-64/jpeg-9e-h5eee18b_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libev-4.33-h7f8727e_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libffi-3.4.4-h6a678d5_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libopenblas-0.3.21-h043d6bf_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/ncurses-6.4-h6a678d5_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/openssl-1.1.1u-h7f8727e_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/re2-2020.11.01-h2531618_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/snappy-1.1.9-h295c915_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/tbb-2021.8.0-hdb19cb5_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/xz-5.4.2-h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/zlib-1.2.13-h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/hdf5-1.10.6-h3ffc7dd_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/intel-openmp-2023.1.0-hdb19cb5_46305.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libedit-3.1.20221030-h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libnghttp2-1.52.0-ha637b67_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libpng-1.6.39-h5eee18b_0.conda
+https://conda.anaconda.org/conda-forge/linux-64/libprotobuf-3.15.8-h780b84a_1.tar.bz2
+https://repo.anaconda.com/pkgs/main/linux-64/libssh2-1.10.0-h37d81fd_2.conda
+https://repo.anaconda.com/pkgs/main/linux-64/readline-8.2-h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/tk-8.6.12-h1ccaba5_0.conda
+https://conda.anaconda.org/conda-forge/linux-64/grpc-cpp-1.36.4-h7919d58_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/linux-64/krb5-1.20.1-h568e23c_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/mkl-2023.1.0-h6d00ec8_46342.conda
+https://repo.anaconda.com/pkgs/main/linux-64/sqlite-3.41.2-h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/libcurl-8.1.1-h91b91d3_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/python-3.8.16-h7a1cb2a_3.conda
+https://repo.anaconda.com/pkgs/main/linux-64/absl-py-1.4.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/appdirs-1.4.4-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/astor-0.8.1-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/async-timeout-4.0.2-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/attrs-22.1.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/blinker-1.4-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/cachetools-4.2.2-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/certifi-2023.5.7-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/charset-normalizer-2.0.4-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/click-8.0.4-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/cython-0.29.35-py38h6a678d5_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/frozenlist-1.3.3-py38h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/gast-0.3.3-py_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/idna-3.4-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/joblib-1.2.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/markupsafe-2.1.1-py38h7f8727e_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/mkl-service-2.4.0-py38h5eee18b_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/multidict-6.0.2-py38h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/numpy-base-1.20.1-py38h34387ca_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/packaging-23.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/pyasn1-0.4.8-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/pycparser-2.21-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/pyjwt-2.4.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/pysocks-1.7.1-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/python-flatbuffers-1.12-pyhd3eb1b0_0.conda
+https://conda.anaconda.org/conda-forge/linux-64/python_abi-3.8-2_cp38.tar.bz2
+https://repo.anaconda.com/pkgs/main/linux-64/setuptools-67.8.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/six-1.16.0-pyhd3eb1b0_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/termcolor-2.1.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/threadpoolctl-2.2.0-pyh0d69192_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/tomli-2.0.1-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/tqdm-4.59.0-pyhd3eb1b0_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/typing_extensions-4.6.3-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/wheel-0.38.4-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/wrapt-1.14.1-py38h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/zipp-3.11.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/aiosignal-1.2.0-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/astunparse-1.6.3-py_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/cffi-1.15.1-py38h5eee18b_3.conda
+https://repo.anaconda.com/pkgs/main/linux-64/coverage-7.2.2-py38h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/google-pasta-0.2.0-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/importlib-metadata-6.0.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/numpy-1.20.1-py38h5a90a98_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/pip-23.1.2-py38h06a4308_0.conda
+https://conda.anaconda.org/conda-forge/linux-64/protobuf-3.15.8-py38h709712a_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/noarch/pyasn1-modules-0.2.8-py_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/rsa-4.7.2-pyhd3eb1b0_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/tensorboard-plugin-wit-1.8.1-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/werkzeug-2.2.3-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/yarl-1.8.1-py38h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/aiohttp-3.8.3-py38h5eee18b_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/brotlipy-0.7.0-py38h27cfd23_1003.conda
+https://repo.anaconda.com/pkgs/main/linux-64/cryptography-39.0.1-py38h9ce1e76_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/grpcio-1.36.1-py38h2157cd5_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/h5py-2.10.0-py38hd6299e0_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/markdown-3.4.1-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/opt_einsum-3.3.0-pyhd3eb1b0_1.conda
+https://repo.anaconda.com/pkgs/main/linux-64/oauthlib-3.2.2-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/pyopenssl-23.0.0-py38h06a4308_0.conda
+https://conda.anaconda.org/conda-forge/noarch/tensorflow-estimator-2.4.0-pyh9656e83_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/linux-64/urllib3-1.26.16-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/requests-2.29.0-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/google-auth-2.6.0-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/pooch-1.4.0-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/requests-oauthlib-1.3.0-py_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/google-auth-oauthlib-0.5.2-py38h06a4308_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/scipy-1.10.1-py38h32ae08f_1.conda
+https://repo.anaconda.com/pkgs/main/noarch/keras-preprocessing-1.1.2-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/linux-64/scikit-learn-0.24.1-py38ha9443f7_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/tensorboard-2.4.0-pyhc547734_0.conda
+https://conda.anaconda.org/conda-forge/linux-64/tensorflow-base-2.4.0-py38h01d9eeb_0.tar.bz2
+https://conda.anaconda.org/conda-forge/linux-64/tensorflow-2.4.0-py38h578d9bd_0.tar.bz2
