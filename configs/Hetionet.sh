@@ -15,5 +15,5 @@ max_num_actions=400
 train_entity_embeddings=1
 use_entity_embeddings=1
 num_rollouts=30
-load_model=1
-model_load_path="/home/ubuntu/PoLo/models/Hetionet/model.ckpt"
+load_model=0
+model_load_path="./models/Hetionet/model.ckpt"
