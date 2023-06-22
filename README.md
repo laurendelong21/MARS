@@ -14,9 +14,9 @@ The dependencies are specified in [requirements.txt](requirements.txt) as well a
 **Note**: The Hetionet graph is split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
 These two files **need to be combined into one file** (with the name ```graph.txt```) before running the code.
 
-To do this, you have to create a blank file called ```graph.txt```:
+To do this, you have to create a file called ```graph.txt```, as explained above:
 ```
-touch datasets/Hetionet/graph.txt
+cat datasets/Hetionet/graph_triples.txt datasets/Hetionet/graph_inverses.txt > datasets/Hetionet/graph.txt
 ```
 
 Then, change the permissions of the ```run.sh``` file:
