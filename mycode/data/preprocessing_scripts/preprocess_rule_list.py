@@ -2,6 +2,12 @@ import re
 import json
 
 
+"""This script processes pre-computed rules for the WordNet dataset only
+
+    The pre-processed rules, rules-1000, are not in this repo...
+"""
+
+
 def get_rule_paths(rules):
     """
     Preprocess the rule list so that each rule can be described by a path in the graph.
