@@ -1,11 +1,15 @@
 import numpy as np
 
+"""Script containing functions to check whether metapaths match with rules, and 
+    modify the reward accordingly
+"""
 
 def prepare_argument(argument, string='NO_OP'):
     body = argument[::2]  # Remove all entities and keep relations
+    # TODO: what does NO_OP mean?
     str_idx = [i for i, x in enumerate(body) if x == string]  # Find NO_OPs
     body = [element for i, element in enumerate(body) if i not in str_idx]  # Remove NO_OPs
-    return body, argument[-1]
+    return body, argument[-1]  # return relation sequence, last entity
 
 
 def check_rule(body, obj, obj_string, rule, only_body):
