@@ -489,6 +489,7 @@ class Trainer(object):
             obj_string = np.array([self.rev_entity_vocab[x] for x in episode.get_query_objects()])
 
             rewards = episode.get_rewards()
+            # Here, they modify the rewards to take into account whether it fits rules.
             rewards, rule_count, rule_count_body = modify_rewards(self.rule_list, arguments, query_rel_string,
                                                                   obj_string, self.rule_base_reward, rewards,
                                                                   self.only_body)

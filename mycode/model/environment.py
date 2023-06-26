@@ -2,6 +2,7 @@ import numpy as np
 from mycode.data.grapher import RelationEntityGrapher
 from mycode.data.feed_data import RelationEntityBatcher
 
+"""Script which defines an episode in which the agent tries to find paths"""
 
 class Episode(object):
     def __init__(self, graph, data, params):
@@ -42,6 +43,9 @@ class Episode(object):
         return self.end_entities
 
     def get_rewards(self):
+        """ Returns a rewards list which contains positive values where it found the
+            final entity, and negative rewards where it did not
+        """
         rewards = (self.current_entities == self.end_entities)
         # Set the True and False values to the values of positive and negative rewards
         condlist = [rewards == True, rewards == False]
