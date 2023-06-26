@@ -5,6 +5,7 @@ from mycode.data.feed_data import RelationEntityBatcher
 """Script which defines an episode in which the agent tries to find paths"""
 
 class Episode(object):
+    """Object defining the span of the agent trying to find a path 20-30 times"""
     def __init__(self, graph, data, params):
         self.grapher = graph
         self.batch_size, self.path_len, num_rollouts, test_rollouts, positive_reward, negative_reward, mode, \
@@ -17,8 +18,10 @@ class Episode(object):
         self.current_hop = 0
         self.positive_reward = positive_reward
         self.negative_reward = negative_reward
+        # e1s, all relations, e2s, and a mapping from e2s back to all possible source nodes
         start_entities, query_relation,  end_entities, all_answers = data
         self.no_examples = start_entities.shape[0]
+        # below creates arrays of all things where it is like [1,1,1,2,2,2,...]
         self.start_entities = np.repeat(start_entities, self.rollouts)
         self.query_relations = np.repeat(query_relation, self.rollouts)
         self.end_entities = np.repeat(end_entities, self.rollouts)
@@ -54,11 +57,13 @@ class Episode(object):
         return rewards
 
     def __call__(self, action):
+        """The function which updates the state of the agent based on each hop"""
         self.current_hop += 1
         self.current_entities = self.states['next_entities'][np.arange(self.no_examples * self.rollouts), action]
         next_actions = self.grapher.return_next_actions(self.current_entities, self.start_entities,
                                                         self.query_relations, self.end_entities, self.all_answers,
                                                         self.current_hop == self.path_len - 1, self.rollouts)
+        # update the states
         self.states['next_relations'] = next_actions[:, :, 1]
         self.states['next_entities'] = next_actions[:, :, 0]
         self.states['current_entities'] = self.current_entities

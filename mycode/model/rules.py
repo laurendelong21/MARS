@@ -28,14 +28,15 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     """Modifies the rewards according to whether the metapath corresponds to a rule
     :param rule_list: 2D array containing rules and corresponding confidences 
     :param arguments:
-    :param query_rel_string: the relation being queried, and its string representation
-    :param obj_string: the path the agent found
+    :param query_rel_string: all possible relations from each entity
+    :param obj_string: all possible entities 
     :param rule_base_reward: the reward value assigned for getting a matching path
     :param rewards: array containing rewards for each entity
     """
     rule_count = 0
     rule_count_body = 0
     for k in range(len(obj_string)):
+        # get all of the relations from k
         query_rel = query_rel_string[k]
         if query_rel in rule_list:
             rel_rules = rule_list[query_rel]

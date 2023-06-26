@@ -37,6 +37,7 @@ class Trainer(object):
         self.test_environment = self.dev_test_environment
         self.rev_entity_vocab = self.train_environment.grapher.rev_entity_vocab
         self.rev_relation_vocab = self.train_environment.grapher.rev_relation_vocab
+        # load in the rules and corresponding confidences
         self.rule_list_dir = self.input_dir + self.rule_file
         with open(self.rule_list_dir, 'r') as file:
             self.rule_list = json.load(file)
@@ -462,9 +463,12 @@ class Trainer(object):
         train_loss = 0.0
         self.batch_counter = 0
 
+        # for each batch / episode
         for episode in self.train_environment.get_episodes():
             self.batch_counter += 1
+            # parallelization
             h = sess.partial_run_setup(fetches=fetches, feeds=feeds)
+            # get all the next relations from query
             feed_dict[0][self.query_relations] = episode.get_query_relations()
             states = episode.get_states()
 
@@ -479,17 +483,24 @@ class Trainer(object):
 
                 rel = np.copy(states['next_relations'][np.arange(states['next_relations'].shape[0]), actions_idx])
                 ent = np.copy(states['next_entities'][np.arange(states['next_entities'].shape[0]), actions_idx])
+                # get the names of the relations and entities from the IDs
                 rel_string = np.array([self.rev_relation_vocab[x] for x in rel])
                 ent_string = np.array([self.rev_entity_vocab[x] for x in ent])
+                # rel_string and ent_string are actually lists of possibilities from the current state
                 arguments.append(rel_string)
                 arguments.append(ent_string)
+                # get the next set of states
                 states = episode(actions_idx)
 
+            # all relations
             query_rel_string = np.array([self.rev_relation_vocab[x] for x in episode.get_query_relations()])
+            # all source nodes
             obj_string = np.array([self.rev_entity_vocab[x] for x in episode.get_query_objects()])
 
+            # positive or negative reward values per starting node
             rewards = episode.get_rewards()
             # Here, they modify the rewards to take into account whether it fits rules.
+            # TODO: modify self.rule_list with new confidences each iteration
             rewards, rule_count, rule_count_body = modify_rewards(self.rule_list, arguments, query_rel_string,
                                                                   obj_string, self.rule_base_reward, rewards,
                                                                   self.only_body)
