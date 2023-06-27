@@ -108,6 +108,9 @@ class Agent(object):
 
     def __call__(self, candidate_relation_sequence, candidate_entity_sequence, current_entities,
                  query_relations, range_arr, path_length):
+        """Calls the agent to action, returns the final loss, logits (scores for action sequences), and 
+            the corresponding actions sequences
+        """
         query_embeddings = tf.compat.v1.nn.embedding_lookup(params=self.relation_lookup_table, ids=query_relations)
         states = self.policy_step.zero_state(batch_size=self.batch_size, dtype=tf.float32)
         prev_relations = self.dummy_start_labels
@@ -122,6 +125,8 @@ class Agent(object):
                 next_possible_relations = candidate_relation_sequence[t]
                 next_possible_entities = candidate_entity_sequence[t]
                 current_entities_t = current_entities[t]
+                
+                # for each hop in the path length, the agent should take a step
                 loss, logits, new_states, idx, chosen_relations = self.step(
                     next_possible_relations, next_possible_entities, current_entities_t, states, prev_relations,
                     query_embeddings, range_arr)

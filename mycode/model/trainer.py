@@ -30,6 +30,7 @@ class Trainer(object):
         for k, v in params.items():
             setattr(self, k, v)
         self.set_random_seeds(self.seed)
+        # the trainer initializes an agent
         self.agent = Agent(params)
         self.train_environment = Env(params, 'train')
         self.dev_test_environment = Env(params, 'dev')
@@ -53,6 +54,7 @@ class Trainer(object):
             np.random.seed(seed)
 
     def calc_reinforce_loss(self):
+        # self.per_example_loss is returned by calling the agent in the initialize function
         loss = tf.stack(self.per_example_loss, axis=1)
         self.tf_baseline = self.baseline.get_baseline_value()
 
@@ -83,7 +85,12 @@ class Trainer(object):
         self.cum_discounted_rewards = tf.compat.v1.placeholder(tf.float32, [None, self.path_length],
                                                                name='cumulative_discounted_rewards')
 
+        # NOTE: params like path_length and max_num_actions come from the user-specified configs
         for t in range(self.path_length):
+            # here, we create lists of lengths self.path_length which include tensors storing next actions, 
+                # and the entities which the agent traversed
+
+            # here, we make tensors which are capped at the max branching factor
             next_possible_relations = tf.compat.v1.placeholder(tf.int32, [None, self.max_num_actions],
                                                                name='next_relations_{}'.format(t))
             next_possible_entities = tf.compat.v1.placeholder(tf.int32, [None, self.max_num_actions],
@@ -92,6 +99,8 @@ class Trainer(object):
             self.candidate_relation_sequence.append(next_possible_relations)
             self.candidate_entity_sequence.append(next_possible_entities)
             self.entity_sequence.append(start_entities)
+        
+        # here, the agent populates those lists and returns the final loss, scores, and action sequences
         self.per_example_loss, self.per_example_logits, self.actions_idx = self.agent(
             self.candidate_relation_sequence, self.candidate_entity_sequence, self.entity_sequence,
             self.query_relations, self.range_arr, self.path_length)

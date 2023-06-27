@@ -97,9 +97,9 @@ class RelationEntityBatcher(object):
             batch_idx = np.random.randint(0, self.store.shape[0], size=self.batch_size)
             # get the triples in this batch
             batch = self.store[batch_idx, :]
-            e1 = batch[:, 0]
-            r = batch[:, 1]
-            e2 = batch[:, 2]
+            e1 = batch[:, 0]  # the 0th element of each nested list
+            r = batch[:, 1]  # the 1st element of each nested list
+            e2 = batch[:, 2]  # the 2nd element of each nested list
             all_e2s = []
             for i in range(e1.shape[0]):
                 all_e2s.append(self.store_all_correct[(e1[i], r[i])])

@@ -72,20 +72,26 @@ class RelationEntityGrapher(object):
         """Using the matrices in self.array_store, return the actions that could be taken
             by the agent from a given node.
         :param current_entities: a list of the entities which the agent is currently considering
-        :param start_entities: a list of the entities which the agent began with
-        :param query_relations: a dictionary?
-        :param answers: another dictionary
-        :param all_correct_answers:
-        :param is_last_step:
+        :param start_entities: an array containing all the source nodes within the data batch triples
+        :param query_relations: an array containing all relations within the data batch triples
+        :param answers: an array containing all the sink nodes within the data batch triples
+        :param all_correct_answers: a mapping from sink nodes (keys) to tuples of source nodes and relations from which they are reachable
+        :param is_last_step: boolean indicating whether it's the max path length
         """
         # get only the connections from the entities currently being considered
         ret = self.array_store[current_entities, :, :].copy()
         for i in range(current_entities.shape[0]):
-            # if we haven't traversed that node yet, 
+            # if we still have any beginning nodes:
             if current_entities[i] == start_entities[i]:
+                # get the entities and relations which are accessible from that entity in the KG
                 entities = ret[i, :, 0]
                 relations = ret[i, :, 1]
+                # identify the connections in the batch and mask them 
+                print(entities)
+                print(query_relations[i])
                 mask = np.logical_and(relations == query_relations[i], entities == answers[i])
+                print("PRINTING MASK")
+                print(mask)
                 ret[i, :, 0][mask] = self.ePAD
                 ret[i, :, 1][mask] = self.rPAD
             if is_last_step:

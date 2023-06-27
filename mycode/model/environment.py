@@ -7,6 +7,15 @@ from mycode.data.feed_data import RelationEntityBatcher
 class Episode(object):
     """Object defining the span of the agent trying to find a path 20-30 times"""
     def __init__(self, graph, data, params):
+        """Initializes Episode object
+        :param graph: the KG, made from the grapher module (RelationEntityGrapher)
+        :param data: a 4-part tuple from RelationEntityBatcher containing
+            - e1: a list of source nodes taking part in batch triples
+            - r: a list of all relations taking part in batch triples
+            - e2: a list of sink nodes taking part in batch triples
+            - all_answers: a mapping from sink nodes (keys) to tuples of source nodes and relations from which they are reachable
+        :param params: user specified configs
+        """
         self.grapher = graph
         self.batch_size, self.path_len, num_rollouts, test_rollouts, positive_reward, negative_reward, mode, \
         batcher = params
@@ -21,10 +30,11 @@ class Episode(object):
         # e1s, all relations, e2s, and a mapping from e2s back to all possible source nodes
         start_entities, query_relation,  end_entities, all_answers = data
         self.no_examples = start_entities.shape[0]
-        # below creates arrays of all things where it is like [1,1,1,2,2,2,...]
+        # below creates arrays of all things where it is like [1,1,1,2,2,2,...] which repeats with the num rollouts
         self.start_entities = np.repeat(start_entities, self.rollouts)
         self.query_relations = np.repeat(query_relation, self.rollouts)
         self.end_entities = np.repeat(end_entities, self.rollouts)
+        # starts as the same as start entities, but updates in the call
         self.current_entities = np.repeat(start_entities, self.rollouts)
         self.all_answers = all_answers
 
