@@ -84,11 +84,12 @@ class RelationEntityGrapher(object):
             # if we still have any beginning nodes:
             if current_entities[i] == start_entities[i]:
                 # get the entities and relations which are accessible from that entity in the KG
-                entities = ret[i, :, 0]
-                relations = ret[i, :, 1]
+                entities = ret[i, :, 0]  # vector of sink nodes connected to i
+                relations = ret[i, :, 1]  # vector of relations connected to i
                 # identify the connections in the batch and mask them 
-                print(entities)
+                print(relations)
                 print(query_relations[i])
+                # mask is a vector of boolean indications
                 mask = np.logical_and(relations == query_relations[i], entities == answers[i])
                 print("PRINTING MASK")
                 print(mask)
