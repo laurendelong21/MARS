@@ -87,14 +87,18 @@ class RelationEntityGrapher(object):
                 entities = ret[i, :, 0]  # vector of sink nodes connected to i
                 relations = ret[i, :, 1]  # vector of relations connected to i
                 # identify the connections in the batch and mask them 
-                print(relations)
-                print(query_relations[i])
+                #print(relations)
+                #print(query_relations[i])
                 # mask is a vector of boolean indications
                 mask = np.logical_and(relations == query_relations[i], entities == answers[i])
                 print("PRINTING MASK")
                 print(mask)
+                print("ret before mask")
+                print(ret[i, :, 1])
                 ret[i, :, 0][mask] = self.ePAD
                 ret[i, :, 1][mask] = self.rPAD
+                print("ret after mask")
+                print(ret[i, :, 1])
             if is_last_step:
                 entities = ret[i, :, 0]
                 correct_e2 = answers[i]
