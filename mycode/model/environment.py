@@ -38,6 +38,7 @@ class Episode(object):
         self.current_entities = np.repeat(start_entities, self.rollouts)
         self.all_answers = all_answers
 
+        # this returns the self.array_store from grapher which tells us all next possible moves
         next_actions = self.grapher.return_next_actions(self.current_entities, self.start_entities,
                                                         self.query_relations, self.end_entities, self.all_answers,
                                                         self.current_hop == self.path_len - 1, self.rollouts)
