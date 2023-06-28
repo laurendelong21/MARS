@@ -545,6 +545,8 @@ class Trainer(object):
             if self.batch_counter % self.eval_every == 0:
                 with open(self.output_dir + 'scores.txt', 'a') as score_file:
                     score_file.write('Scores for iteration ' + str(self.batch_counter) + '\n')
+                #with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
+                #    rule_fl.write('Scores for iteration ' + str(self.batch_counter) + '\n')
                 paths_log_dir = self.output_dir + str(self.batch_counter) + '/'
                 os.makedirs(paths_log_dir)
                 self.paths_log = paths_log_dir + 'paths'
@@ -694,6 +696,9 @@ class Trainer(object):
                                         final_metrics_rule_head, final_metrics_tail, final_metrics_rule_tail,
                                         test_rule_count_body, test_rule_count, num_query_with_rules,
                                         num_query_with_rules_correct, total_examples)
+            
+        with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
+            rule_fl.write(self.rule_list)
 
         metrics = ['Hits@1', 'Hits@3', 'Hits@5', 'Hits@10', 'Hits@20', 'MRR']
         for i in range(len(metrics)):
