@@ -512,9 +512,9 @@ class Trainer(object):
             rewards = episode.get_rewards()
             # Here, they modify the rewards to take into account whether it fits rules.
             # TODO: modify self.rule_list with new confidences each iteration
-            rewards, rule_count, rule_count_body = modify_rewards(self.rule_list, arguments, query_rel_string,
-                                                                  obj_string, self.rule_base_reward, rewards,
-                                                                  self.only_body)
+            rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(self.rule_list, arguments, query_rel_string,
+                                                                            obj_string, self.rule_base_reward, rewards,
+                                                                            self.only_body)
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
             # Backpropagation

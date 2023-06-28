@@ -4,6 +4,15 @@ import numpy as np
     modify the reward accordingly
 """
 
+def adjust_conf_score(score: float, alpha: float = 0.1):
+    """Adjust the confidence score to incrementally increase
+    :param score: the confidence score to increment
+    :param alpha: adjustable parameter to change the increment
+    """
+    new_score = alpha * (1 - score)
+    return new_score
+
+
 def prepare_argument(argument, string='NO_OP'):
     """ Takes a path and returns the relation sequence, last entity"""
     body = argument[::2]  # Remove all entities and keep relations
@@ -51,7 +60,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                     add_reward = rule_base_reward * float(rel_rules[j][0])  # the 0th element is the confidence
                     rewards[k] += add_reward
                     # now adjust that confidence score
-                    rule_list[query_rel][j][0] = str(float(rel_rules[j][0]) * 1.02)
+                    rule_list[query_rel][j][0] = str(adjust_conf_score(float(rel_rules[j][0])))
                     break
             for j in range(len(rel_rules)):
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=True):
@@ -59,4 +68,4 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                     if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):
                         rule_count += 1
                     break
-    return rewards, rule_count, rule_count_body
+    return rewards, rule_count, rule_count_body, rule_list
