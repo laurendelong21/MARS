@@ -698,7 +698,7 @@ class Trainer(object):
                                         num_query_with_rules_correct, total_examples)
             
         with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
-            rule_fl.write(self.rule_list)
+            json.dump(self.rule_list, rule_fl)
 
         metrics = ['Hits@1', 'Hits@3', 'Hits@5', 'Hits@10', 'Hits@20', 'MRR']
         for i in range(len(metrics)):
