@@ -39,6 +39,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
         # get all of the relations from k
         query_rel = query_rel_string[k]
         if query_rel in rule_list:
+            # get all rules in which that query_rel is the head
             rel_rules = rule_list[query_rel]
             argument_temp = [arguments[i][k] for i in range(len(arguments))]
             # separate into relaiton sequence, last entity
@@ -47,8 +48,10 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             # the rule added corresponds to the metapath confidence
             for j in range(len(rel_rules)):
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body):
-                    add_reward = rule_base_reward * float(rel_rules[j][0])
+                    add_reward = rule_base_reward * float(rel_rules[j][0])  # the 0th element is the confidence
                     rewards[k] += add_reward
+                    # now adjust that confidence score
+                    rule_list[query_rel][j][0] = str(float(rel_rules[j][0]) * 1.02)
                     break
             for j in range(len(rel_rules)):
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=True):
