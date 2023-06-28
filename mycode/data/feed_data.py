@@ -4,7 +4,7 @@ import numpy as np
 from collections import defaultdict
 
 
-"""The data loader script"""
+"""The data loader script which separates the indication triples into training and test datasets"""
 
 
 class RelationEntityBatcher(object):

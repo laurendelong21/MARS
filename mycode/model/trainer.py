@@ -105,7 +105,9 @@ class Trainer(object):
             self.candidate_relation_sequence, self.candidate_entity_sequence, self.entity_sequence,
             self.query_relations, self.range_arr, self.path_length)
 
+        # calculate the final loss, including rewards
         self.loss_op = self.calc_reinforce_loss()
+        # TODO: no idea what this is
         self.train_op = self.bp(self.loss_op)
 
         # Building the test graph

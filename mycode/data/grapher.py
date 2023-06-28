@@ -3,7 +3,9 @@ import numpy as np
 from collections import defaultdict
 
 
-"""The script responsible for generating the graph structure and next steps"""
+"""The script responsible for generating the graph structure and next steps, 
+but for each step, ensures to mask the connections representing the true answers so there is no cheating
+"""
 
 
 class RelationEntityGrapher(object):
