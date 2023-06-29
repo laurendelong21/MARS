@@ -556,8 +556,12 @@ class Trainer(object):
             gc.collect()
 
             if self.early_stopping:
+                with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
+                    json.dump(self.rule_list, rule_fl)
                 break
             if self.batch_counter >= self.total_iterations:
+                with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
+                    json.dump(self.rule_list, rule_fl)
                 break
 
     def test(self, sess, print_paths=False, save_model=True, beam=True):
@@ -696,9 +700,6 @@ class Trainer(object):
                                         final_metrics_rule_head, final_metrics_tail, final_metrics_rule_tail,
                                         test_rule_count_body, test_rule_count, num_query_with_rules,
                                         num_query_with_rules_correct, total_examples)
-            
-        with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
-            json.dump(self.rule_list, rule_fl)
 
         metrics = ['Hits@1', 'Hits@3', 'Hits@5', 'Hits@10', 'Hits@20', 'MRR']
         for i in range(len(metrics)):
