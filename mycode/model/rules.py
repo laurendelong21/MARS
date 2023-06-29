@@ -60,7 +60,9 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                     add_reward = rule_base_reward * float(rel_rules[j][0])  # the 0th element is the confidence
                     rewards[k] += add_reward
                     # now adjust that confidence score
+                    print(f"Old conf score is: {rule_list[query_rel][j][0]}")
                     rule_list[query_rel][j][0] = str(adjust_conf_score(float(rel_rules[j][0])))
+                    print(f"New conf score is: {rule_list[query_rel][j][0]}")
                     break
             for j in range(len(rel_rules)):
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=True):
