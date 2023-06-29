@@ -4,7 +4,7 @@ import numpy as np
     modify the reward accordingly
 """
 
-def adjust_conf_score(score: float, alpha: float = 0.1):
+def adjust_conf_score(score: float, alpha: float = 0.01):
     """Adjust the confidence score to incrementally increase
     :param score: the confidence score to increment
     :param alpha: adjustable parameter to change the increment
