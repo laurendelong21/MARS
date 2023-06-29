@@ -9,7 +9,7 @@ def adjust_conf_score(score: float, alpha: float = 0.1):
     :param score: the confidence score to increment
     :param alpha: adjustable parameter to change the increment
     """
-    new_score = alpha * (1 - score)
+    new_score = score + (alpha * (1 - score))
     return new_score
 
 
