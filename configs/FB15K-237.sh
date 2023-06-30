@@ -1,7 +1,7 @@
 input_dir="datasets/FB15k-237/"
 base_output_dir="output/FB15k-237/"
-total_iterations=5000
-eval_every=200
+total_iterations=100
+eval_every=20
 patience=3
 rule_base_reward=3
 only_body=1
