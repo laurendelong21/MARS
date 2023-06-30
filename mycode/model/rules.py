@@ -72,7 +72,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                     if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):
                         rule_count += 1
                     break
-    #new_rule_lst = rule_list
+    new_rule_lst = rule_list
     print("are old and new rule lists same?")
-    print(old_rule_lst == rule_list)
+    print(old_rule_lst == new_rule_lst)
     return rewards, rule_count, rule_count_body, rule_list
