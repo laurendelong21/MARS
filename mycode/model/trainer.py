@@ -11,6 +11,7 @@ import numpy as np
 from tqdm import tqdm
 from pprint import pprint
 from collections import defaultdict
+from copy import deepcopy
 from scipy.special import logsumexp as lse
 from sklearn.model_selection import ParameterGrid
 from mycode.options import read_options
@@ -512,14 +513,14 @@ class Trainer(object):
             rewards = episode.get_rewards()
             # Here, they modify the rewards to take into account whether it fits rules.
             # TODO: modify self.rule_list with new confidences each iteration
-            #old_rl_list = self.rule_list
+            old_rl_list = deepcopy(self.rule_list)
             rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(self.rule_list, arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
                                                                             self.only_body)
             
             #new_rl_list = self.rule_list
-            #print("Does old rule list match new?")
-            #print(old_rl_list == new_rl_list)
+            print("Does old rule list match new?")
+            print(old_rl_list == self.rule_list)
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
             # Backpropagation
