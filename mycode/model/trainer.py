@@ -478,7 +478,7 @@ class Trainer(object):
         # for each batch / episode
         for episode in self.train_environment.get_episodes():
             print('Confidence we are monitoring:')
-            print(self.rule_list['_/location/location/contains'][1][0])
+            print(self.rule_list['/base/aareas/schema/administrative_area/administrative_parent'][3][0])
             self.batch_counter += 1
             # parallelization
             h = sess.partial_run_setup(fetches=fetches, feeds=feeds)
