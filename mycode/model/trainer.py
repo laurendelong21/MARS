@@ -522,6 +522,9 @@ class Trainer(object):
             
             print("Does old rule list match new?")
             print(old_rl_list == self.rule_list)
+            with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
+                    json.dump(self.rule_list, rule_fl)
+
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
             # Backpropagation
@@ -548,9 +551,6 @@ class Trainer(object):
             logger.info('rule_count_correct: {0}/{1} = {2:6.4f}'.format(
                 rule_count, self.batch_size * self.num_rollouts,
                 rule_count / (self.batch_size * self.num_rollouts)))
-            
-            with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
-                    json.dump(self.rule_list, rule_fl)
 
             if self.batch_counter % self.eval_every == 0:
                 with open(self.output_dir + 'scores.txt', 'a') as score_file:
