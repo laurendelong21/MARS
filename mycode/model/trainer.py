@@ -477,6 +477,8 @@ class Trainer(object):
 
         # for each batch / episode
         for episode in self.train_environment.get_episodes():
+            print('Confidence we are monitoring:')
+            print(self.rule_list['/film/film_distributor/films_distributed./film/film_film_distributor_relationship/film'][3][0])
             self.batch_counter += 1
             # parallelization
             h = sess.partial_run_setup(fetches=fetches, feeds=feeds)
