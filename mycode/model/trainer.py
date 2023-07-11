@@ -476,6 +476,7 @@ class Trainer(object):
         self.batch_counter = 0
 
         # for each batch / episode
+        # TODO: understand why the trainer starts with old scores each time
         for episode in self.train_environment.get_episodes():
             print('Confidence we are monitoring:')
             print(self.rule_list['/base/aareas/schema/administrative_area/administrative_parent'][3][0])
@@ -514,7 +515,6 @@ class Trainer(object):
             # positive or negative reward values per starting node
             rewards = episode.get_rewards()
             # Here, they modify the rewards to take into account whether it fits rules.
-            # TODO: modify self.rule_list with new confidences each iteration
             old_rl_list = deepcopy(self.rule_list)
             rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(self.rule_list, arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
