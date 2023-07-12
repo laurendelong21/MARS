@@ -24,6 +24,15 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
+If you're having operating system conflicts (typically due to `pracmln` installation), use the Docker image:
+
+```
+docker build -t laurendelong21/internship:0 - < Dockerfile
+
+docker run --rm -it -v $(pwd) laurendelong21/internship:0
+
+```
+
 To run PoLo, use one of the config files or create your own. For an explanation of each hyperparameter, refer to the [README file in the configs folder](configs/README.md).
 
 **Note**: The Hetionet graph is split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
