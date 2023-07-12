@@ -550,8 +550,8 @@ class Trainer(object):
                 with open(self.output_dir + 'scores.txt', 'a') as score_file:
                     score_file.write('Scores for iteration ' + str(self.batch_counter) + '\n')
                 # NOTE: outputting confidence values here
-                with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
-                    json.dump(self.rule_list, rule_fl)
+                #with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
+                #    json.dump(self.rule_list, rule_fl)
                 paths_log_dir = self.output_dir + str(self.batch_counter) + '/'
                 os.makedirs(paths_log_dir)
                 self.paths_log = paths_log_dir + 'paths'
@@ -561,8 +561,12 @@ class Trainer(object):
             gc.collect()
 
             if self.early_stopping:
+                with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
+                    json.dump(self.rule_list, rule_fl)
                 break
             if self.batch_counter >= self.total_iterations:
+                with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
+                    json.dump(self.rule_list, rule_fl)
                 break
 
     def test(self, sess, print_paths=False, save_model=True, beam=True):
