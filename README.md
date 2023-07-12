@@ -9,10 +9,28 @@ This implementation is based on [Shehzaad Dhuliawala's repository](https://githu
 
 <h2> How To Run </h2>
 
-The dependencies are specified in [ENV.yml](ENV.yml):
+The dependencies are specified in [ENV.yml](ENV.yml) as well as [requirements.txt](requirements.txt) The user can use either of the following to create
+a virtual environment:
 
 ```
 conda env create -n ENV_NAME --file ENV.yml
+```
+
+```
+python3 -m venv env
+
+source env/bin/activate
+
+pip install -r requirements.txt
+```
+
+If you're having operating system conflicts (typically due to `pracmln` installation), use the Docker image:
+
+```
+docker build -t laurendelong21/internship:0 - < Dockerfile
+
+docker run --rm -it -v $(pwd) laurendelong21/internship:0
+
 ```
 
 To run PoLo, use one of the config files or create your own. For an explanation of each hyperparameter, refer to the [README file in the configs folder](configs/README.md).
