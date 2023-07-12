@@ -478,8 +478,6 @@ class Trainer(object):
         # for each batch / episode
         # TODO: understand why the trainer starts with old scores each time
         for episode in self.train_environment.get_episodes():
-            print('Confidence we are monitoring:')
-            print(self.rule_list['/base/aareas/schema/administrative_area/administrative_parent'][3][0])
             self.batch_counter += 1
             # parallelization
             h = sess.partial_run_setup(fetches=fetches, feeds=feeds)
@@ -520,11 +518,6 @@ class Trainer(object):
             rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(self.rule_list, arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
                                                                             self.only_body)
-            # Output confidences
-            print("Does old rule list match new?")
-            print(old_rl_list == self.rule_list)
-            with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
-                    json.dump(self.rule_list, rule_fl)
 
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
@@ -556,8 +549,9 @@ class Trainer(object):
             if self.batch_counter % self.eval_every == 0:
                 with open(self.output_dir + 'scores.txt', 'a') as score_file:
                     score_file.write('Scores for iteration ' + str(self.batch_counter) + '\n')
-                #with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
-                #    rule_fl.write('Scores for iteration ' + str(self.batch_counter) + '\n')
+                # NOTE: outputting confidence values here
+                with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
+                    json.dump(self.rule_list, rule_fl)
                 paths_log_dir = self.output_dir + str(self.batch_counter) + '/'
                 os.makedirs(paths_log_dir)
                 self.paths_log = paths_log_dir + 'paths'
