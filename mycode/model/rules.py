@@ -30,7 +30,7 @@ def check_rule(body, obj, obj_string, rule, only_body):
     if only_body:  # Compare only the body of the rule to the argument
         retval = (body == rule[2:])
     else:
-        retval = ((body == rule[2:]) and (obj == obj_string))
+        retval = ((body == rule[2:]) and (obj == obj_string))  # checks if te end entity is correct
     return retval
 
 
@@ -38,15 +38,25 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     """Modifies the rewards according to whether the metapath corresponds to a rule
     :param rule_list: 2D array containing rules and corresponding confidences 
     :param arguments: a string which is like a list, alternating between the next possible relation and entity
-    :param query_rel_string: all possible relations from each entity
+    :param query_rel_string: all possible rule heads (relations) from each entity
     :param obj_string: all possible sink entities from each sourch entity
     :param rule_base_reward: the reward value assigned for getting a matching path
     :param rewards: array containing rewards for each entity
+    :param only_body: Either 0 or 1. Flag to check whether the extracted paths should only be compared against
+        the body of the rules, or if the correctness of the end entity should also be taken into account.
     """
     rule_count = 0
     rule_count_body = 0
+    # get the total number of rules
+    num_rules = len(sum([val for val in rule_list.values()]), [])
+    print(f"Total Num rules: {num_rules}")
+    expected_prob = 1 / num_rules
+    # to store the number of occurrences of each rule:
+    no_rule_instances = {key: {i: 0 for i in range(val)} for key, val in rule_list.items()}
+    # to store the rule instances
+    # rule_instances = {key: dict() for key in rule_list.keys()}
     for k in range(len(obj_string)):
-        # get all of the relations from k
+        # get all of the relations/ rule heads applicable from k
         query_rel = query_rel_string[k]
         if query_rel in rule_list:
             # get all rules in which that query_rel is the head
@@ -61,14 +71,25 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                     add_reward = rule_base_reward * float(rel_rules[j][0])  # the 0th element is the confidence
                     rewards[k] += add_reward
                     # now adjust that confidence score
-                    print(f"Old conf score is: {rule_list[query_rel][j][0]}")
-                    rule_list[query_rel][j][0] = str(adjust_conf_score(float(rel_rules[j][0])))
-                    print(f"New conf score is: {rule_list[query_rel][j][0]}")
+                    #print(f"Old conf score is: {rule_list[query_rel][j][0]}")
+                    #rule_list[query_rel][j][0] = str(adjust_conf_score(float(rel_rules[j][0])))
+                    #print(f"New conf score is: {rule_list[query_rel][j][0]}")
                     break
             for j in range(len(rel_rules)):
-                if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=True):
+                if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=True):  # only checks if the metapath matches
                     rule_count_body += 1
-                    if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):
+                    if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):  # checks if the last entity is a true sink node
                         rule_count += 1
+                        # count the number of instances for each rule
+                        no_rule_instances[query_rel][j] += 1
                     break
+
+    # update the rule confidences here
+    for rule_head, rule_bodies in no_rule_instances.items():
+        for rule_body, num_instances in rule_bodies.items():
+            # TODO: does it make sense to use rule_count rather than rule_count_body?
+            observed_prob = num_instances / rule_count
+            adjustment = observed_prob / expected_prob  # TODO: how do I adjust this accordingly?
+            rule_list[rule_head][rule_body][0] = str(adjustment)
+
     return rewards, rule_count, rule_count_body, rule_list
