@@ -488,6 +488,7 @@ class Trainer(object):
             states = episode.get_states()
 
             arguments = []
+            # here is where the agent finds a path between the query and the answer
             for i in range(self.path_length):
                 feed_dict[i][self.candidate_relation_sequence[i]] = states['next_relations']
                 feed_dict[i][self.candidate_entity_sequence[i]] = states['next_entities']
@@ -519,10 +520,10 @@ class Trainer(object):
             rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(self.rule_list, arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
                                                                             self.only_body)
-            
+            # Output confidences
             print("Does old rule list match new?")
             print(old_rl_list == self.rule_list)
-            with open(self.output_dir + 'confidences.txt', 'a') as rule_fl:
+            with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
                     json.dump(self.rule_list, rule_fl)
 
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
