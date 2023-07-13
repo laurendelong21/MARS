@@ -14,6 +14,14 @@ def adjust_conf_score(score: float, alpha: float = 0.01):
     return new_score
 
 
+def map_to_penalty(score: float, alpha: float = 0.1):
+    """
+    :param score: the observed/expected ratio to map
+    :param alpha: adjustable parameter to change how dramatic the penalty is"""
+    return alpha * (np.tanh(score-1))**3
+
+
+
 def prepare_argument(argument, string='NO_OP'):
     """ Takes a path and returns the relation sequence, last entity"""
     body = argument[::2]  # Remove all entities and keep relations
@@ -48,11 +56,11 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     rule_count = 0
     rule_count_body = 0
     # get the total number of rules
-    num_rules = len(sum([val for val in rule_list.values()]), [])
+    num_rules = len(sum([val for val in rule_list.values()], []))
     print(f"Total Num rules: {num_rules}")
     expected_prob = 1 / num_rules
     # to store the number of occurrences of each rule:
-    no_rule_instances = {key: {i: 0 for i in range(val)} for key, val in rule_list.items()}
+    no_rule_instances = {key: {i: 0 for i in range(len(val))} for key, val in rule_list.items()}
     # to store the rule instances
     # rule_instances = {key: dict() for key in rule_list.keys()}
     for k in range(len(obj_string)):
@@ -85,11 +93,13 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                     break
 
     # update the rule confidences here
-    for rule_head, rule_bodies in no_rule_instances.items():
-        for rule_body, num_instances in rule_bodies.items():
-            # TODO: does it make sense to use rule_count rather than rule_count_body?
-            observed_prob = num_instances / rule_count
-            adjustment = observed_prob / expected_prob  # TODO: how do I adjust this accordingly?
-            rule_list[rule_head][rule_body][0] = str(adjustment)
+    if rule_count > 0:
+        for rule_head, rule_bodies in no_rule_instances.items():
+            for rule_body, num_instances in rule_bodies.items():
+                # TODO: does it make sense to use rule_count rather than rule_count_body?
+                observed_prob = num_instances / rule_count
+                adjustment = map_to_penalty(observed_prob / expected_prob)
+                old_conf = float(rule_list[rule_head][rule_body][0])
+                rule_list[rule_head][rule_body][0] = str(old_conf + (adjustment * old_conf))
 
     return rewards, rule_count, rule_count_body, rule_list
