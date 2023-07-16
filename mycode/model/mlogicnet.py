@@ -24,93 +24,78 @@ MLN_RULES = osp.join(INPUT_DIR, 'mln_rules.json')
 MLN_DB = osp.join(INPUT_DIR, 'instances.txt')
 
 
-def create_mln(preds, rules):
-    """Generates MLN instance
-    :param preds: list of predicates as strings (ex- ['Interacts(protein, protein)', 'Activates(drug, protein)', 'Treats(drug, bp)'])
-    :param rules: list of FOL rules as strings (ex- ['0 Activates(x, y) ^ Interacts(y, z) ^ InvolvedIn(z, a) => Treats(x, a)'])
-    """
-    # TODO: make it so this isn't done
-    mln = MLN(grammar='StandardGrammar',logic='FirstOrderLogic')
+class MLogicNet(object):
 
-    # Predicate Declaration
-    for pred in preds:
-        print(pred)
-        mln << pred
+    def __init__(self, mln_input):
+        """Generates MLN instance
+        :param mln_input: a dictionary containting two components:
+            - preds: list of predicates as strings (ex- ['Interacts(protein, protein)', 'Activates(drug, protein)', 'Treats(drug, bp)'])
+            - rules: list of FOL rules as strings (ex- ['0 Activates(x, y) ^ Interacts(y, z) ^ InvolvedIn(z, a) => Treats(x, a)'])
+        """
+        self.config = {}
 
-    # Rules
+        mln = MLN(grammar='StandardGrammar',logic='FirstOrderLogic')
 
-    for rule in rules:
-        mln << rule
+        # Predicate Declaration
+        self.preds = mln_input['predicates']
+        for pred in self.preds:
+            print(pred)
+            mln << pred
 
-    mln.write()
+        # Rules
+        self.rules = mln_input['fol_rules']
+        for rule in self.rules:
+            mln << rule
 
-    return mln 
+        mln.write()
 
+        self.mln = mln
 
-def create_db(mln, instances):
-    db = Database(mln)
-    for i in instances:
-        db << i
-
-    db.write()
-    return db
+        self.db = None
 
 
-def update_configs(mln, db):
+    def create_db(self, instances):
+        self.db = Database(self.mln)
+        for i in instances:
+            self.db << i
 
-    # get the default configs
-    DEFAULT_CONFIG = os.path.join(locs.user_data, global_config_filename)
-    conf = PRACMLNConfig(DEFAULT_CONFIG)
-
-    config = {}
-    config['verbose'] = True
-    config['discr_preds'] = 0
-    config['db'] = db
-    config['mln'] = mln
-    config['ignore_zero_weight_formulas'] = 0
-    config['ignore_unknown_preds'] = 0
-    config['incremental'] = 0
-    config['grammar'] = 'StandardGrammar'
-    config['logic'] = 'FirstOrderLogic'
-    #Other Methods: EnumerationAsk, MC-SAT, WCSPInference, GibbsSampler
-    config['method'] = 'BPLL'
-    config['multicore'] = 1
-    config['profile'] = 0
-    config['shuffle'] = 0
-    config['prior_mean'] = 0
-    config['prior_stdev'] = 6
-    config['save'] = 0
-    config['use_initial_weights'] = 0
-    config['use_prior'] = 0
-    conf.update(config)
-
-    return conf
+        self.db.write()
 
 
-def learn_mln(mln, db, conf):
-    learn = MLNLearn(conf, mln=mln, db=db)
-    result = learn.run()
-    result.write()
+    def update_configs(self):
+
+        # get the default configs
+        DEFAULT_CONFIG = os.path.join(locs.user_data, global_config_filename)
+        self.conf = PRACMLNConfig(DEFAULT_CONFIG)
+
+        self.config['verbose'] = True
+        self.config['discr_preds'] = 0
+        self.config['db'] = self.db
+        self.config['mln'] = self.mln
+        self.config['ignore_zero_weight_formulas'] = 0
+        self.config['ignore_unknown_preds'] = 0
+        self.config['incremental'] = 0
+        self.config['grammar'] = 'StandardGrammar'
+        self.config['logic'] = 'FirstOrderLogic'
+        #Other Methods: EnumerationAsk, MC-SAT, WCSPInference, GibbsSampler, BPLL
+        self.config['method'] = 'GibbsSampler'
+        self.config['multicore'] = 1
+        self.config['profile'] = 0
+        self.config['shuffle'] = 0
+        self.config['prior_mean'] = 0
+        self.config['prior_stdev'] = 6
+        self.config['save'] = 0
+        self.config['use_initial_weights'] = 0
+        self.config['use_prior'] = 0
+        self.conf.update(self.config)
 
 
-if __name__ == "__main__":
-    start = time.time()
-    with open(MLN_RULES, 'r') as f:
-        mln_input = json.load(f)
+    def learn_mln(self):
+        start = time.time()
+        learn = MLNLearn(self.conf, mln=self.mln, db=self.db)
+        result = learn.run()
+        result.write()
+        end = time.time()
+        print(f"Time elapsed: {(end - start) / 60} minutes.")
 
-    rules = mln_input['fol_rules']
-    preds =  mln_input['predicates']
-
-    # TODO: this will be replaced by data provided by PoLo
-    #write code that reads that list back in
-    with open(MLN_DB, 'r') as f:
-        instances = f.read().splitlines()
-
-    mln = create_mln(preds, rules)
-    db = create_db(mln, instances)
-    conf = update_configs(mln, db)
-    learn_mln(mln, db, conf)
-
-    end = time.time()
-
-    print(f"Time elapsed: {(end - start) / 60} minutes.")
+        return result

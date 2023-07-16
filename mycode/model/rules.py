@@ -21,6 +21,10 @@ def map_to_penalty(score: float, alpha: float = 0.1):
     return alpha * (np.tanh(score-1))**3
 
 
+def get_entities(argument):
+    body = set(argument[1::2])  # get all entities, no relations
+    return body
+
 
 def prepare_argument(argument, string='NO_OP'):
     """ Takes a path and returns the relation sequence, last entity"""
@@ -55,14 +59,14 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     """
     rule_count = 0
     rule_count_body = 0
+    entities_traversed = set()
     # get the total number of rules
     num_rules = len(sum([val for val in rule_list.values()], []))
-    print(f"Total Num rules: {num_rules}")
     expected_prob = 1 / num_rules
     # to store the number of occurrences of each rule:
     no_rule_instances = {key: {i: 0 for i in range(len(val))} for key, val in rule_list.items()}
     # to store the rule instances
-    # rule_instances = {key: dict() for key in rule_list.keys()}
+    rule_instances = {key: dict() for key in rule_list.keys()}
     for k in range(len(obj_string)):
         # get all of the relations/ rule heads applicable from k
         query_rel = query_rel_string[k]
@@ -72,25 +76,30 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             argument_temp = [arguments[i][k] for i in range(len(arguments))]
             # separate into relation sequence, last entity
             body, obj = prepare_argument(argument_temp)
+            entities = get_entities(argument_temp)
             # now, loop through the metapaths and add a reward if the path matches metapath
             # the rule added corresponds to the metapath confidence
             for j in range(len(rel_rules)):  # for each rule body corresponding to that rule head:
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body):
                     add_reward = rule_base_reward * float(rel_rules[j][0])  # the 0th element is the confidence
                     rewards[k] += add_reward
-                    # now adjust that confidence score
-                    #print(f"Old conf score is: {rule_list[query_rel][j][0]}")
-                    #rule_list[query_rel][j][0] = str(adjust_conf_score(float(rel_rules[j][0])))
-                    #print(f"New conf score is: {rule_list[query_rel][j][0]}")
                     break
             for j in range(len(rel_rules)):
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=True):  # only checks if the metapath matches
                     rule_count_body += 1
+                    entities_traversed.update(entities)
                     if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):  # checks if the last entity is a true sink node
                         rule_count += 1
                         # count the number of instances for each rule
                         no_rule_instances[query_rel][j] += 1
+                        # store that rule instance
+                        rule_instances[query_rel][j] = body
                     break
+
+    print(f"Total bodies matched: {rule_count_body}")
+    print(f"Total complete matches: {rule_count}")
+
+    print(f"Entities traversed: {len(entities_traversed)}")
 
     # update the rule confidences here
     if rule_count > 0:
