@@ -4,6 +4,17 @@ import re
 
 with open('../rules.txt') as f:
     rules = json.load(f)
+
+
+# write a generator that produces a new lowercase letter each time it is called,
+# cycling back after it uses z
+def letter_generator():
+    i = 0
+    while True:
+        yield chr(ord('a') + i), chr(ord('a') + i + 1)
+        i += 1
+        if i == 25:
+            i = 0
     
 
 def get_predicate_mapping(rule_dict):
@@ -30,9 +41,18 @@ def rules2fol(rule_dict, pred_mapping):
     fol_rules = []
     for head, val in rule_dict.items():
         for mpath in val:
-            body = [pred_mapping[i] for i in mpath[2:]]
+            lg = letter_generator()
+            body = []
+            true_mpath = mpath[2:]
+            for count, i in enumerate(true_mpath):
+                vars = next(lg)
+                if count == 0:
+                    first = vars[0]
+                elif count == len(true_mpath) - 1:
+                    last = vars[1]
+                body.append(f"{i}({vars[0]}, {vars[1]})")
             body = ' ^ '.join(body)
-            fol_rules.append(f'0 ({body}) => {preds[head]}')
+            fol_rules.append(f'0 ({body}) => {head}({first}, {last})')
 
     return fol_rules
 
