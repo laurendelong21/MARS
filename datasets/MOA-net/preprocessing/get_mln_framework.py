@@ -15,9 +15,9 @@ def get_predicate_mapping(rule_dict):
                 if '_' not in medge:
                     involved = [i.lower() for i in re.split('[^A-Z]', medge)]
                     preds[medge] = f"{medge}({involved[0]}, {involved[-1]})"
-                    preds['_' + medge] = f"{'_' + medge}({involved[-1]}, {involved[0]})"
+                    # preds['_' + medge] = f"{'_' + medge}({involved[-1]}, {involved[0]})"
     preds['CtBP'] = ('CtBP(c, bp)')
-    preds['_CtBP'] = ('_CtBP(bp, c)')
+    # preds['_CtBP'] = ('_CtBP(bp, c)')
 
     return preds
 
