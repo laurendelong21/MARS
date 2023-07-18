@@ -28,7 +28,7 @@ def get_predicate_mapping(rule_dict):
                     preds[medge] = f"{medge}({involved[0]}, {involved[-1]})"
                     # preds['_' + medge] = f"{'_' + medge}({involved[-1]}, {involved[0]})"
     preds['CtBP'] = ('CtBP(c, bp)')
-    # preds['_CtBP'] = ('_CtBP(bp, c)')
+    preds['_CtBP'] = ('_CtBP(bp, c)')
 
     return preds
 
@@ -40,6 +40,8 @@ def rules2fol(rule_dict, pred_mapping):
     """
     fol_rules = []
     for head, val in rule_dict.items():
+        if '_' in head:
+            continue
         for mpath in val:
             lg = letter_generator()
             body = []
