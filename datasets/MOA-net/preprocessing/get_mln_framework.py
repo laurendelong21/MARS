@@ -38,11 +38,13 @@ def rules2fol(rule_dict, pred_mapping):
     :param rule_dict: PoLo format rule dictionary
     :param pred_mapping: mapping from metaedge notation to FOL predicates
     """
-    fol_rules = []
+    fol_rules = {}
     for head, val in rule_dict.items():
         if '_' in head:
             continue
         for mpath in val:
+            if len(mpath)-2 not in fol_rules:
+                fol_rules[len(mpath)-2] = []
             lg = letter_generator()
             body = []
             true_mpath = mpath[2:]
@@ -54,7 +56,7 @@ def rules2fol(rule_dict, pred_mapping):
                     last = vars[1]
                 body.append(f"{i}({vars[0]}, {vars[1]})")
             body = ' ^ '.join(body)
-            fol_rules.append(f'0 ({body}) => {head}({first}, {last})')
+            fol_rules[len(mpath)-2].append(f'0 ({body}) => {head}({first}, {last})')
 
     return fol_rules
 

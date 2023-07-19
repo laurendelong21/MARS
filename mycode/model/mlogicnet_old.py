@@ -97,7 +97,7 @@ if __name__ == "__main__":
     with open(MLN_RULES, 'r') as f:
         mln_input = json.load(f)
 
-    rules = mln_input['fol_rules']
+    rules = mln_input['fol_rules']['2']
     preds =  mln_input['predicates']
 
     # TODO: this will be replaced by data provided by PoLo
