@@ -10,7 +10,6 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 # install virtual env
 RUN python -m pip install --upgrade pip
 
-RUN pip install pracmln==1.2.4
 RUN pip install tensorflow==2.10.1
 RUN pip install tqdm==4.59.0
 RUN pip install scipy==1.8.1

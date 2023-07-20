@@ -19,7 +19,6 @@ from mycode.model.agent import Agent
 from mycode.model.environment import Env
 from mycode.model.baseline import ReactiveBaseline
 from mycode.model.rules import prepare_argument, check_rule, modify_rewards
-from mycode.model.mlogicnet import MLogicNet
 
 
 logger = logging.getLogger(__name__)
@@ -44,11 +43,6 @@ class Trainer(object):
         self.rule_list_dir = self.input_dir + self.rule_file
         with open(self.rule_list_dir, 'r') as file:
             self.rule_list = json.load(file)
-        # adding in MLN stuff here:
-        #self.mln_dir = self.input_dir + self.mln_file
-        #with open(self.mln_dir, 'r') as f:
-        #    self.mln_input = json.load(f)
-        #self.mlogicnet = MLogicNet(self.mln_input)
         self.baseline = ReactiveBaseline(self.Lambda)
         self.optimizer = tf.compat.v1.train.AdamOptimizer(self.learning_rate)
         self.best_metric = -1
