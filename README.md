@@ -29,9 +29,11 @@ If you're having operating system conflicts (typically due to `pracmln` installa
 ```
 docker build -t laurendelong21/internship:0 - < Dockerfile
 
-docker run --rm -it -v $(pwd) laurendelong21/internship:0
+docker run -it --workdir /work --volume $HOME_DIR$/PoLo:/work --name polo_cont laurendelong21/internship:0 
+/bin/bash
 
 ```
+
 
 To run PoLo, use one of the config files or create your own. For an explanation of each hyperparameter, refer to the [README file in the configs folder](configs/README.md).
 
