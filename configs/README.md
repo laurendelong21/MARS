@@ -63,6 +63,8 @@ located.
 
 ```--train_relation_embeddings```*: int. Either 0 or 1. Flag to check whether the relation embeddings should be trained  after initialization.
 
+```--update_confs```: int. Either 0 or 1. Flag to determine whether the confidence values should be updated.
+
 
 Arguments marked with a ```*``` also take as values a list of the corresponding type written as string,
 e.g., ```path_length="1 2 3"```. A grid search across all combinations is then carried out.  

@@ -46,7 +46,7 @@ def check_rule(body, obj, obj_string, rule, only_body):
     return retval
 
 
-def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, rewards, only_body):
+def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, rewards, only_body, update_confs):
     """Modifies the rewards according to whether the metapath corresponds to a rule
     :param rule_list: 2D array containing rules and corresponding confidences 
     :param arguments: a string which is like a list, alternating between the next possible relation and entity
@@ -56,6 +56,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     :param rewards: array containing rewards for each entity
     :param only_body: Either 0 or 1. Flag to check whether the extracted paths should only be compared against
         the body of the rules, or if the correctness of the end entity should also be taken into account.
+    :param update_confs: Either 0 or 1. Flag to check whether the rule confidences should be updated.
     """
     rule_count = 0
     rule_count_body = 0
@@ -102,7 +103,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     print(f"Entities traversed: {len(entities_traversed)}")
 
     # update the rule confidences here
-    if rule_count > 0:
+    if update_confs and rule_count > 0:
         for rule_head, rule_bodies in no_rule_instances.items():
             for rule_body, num_instances in rule_bodies.items():
                 # TODO: does it make sense to use rule_count rather than rule_count_body?

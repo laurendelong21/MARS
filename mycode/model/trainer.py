@@ -516,7 +516,7 @@ class Trainer(object):
             # Here, they modify the rewards to take into account whether it fits rules.
             rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(self.rule_list, arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
-                                                                            self.only_body)
+                                                                            self.only_body, self.update_confs)
 
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
