@@ -1,6 +1,6 @@
-input_dir="datasets/MOA-net/"
-base_output_dir="output/MOA-net/"
-update_confs=0
+input_dir="datasets/Hetionet/"
+base_output_dir="output/Hetionet/"
+update_confs=1
 total_iterations=1000
 eval_every=10
 patience=2
@@ -17,4 +17,4 @@ train_entity_embeddings=1
 use_entity_embeddings=1
 num_rollouts=30
 load_model=0
-model_load_path="./models/MOA-net/model.ckpt"
+model_load_path="./models/Hetionet/model.ckpt"

@@ -1,6 +1,6 @@
 input_dir="datasets/MOA-net/"
 base_output_dir="output/MOA-net/"
-update_confs=0
+update_confs=2
 total_iterations=1000
 eval_every=10
 patience=2
