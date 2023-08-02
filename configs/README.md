@@ -63,7 +63,7 @@ located.
 
 ```--train_relation_embeddings```*: int. Either 0 or 1. Flag to check whether the relation embeddings should be trained  after initialization.
 
-```--update_confs```: int. Either 0 or 1. Flag to determine whether the confidence values should be updated.
+```--update_confs```: int. Either 0, 1, or 2. Option to determine whether the confidence values should be updated.
 
 
 Arguments marked with a ```*``` also take as values a list of the corresponding type written as string,

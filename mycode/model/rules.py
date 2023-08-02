@@ -1,9 +1,50 @@
 import numpy as np
 from copy import deepcopy
+from collections import Counter
 
 """Script containing functions to check whether metapaths match with rules, and 
     modify the reward accordingly
 """
+
+"""The following three functions are used to update the rule confidences based on the piecewise empirical probabilities"""
+
+def piecewise_probability(mpath, empirical_probs):
+    """Compute the piecewise probability of a metapath, given the empirical probabilities of its two-hop chunks
+    :param mpath: the full metapath, in terms the relations it constitutes
+    :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
+    """
+    prob = 1
+    for rel in range(len(mpath)-1):
+        key = (mpath[rel], mpath[rel-1])
+        prob *= empirical_probs[key]
+    return prob
+
+
+def get_metapath_chunks(path):
+    """Gets all of the two-hop pieces of a metapath, returns them as a dictionary like (rel1, rel2):occurences """
+    empirical_probs = dict()
+    for rel in range(len(path)-1):
+        key = (path[rel], path[rel-1])
+        if key in empirical_probs:
+            empirical_probs[key] += 1
+        else:
+            empirical_probs[key] = 1
+    return empirical_probs
+
+
+def update_confs_piecewise(rule_list, empirical_probs):
+    """Updates the confidences in the rule list based on empirical probabilities computed during the batch
+    :param rule_list
+    :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
+    """
+    for head in rule_list.keys():
+        for count, mpath in rule_list[head]:
+            old_conf = float(rule_list[head][count][0])
+            pw_prob = piecewise_probability(mpath[2::], empirical_probs)
+            # get the average of the new and old confidences
+            rule_list[head][count][0] = str(pw_prob * old_conf / 2)
+    return rule_list
+
 
 def adjust_conf_score(score: float, alpha: float = 0.01):
     """Adjust the confidence score to incrementally increase
@@ -16,6 +57,7 @@ def adjust_conf_score(score: float, alpha: float = 0.01):
 
 def map_to_penalty(score: float, alpha: float = 0.1):
     """
+    The naive way to update the rule confidences.
     :param score: the observed/expected ratio to map
     :param alpha: adjustable parameter to change how dramatic the penalty is"""
     return alpha * (np.tanh(score-1))**3
@@ -42,7 +84,7 @@ def check_rule(body, obj, obj_string, rule, only_body):
     if only_body:  # Compare only the body of the rule to the argument
         retval = (body == rule[2:])
     else:
-        retval = ((body == rule[2:]) and (obj == obj_string))  # checks if te end entity is correct
+        retval = ((body == rule[2:]) and (obj == obj_string))  # checks if the end entity is correct
     return retval
 
 
@@ -61,6 +103,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     rule_count = 0
     rule_count_body = 0
     entities_traversed = set()
+    empirical_probs = dict()
     # get the total number of rules
     num_rules = len(sum([val for val in rule_list.values()], []))
     expected_prob = 1 / num_rules
@@ -77,6 +120,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             argument_temp = [arguments[i][k] for i in range(len(arguments))]
             # separate into relation sequence, last entity
             body, obj = prepare_argument(argument_temp)
+            
             entities = get_entities(argument_temp)
             # now, loop through the metapaths and add a reward if the path matches metapath
             # the rule added corresponds to the metapath confidence
@@ -95,6 +139,9 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                         no_rule_instances[query_rel][j] += 1
                         # store that rule instance
                         rule_instances[query_rel][j] = body
+                        # get all of the 2-hop chunks that helped make a match
+                        if update_confs == 2:
+                            empirical_probs = Counter(get_metapath_chunks(body)) + Counter(empirical_probs)
                     break
 
     print(f"Total bodies matched: {rule_count_body}")
@@ -102,8 +149,8 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
 
     print(f"Entities traversed: {len(entities_traversed)}")
 
-    # update the rule confidences here
-    if update_confs and rule_count > 0:
+    # the naive option
+    if update_confs == 1 and rule_count > 0:
         for rule_head, rule_bodies in no_rule_instances.items():
             for rule_body, num_instances in rule_bodies.items():
                 # TODO: does it make sense to use rule_count rather than rule_count_body?
@@ -111,5 +158,9 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                 adjustment = map_to_penalty(observed_prob / expected_prob)
                 old_conf = float(rule_list[rule_head][rule_body][0])
                 rule_list[rule_head][rule_body][0] = str(old_conf + (adjustment * old_conf))
+
+    # the piecewise option
+    if update_confs == 2:
+        rule_list = update_confs_piecewise(rule_list, empirical_probs)
 
     return rewards, rule_count, rule_count_body, rule_list
