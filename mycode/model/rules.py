@@ -38,7 +38,7 @@ def update_confs_piecewise(rule_list, empirical_probs):
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     """
     for head in rule_list.keys():
-        for count, mpath in rule_list[head]:
+        for count, mpath in enumerate(rule_list[head]):
             old_conf = float(rule_list[head][count][0])
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
             # get the average of the new and old confidences
