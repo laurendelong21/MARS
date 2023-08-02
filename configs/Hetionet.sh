@@ -1,5 +1,6 @@
 input_dir="datasets/Hetionet/"
 base_output_dir="output/Hetionet/"
+update_confs=0
 total_iterations=1000
 eval_every=10
 patience=2

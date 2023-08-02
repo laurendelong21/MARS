@@ -1,6 +1,6 @@
 input_dir="datasets/FB15k-237/"
 base_output_dir="output/FB15k-237/"
-update_confs=0
+update_confs=2
 total_iterations=100
 eval_every=20
 patience=3
