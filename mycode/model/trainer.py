@@ -696,6 +696,7 @@ class Trainer(object):
 
         self.write_paths_summary()
         if print_paths:
+            # HERE: print the paths found for each pair:
             logger.info('Printing paths at {}'.format(self.output_dir + 'test_beam/'))
             self.write_paths_file(answers)
 

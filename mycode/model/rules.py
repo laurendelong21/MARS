@@ -16,7 +16,8 @@ def piecewise_probability(mpath, empirical_probs):
     prob = 1
     for rel in range(len(mpath)-1):
         key = (mpath[rel], mpath[rel-1])
-        prob *= empirical_probs[key]
+        chunk_prob = empirical_probs[key] if key in empirical_probs else 0
+        prob *= chunk_prob
     return prob
 
 
@@ -42,7 +43,7 @@ def update_confs_piecewise(rule_list, empirical_probs):
             old_conf = float(rule_list[head][count][0])
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
             # get the average of the new and old confidences
-            rule_list[head][count][0] = str(pw_prob * old_conf / 2)
+            rule_list[head][count][0] = str(pw_prob + old_conf / 2)
     return rule_list
 
 
