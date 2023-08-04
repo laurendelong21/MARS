@@ -27,7 +27,7 @@ def read_options():
     parser.add_argument('--Lambda', default=0.0, type=float, nargs='+')
     parser.add_argument('--grad_clip_norm', default=5, type=int, nargs='+')
     parser.add_argument('--rule_base_reward', default=20, type=float, nargs='+')
-    parser.add_argument('--positive_reward', default=1.0, type=float, nargs='+')
+    parser.add_argument('--', default=1.0, type=float, nargs='+')
     parser.add_argument('--negative_reward', default=0, type=float, nargs='+')
     parser.add_argument('--only_body', default=0, type=int, nargs='+')
     parser.add_argument('--pool', default='max', type=str)
@@ -35,6 +35,7 @@ def read_options():
     parser.add_argument('--train_entity_embeddings', default=0, type=int)
     parser.add_argument('--train_relation_embeddings', default=1, type=int)
     parser.add_argument('--update_confs', default=0, type=int, nargs='+')
+    parser.add_argument('--alpha', default=0.1, type=float, nargs='+')
 
     try:
         parsed = vars(parser.parse_args())

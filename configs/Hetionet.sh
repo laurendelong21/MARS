@@ -1,6 +1,7 @@
 input_dir="datasets/Hetionet/"
 base_output_dir="output/Hetionet/"
 update_confs=0
+alpha=0.1
 path_length="2 3 4"
 pool="max sum"
 total_iterations=1000

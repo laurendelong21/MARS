@@ -33,27 +33,20 @@ def get_metapath_chunks(path):
     return empirical_probs
 
 
-def update_confs_piecewise(rule_list, empirical_probs):
+def update_confs_piecewise(rule_list, empirical_probs, alpha=0.1):
     """Updates the confidences in the rule list based on empirical probabilities computed during the batch
     :param rule_list
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
+    :param alpha: the parameter that controls how drastically the confidences are updated
     """
     for head in rule_list.keys():
         for count, mpath in enumerate(rule_list[head]):
             old_conf = float(rule_list[head][count][0])
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
             # get the average of the new and old confidences
-            rule_list[head][count][0] = str(pw_prob + old_conf / 2)
+            adjustment = (pw_prob - old_conf) * alpha
+            rule_list[head][count][0] = str(pw_prob + adjustment)
     return rule_list
-
-
-def adjust_conf_score(score: float, alpha: float = 0.01):
-    """Adjust the confidence score to incrementally increase
-    :param score: the confidence score to increment
-    :param alpha: adjustable parameter to change the increment
-    """
-    new_score = score + (alpha * (1 - score))
-    return new_score
 
 
 def map_to_penalty(score: float, alpha: float = 0.1):
@@ -89,7 +82,8 @@ def check_rule(body, obj, obj_string, rule, only_body):
     return retval
 
 
-def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, rewards, only_body, update_confs):
+def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, 
+                   rewards, only_body, update_confs, alpha):
     """Modifies the rewards according to whether the metapath corresponds to a rule
     :param rule_list: 2D array containing rules and corresponding confidences 
     :param arguments: a string which is like a list, alternating between the next possible relation and entity
@@ -100,6 +94,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     :param only_body: Either 0 or 1. Flag to check whether the extracted paths should only be compared against
         the body of the rules, or if the correctness of the end entity should also be taken into account.
     :param update_confs: Either 0 or 1. Flag to check whether the rule confidences should be updated.
+    :param alpha: if doing confidence updates, alpha controls how drastically the confidences are updated
     """
     rule_count = 0
     rule_count_body = 0
@@ -156,12 +151,12 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             for rule_body, num_instances in rule_bodies.items():
                 # TODO: does it make sense to use rule_count rather than rule_count_body?
                 observed_prob = num_instances / rule_count
-                adjustment = map_to_penalty(observed_prob / expected_prob)
+                adjustment = map_to_penalty(observed_prob / expected_prob, alpha)
                 old_conf = float(rule_list[rule_head][rule_body][0])
                 rule_list[rule_head][rule_body][0] = str(old_conf + (adjustment * old_conf))
 
     # the piecewise option
     if update_confs == 2:
-        rule_list = update_confs_piecewise(rule_list, empirical_probs)
+        rule_list = update_confs_piecewise(rule_list, empirical_probs, alpha)
 
     return rewards, rule_count, rule_count_body, rule_list
