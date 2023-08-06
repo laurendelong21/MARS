@@ -20,6 +20,9 @@ from mycode.model.environment import Env
 from mycode.model.baseline import ReactiveBaseline
 from mycode.model.rules import prepare_argument, check_rule, modify_rewards
 
+import multiprocessing
+from multiprocessing import Process
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -752,6 +755,24 @@ def initialize_setting(params, relation_vocab, entity_vocab, mode=''):
     return params
 
 
+def optimization(permutation, config, logfile, metrics_queue):
+    """The training function on which to optimize hps"""
+    logger.removeHandler(logfile)
+    logfile = logging.FileHandler(permutation['output_dir'] + 'log.txt', 'w')
+    logfile.setFormatter(fmt)
+    logger.addHandler(logfile)
+    # Training
+    trainer = Trainer(permutation)
+    with tf.compat.v1.Session(config=config) as sess:
+        sess.run(trainer.initialize())
+        trainer.initialize_pretrained_embeddings(sess=sess)
+        trainer.train(sess)
+
+    metrics_queue.put(trainer.best_metric)
+
+    tf.compat.v1.reset_default_graph()
+
+
 if __name__ == '__main__':
     options = read_options()
     logger.setLevel(logging.INFO)
@@ -776,24 +797,40 @@ if __name__ == '__main__':
                 options[k] = [v]
         best_permutation = None
         best_metric = -1
-        for permutation in ParameterGrid(options):
-            permutation = initialize_setting(permutation, relation_vocab, entity_vocab)
-            logger.removeHandler(logfile)
-            logfile = logging.FileHandler(permutation['output_dir'] + 'log.txt', 'w')
-            logfile.setFormatter(fmt)
-            logger.addHandler(logfile)
+        # get number of cores for parallelization
+        num_cores = multiprocessing.cpu_count()
+        hp_permutations = list(ParameterGrid(options))
+        print(f"Executing {len(hp_permutations)} permutations of hyperparameters on {num_cores} cores.")
+        for count in range(0, len(hp_permutations), num_cores):
+            # instantiate the parallelization process
+            procs = []
+            proc = Process(target=optimization)  # instantiating without any argument
+            procs.append(proc)
+            proc.start()
+            for permutation in hp_permutations[count: count+num_cores]:
+                permutation = initialize_setting(permutation, relation_vocab, entity_vocab)
 
-            # Training
-            trainer = Trainer(permutation)
-            with tf.compat.v1.Session(config=config) as sess:
-                sess.run(trainer.initialize())
-                trainer.initialize_pretrained_embeddings(sess=sess)
-                trainer.train(sess)
+                metrics_queue = multiprocessing.Queue()
 
-            if (best_permutation is None) or (trainer.best_metric > best_metric):
-                best_metric = trainer.best_metric
-                best_permutation = permutation
+                proc = Process(target=optimization, args=(permutation, config, logfile, metrics_queue,))
+                procs.append(proc)
+                proc.start()
+
+            # complete the processes
+            for proc in procs:
+                proc.join()
+
+            # get best metric from queue, and do the comparison
+            while not metrics_queue.empty():
+                rounds_best_metric = metrics_queue.get()
+
+                if (best_permutation is None) or (rounds_best_metric > best_metric):
+                    best_metric = rounds_best_metric
+                    best_permutation = permutation
+
             tf.compat.v1.reset_default_graph()
+
+        print(f"Best permutation: {best_permutation}")
 
         # Testing on test set with best model
         best_permutation['old_output_dir'] = best_permutation['output_dir']
