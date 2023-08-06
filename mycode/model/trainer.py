@@ -817,15 +817,14 @@ if __name__ == '__main__':
             for proc in procs:
                 proc.join()
 
-            # get best metric from queue, and do the comparison
-            while not metrics_queue.empty():
+                # get best metric from queue, and do the comparison
                 rounds_best_metric = metrics_queue.get()
 
                 if (best_permutation is None) or (rounds_best_metric > best_metric):
                     best_metric = rounds_best_metric
                     best_permutation = permutation
 
-            tf.compat.v1.reset_default_graph()
+        tf.compat.v1.reset_default_graph()
 
         print(f"Best permutation: {best_permutation}")
 
