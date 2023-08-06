@@ -804,9 +804,6 @@ if __name__ == '__main__':
         for count in range(0, len(hp_permutations), num_cores):
             # instantiate the parallelization process
             procs = []
-            proc = Process(target=optimization)  # instantiating without any argument
-            procs.append(proc)
-            proc.start()
             for permutation in hp_permutations[count: count+num_cores]:
                 permutation = initialize_setting(permutation, relation_vocab, entity_vocab)
 
