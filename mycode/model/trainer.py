@@ -21,7 +21,6 @@ from mycode.model.baseline import ReactiveBaseline
 from mycode.model.rules import prepare_argument, check_rule, modify_rewards
 
 import multiprocessing
-from multiprocessing import Process
 
 
 logger = logging.getLogger(__name__)
@@ -755,7 +754,7 @@ def initialize_setting(params, relation_vocab, entity_vocab, mode=''):
     return params
 
 
-def optimization(permutation, config, logfile, metrics_queue):
+def optimization(permutation, config, logfile):
     """The training function on which to optimize hps"""
     logger.removeHandler(logfile)
     logfile = logging.FileHandler(permutation['output_dir'] + 'log.txt', 'w')
@@ -768,9 +767,10 @@ def optimization(permutation, config, logfile, metrics_queue):
         trainer.initialize_pretrained_embeddings(sess=sess)
         trainer.train(sess)
 
-    metrics_queue.put(trainer.best_metric)
-
+    local_metric = trainer.best_metric
     tf.compat.v1.reset_default_graph()
+
+    return local_metric
 
 
 if __name__ == '__main__':
@@ -797,36 +797,25 @@ if __name__ == '__main__':
                 options[k] = [v]
         best_permutation = None
         best_metric = -1
+
+        # get all of the hp permutations
+        hp_permutations = list(ParameterGrid(options))
+        arguments = [(initialize_setting(perm, relation_vocab, entity_vocab), config, logfile) for perm in hp_permutations]
+
         # get number of cores for parallelization
         num_cores = multiprocessing.cpu_count()
-        hp_permutations = list(ParameterGrid(options))
+
         print(f"Executing {len(hp_permutations)} permutations of hyperparameters on {num_cores} cores.")
-        for count in range(0, len(hp_permutations), num_cores):
-            # instantiate the parallelization process
-            round_of_permutations = hp_permutations[count: count+num_cores]
-            procs = []
-            for permutation in round_of_permutations:
-                permutation = initialize_setting(permutation, relation_vocab, entity_vocab)
 
-                metrics_queue = multiprocessing.Queue()
-
-                proc = Process(target=optimization, args=(permutation, config, logfile, metrics_queue,))
-                procs.append(proc)
-                proc.start()
-
-            # complete the processes
-            for proc in procs:
-                proc.join()
-
-            round_of_metrics = []
-            while not metrics_queue.empty():
-                # get all the final metrics in a list
-                round_of_metrics.append(metrics_queue.get())
-            # the metric indices should be in the same order that we queued (FIFO)
-            for met_num, met in enumerate(round_of_metrics):
-                if (best_permutation is None) or (met > best_metric):
-                    best_metric = met
-                    best_permutation = round_of_permutations[met_num]
+        with multiprocessing.Pool(processes=num_cores) as pool:
+            # use starmap to take multiple args
+            results = pool.starmap(optimization, arguments)
+        
+        # get the parameters with the best functions
+        for met_num, met in enumerate(results):
+            if (best_permutation is None) or (met > best_metric):
+                best_metric = met
+                best_permutation = arguments[met_num][0]
 
         tf.compat.v1.reset_default_graph()
 
