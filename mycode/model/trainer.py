@@ -817,6 +817,7 @@ if __name__ == '__main__':
             for proc in procs:
                 proc.join()
 
+            while not metrics_queue.empty():
                 # get best metric from queue, and do the comparison
                 rounds_best_metric = metrics_queue.get()
 
