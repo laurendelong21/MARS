@@ -1,6 +1,6 @@
 input_dir="datasets/WN18RR/"
 base_output_dir="output/WN18RR/"
-update_confs=0
+update_confs=2
 total_iterations=5000
 eval_every=100
 patience=2

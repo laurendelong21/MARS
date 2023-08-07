@@ -43,7 +43,7 @@ located.
 
 ```--gamma```*: float. Discount factor for REINFORCE.
 
-```--Lambda```*: float. Discount factor for the baseline.
+```--Lambda```*: float. Discount factor for the baseline. This is lambda in the reward function.
 
 ```--grad_clip_norm```*: int. Clipping ratio for the gradient.
 
@@ -53,7 +53,7 @@ located.
 
 ```--negative_reward```*: float. Negative reward if the end entity is incorrect.
 
-```--only_body```*: int. Either 0 or 1. Flag to check whether the extracted paths should only be compared against the body of the rules, or if the correctness of the end entity should also be taken into account.
+```--only_body```*: int. Either 0 or 1. Flag to check whether the extracted paths should only be compared against the body of the rules, or if the correctness of the end entity should also be taken into account. This is b in the reward function; 0 means we set it equal to the first term, and 1 means we set it equal to 1.
 
 ```--pool```*: str. ```max``` or ```sum```. Pooling operation for evaluation.
 
@@ -62,6 +62,8 @@ located.
 ```--train_entity_embeddings```*: int. Either 0 or 1. Flag to check whether the entity embeddings should be trained after initialization.
 
 ```--train_relation_embeddings```*: int. Either 0 or 1. Flag to check whether the relation embeddings should be trained  after initialization.
+
+```--update_confs```: int. Either 0, 1, or 2. Option to determine whether the confidence values should be updated.
 
 
 Arguments marked with a ```*``` also take as values a list of the corresponding type written as string,

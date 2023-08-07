@@ -3,7 +3,9 @@ import numpy as np
 from collections import defaultdict
 
 
-"""The script responsible for generating the graph structure"""
+"""The script responsible for generating the graph structure and next steps, 
+but for each step, ensures to mask the connections representing the true answers so there is no cheating
+"""
 
 
 class RelationEntityGrapher(object):
@@ -35,7 +37,7 @@ class RelationEntityGrapher(object):
         print("KG constructed.")
 
     def create_graph(self):
-        """Stores all of the triples in self.array_store so that the matrix values
+        """Stores all of the KG triples in self.array_store so that the matrix values
             are either the receiving node or the relation, and
             the relation connecting the two nodes is in the same position in its
             respective matrix as the entity toward which the edge is going
@@ -70,28 +72,36 @@ class RelationEntityGrapher(object):
     def return_next_actions(self, current_entities, start_entities, query_relations, answers, all_correct_answers,
                             is_last_step, rollouts):
         """Using the matrices in self.array_store, return the actions that could be taken
-            by the agent from a given node.
+            by the agent from a given node. Mask the source nodes from the true labels in the dataset.
         :param current_entities: a list of the entities which the agent is currently considering
-        :param start_entities: a list of the entities which the agent began with
-        :param query_relations: a dictionary?
-        :param answers: another dictionary
-        :param all_correct_answers:
-        :param is_last_step:
+        :param start_entities: an array containing all the source nodes within the data batch triples
+        :param query_relations: an array containing all relations within the data batch triples
+        :param answers: an array containing all the sink nodes within the data batch triples
+        :param all_correct_answers: a mapping from sink nodes (keys) to tuples of source nodes and relations from which they are reachable
+        :param is_last_step: boolean indicating whether it's the max path length
+
+        :returns: a copy of self.array_store in which (1) only the next possible actions are shown, and (2) the
+            true labels from the dataset are masked so that the model can not cheat
         """
         # get only the connections from the entities currently being considered
         ret = self.array_store[current_entities, :, :].copy()
         for i in range(current_entities.shape[0]):
-            # if we haven't traversed that node yet, 
+            # if we still have any beginning nodes:
             if current_entities[i] == start_entities[i]:
-                entities = ret[i, :, 0]
-                relations = ret[i, :, 1]
+                # get the entities and relations which are accessible from that entity in the KG
+                entities = ret[i, :, 0]  # vector of sink nodes connected to i
+                relations = ret[i, :, 1]  # vector of relations connected to i
+                # identify the connections in the batch and mask them 
+                # mask is a vector of boolean indications, where if True, the mask 
                 mask = np.logical_and(relations == query_relations[i], entities == answers[i])
                 ret[i, :, 0][mask] = self.ePAD
                 ret[i, :, 1][mask] = self.rPAD
             if is_last_step:
-                entities = ret[i, :, 0]
-                correct_e2 = answers[i]
+                entities = ret[i, :, 0]  # vector of sink nodes connected to source node at i
+                correct_e2 = answers[i]  # the sink node in triple index i
+                # for each of the sink nodes connected to source nodes i,
                 for j in range(entities.shape[0]):
+                    # if the entities connected to those sink nodes are AND 
                     if entities[j] in all_correct_answers[i // rollouts] and entities[j] != correct_e2:
                         ret[i, :, 0][j] = self.ePAD
                         ret[i, :, 1][j] = self.rPAD

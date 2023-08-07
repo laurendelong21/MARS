@@ -2,6 +2,9 @@ import numpy as np
 import tensorflow as tf
 
 
+"""The script that defines the agent and the actions it can take. This is the part with trainable parameters."""
+
+
 class Agent(object):
     def __init__(self, params):
         self.action_vocab_size = len(params['relation_vocab'])
@@ -12,12 +15,15 @@ class Agent(object):
         self.LSTM_Layers = params['LSTM_layers']
         self.num_rollouts = params['num_rollouts']
         self.test_rollouts = params['test_rollouts']
-        self.batch_size = params['batch_size'] * params['num_rollouts']
+        self.batch_size = params['batch_size'] * params['num_rollouts']  # since we repeat w num_rollouts
         self.dummy_start_labels = tf.constant(
             np.ones(self.batch_size, dtype='int64') * params['relation_vocab']['DUMMY_START_RELATION'])
+        # Below: Either 0 or 1. Flag to check whether the entity embeddings should be trained after initialization.
         self.train_entities = params['train_entity_embeddings']
         self.train_relations = params['train_relation_embeddings']
+        # int. Either 0 or 1. Flag to check whether the paths should use the entity embeddings.
         self.use_entity_embeddings = params['use_entity_embeddings']
+        # TODO: what does this mean?
         if self.use_entity_embeddings:
             self.m = 4
             self.entity_initializer = tf.keras.initializers.GlorotUniform()
@@ -108,6 +114,9 @@ class Agent(object):
 
     def __call__(self, candidate_relation_sequence, candidate_entity_sequence, current_entities,
                  query_relations, range_arr, path_length):
+        """Calls the agent to action, returns the final loss, logits (scores for action sequences), and 
+            the corresponding actions sequences
+        """
         query_embeddings = tf.compat.v1.nn.embedding_lookup(params=self.relation_lookup_table, ids=query_relations)
         states = self.policy_step.zero_state(batch_size=self.batch_size, dtype=tf.float32)
         prev_relations = self.dummy_start_labels
@@ -122,6 +131,8 @@ class Agent(object):
                 next_possible_relations = candidate_relation_sequence[t]
                 next_possible_entities = candidate_entity_sequence[t]
                 current_entities_t = current_entities[t]
+
+                # for each hop in the path length, the agent should take a step
                 loss, logits, new_states, idx, chosen_relations = self.step(
                     next_possible_relations, next_possible_entities, current_entities_t, states, prev_relations,
                     query_embeddings, range_arr)
