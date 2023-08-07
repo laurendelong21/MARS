@@ -803,8 +803,9 @@ if __name__ == '__main__':
         print(f"Executing {len(hp_permutations)} permutations of hyperparameters on {num_cores} cores.")
         for count in range(0, len(hp_permutations), num_cores):
             # instantiate the parallelization process
+            round_of_permutations = hp_permutations[count: count+num_cores]
             procs = []
-            for permutation in hp_permutations[count: count+num_cores]:
+            for permutation in round_of_permutations:
                 permutation = initialize_setting(permutation, relation_vocab, entity_vocab)
 
                 metrics_queue = multiprocessing.Queue()
@@ -817,13 +818,15 @@ if __name__ == '__main__':
             for proc in procs:
                 proc.join()
 
+            round_of_metrics = []
             while not metrics_queue.empty():
-                # get best metric from queue, and do the comparison
-                rounds_best_metric = metrics_queue.get()
-
-                if (best_permutation is None) or (rounds_best_metric > best_metric):
-                    best_metric = rounds_best_metric
-                    best_permutation = permutation
+                # get all the final metrics in a list
+                round_of_metrics.append(metrics_queue.get())
+            # the metric indices should be in the same order that we queued (FIFO)
+            for met_num, met in enumerate(round_of_metrics):
+                if (best_permutation is None) or (met > best_metric):
+                    best_metric = met
+                    best_permutation = round_of_permutations[met_num]
 
         tf.compat.v1.reset_default_graph()
 
