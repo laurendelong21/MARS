@@ -724,14 +724,20 @@ def create_output_and_model_dir(params, mode):
                                '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
                                '_L' + str(params['LSTM_layers']) + '_l' + str(params['learning_rate']) + \
-                               '_o' + str(params['only_body']) + '/'
+                               '_a' + str(params['alpha']) + \
+                               '_b' + str(params['beta']) + \
+                               '_Lb' + str(params['Lambda']) + \
+                                '_LR' + str(params['learning_rate'])  + '/'
         os.makedirs(params['output_dir'])
     else:
         params['output_dir'] = params['base_output_dir'] + str(current_time) + \
                                '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
                                '_L' + str(params['LSTM_layers']) + '_l' + str(params['learning_rate']) + \
-                               '_o' + str(params['only_body']) + '/'
+                               '_a' + str(params['alpha']) + \
+                               '_b' + str(params['beta']) + \
+                               '_Lb' + str(params['Lambda']) + \
+                                '_LR' + str(params['learning_rate'])  + '/'
         params['model_dir'] = params['output_dir'] + 'model/'
         os.makedirs(params['output_dir'])
         os.makedirs(params['model_dir'])
