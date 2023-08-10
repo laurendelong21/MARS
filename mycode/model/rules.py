@@ -14,8 +14,8 @@ def piecewise_probability(mpath, empirical_probs):
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     """
     prob = 1
-    for rel in range(len(mpath)-1):
-        key = (mpath[rel], mpath[rel-1])
+    for rel in range(len(mpath)-2):
+        key = (mpath[rel], mpath[rel+1])
         chunk_prob = empirical_probs[key] if key in empirical_probs else 0
         prob *= chunk_prob
     return prob
@@ -23,14 +23,14 @@ def piecewise_probability(mpath, empirical_probs):
 
 def get_metapath_chunks(path):
     """Gets all of the two-hop pieces of a metapath, returns them as a dictionary like (rel1, rel2):occurences """
-    empirical_probs = dict()
-    for rel in range(len(path)-1):
-        key = (path[rel], path[rel-1])
-        if key in empirical_probs:
-            empirical_probs[key] += 1
+    empirical_nums = dict()
+    for rel in range(len(path)-2):
+        key = (path[rel], path[rel+1])
+        if key in empirical_nums:
+            empirical_nums[key] += 1
         else:
-            empirical_probs[key] = 1
-    return empirical_probs
+            empirical_nums[key] = 1
+    return empirical_nums
 
 
 def update_confs_piecewise(rule_list, empirical_probs, alpha=0.1):
@@ -99,7 +99,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     rule_count = 0
     rule_count_body = 0
     entities_traversed = set()
-    empirical_probs = dict()
+    empirical_nums = dict()
     # get the total number of rules
     num_rules = len(sum([val for val in rule_list.values()], []))
     expected_prob = 1 / num_rules
@@ -137,7 +137,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                         rule_instances[query_rel][j] = body
                         # get all of the 2-hop chunks that helped make a match
                         if update_confs == 2:
-                            empirical_probs = Counter(get_metapath_chunks(body)) + Counter(empirical_probs)
+                            empirical_nums = Counter(get_metapath_chunks(body)) + Counter(empirical_nums)
                     break
 
     print(f"Total bodies matched: {rule_count_body}")
@@ -157,6 +157,8 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
 
     # the piecewise option
     if update_confs == 2:
+        total_count = sum(empirical_nums.values())
+        empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
         rule_list = update_confs_piecewise(rule_list, empirical_probs, alpha)
 
     return rewards, rule_count, rule_count_body, rule_list
