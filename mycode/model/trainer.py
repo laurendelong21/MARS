@@ -348,17 +348,17 @@ class Trainer(object):
 
     def calculate_query_metrics(self, query_metrics, answer_pos):
         if answer_pos is not None:
-            query_metrics[5] += 1.0 / (answer_pos + 1)
+            query_metrics[5] += 1.0 / (answer_pos + 1)  # MRR
             if answer_pos < 20:
-                query_metrics[4] += 1
+                query_metrics[4] += 1  # Hits@20
                 if answer_pos < 10:
-                    query_metrics[3] += 1
+                    query_metrics[3] += 1  # Hits@10
                     if answer_pos < 5:
-                        query_metrics[2] += 1
+                        query_metrics[2] += 1  # Hits@5
                         if answer_pos < 3:
-                            query_metrics[1] += 1
+                            query_metrics[1] += 1  # Hits@3
                             if answer_pos < 1:
-                                query_metrics[0] += 1
+                                query_metrics[0] += 1  # Hits@1
         return query_metrics
 
     def add_paths(self, b, sorted_idx, qr, start_e, se, ce, end_e, answer_pos, answers, rewards):
@@ -688,7 +688,7 @@ class Trainer(object):
 
         if save_model:
             if final_metrics[-1] > self.best_metric:
-                self.best_metric = final_metrics[-1]
+                self.best_metric = final_metrics[-1]  # MRR
                 self.model_saver.save(sess, self.model_dir + 'model.ckpt')
                 self.current_patience = self.patience
             elif self.best_metric >= final_metrics[-1]:
@@ -727,6 +727,7 @@ def create_output_and_model_dir(params, mode):
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
+                               '_A' + str(params['max_num_actions']) + \
                                 '_LR' + str(params['learning_rate'])  + '/'
         os.makedirs(params['output_dir'])
     else:
@@ -737,6 +738,7 @@ def create_output_and_model_dir(params, mode):
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
+                               '_A' + str(params['max_num_actions']) + \
                                 '_LR' + str(params['learning_rate'])  + '/'
         params['model_dir'] = params['output_dir'] + 'model/'
         os.makedirs(params['output_dir'])
@@ -773,7 +775,7 @@ def optimization(permutation, config, logfile):
         trainer.initialize_pretrained_embeddings(sess=sess)
         trainer.train(sess)
 
-    local_metric = trainer.best_metric
+    local_metric = trainer.best_metric  # this is MRR right now
     tf.compat.v1.reset_default_graph()
 
     return local_metric
