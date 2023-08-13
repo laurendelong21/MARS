@@ -8,23 +8,10 @@ from collections import Counter
 
 """The following three functions are used to update the rule confidences based on the piecewise empirical probabilities"""
 
-def piecewise_probability(mpath, empirical_probs):
-    """Compute the piecewise probability of a metapath, given the empirical probabilities of its two-hop chunks
-    :param mpath: the full metapath, in terms the relations it constitutes
-    :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
-    """
-    prob = 1
-    for rel in range(len(mpath)-2):
-        key = (mpath[rel], mpath[rel+1])
-        chunk_prob = empirical_probs[key] if key in empirical_probs else 0
-        prob *= chunk_prob
-    return prob
-
-
 def get_metapath_chunks(path):
     """Gets all of the two-hop pieces of a metapath, returns them as a dictionary like (rel1, rel2):occurences """
     empirical_nums = dict()
-    for rel in range(len(path)-2):
+    for rel in range(len(path)-1):
         key = (path[rel], path[rel+1])
         if key in empirical_nums:
             empirical_nums[key] += 1
@@ -32,21 +19,36 @@ def get_metapath_chunks(path):
             empirical_nums[key] = 1
     return empirical_nums
 
+def piecewise_probability(mpath, empirical_probs):
+    """Compute the piecewise probability of a metapath, given the empirical probabilities of its two-hop chunks
+    :param mpath: the full metapath, in terms the relations it constitutes
+    :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
+    """
+    prob = 1
+    for rel in range(len(mpath)-1):
+        key = (mpath[rel], mpath[rel+1])
+        chunk_prob = empirical_probs[key] if key in empirical_probs else 0
+        prob *= chunk_prob
+    return prob
 
-def update_confs_piecewise(rule_list, empirical_probs, alpha=0.1):
+
+def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
     """Updates the confidences in the rule list based on empirical probabilities computed during the batch
-    :param rule_list
+    :param rule_dict
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     :param alpha: the parameter that controls how drastically the confidences are updated
     """
-    for head in rule_list.keys():
-        for count, mpath in enumerate(rule_list[head]):
-            old_conf = float(rule_list[head][count][0])
+    expected = 1 / len(empirical_probs)
+    for head in rule_dict.keys():
+        for count, mpath in enumerate(rule_dict[head]):
+            old_conf = float(rule_dict[head][count][0])
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
+            normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
             # get the average of the new and old confidences
-            adjustment = (pw_prob - old_conf) * alpha
-            rule_list[head][count][0] = str(pw_prob + adjustment)
-    return rule_list
+            adjustment = map_to_penalty(normed_prob, alpha)
+            # adjustment = (normed_prob - old_conf) * old_conf * alpha
+            rule_dict[head][count][0] = str(old_conf + adjustment)
+    return rule_dict
 
 
 def map_to_penalty(score: float, alpha: float = 0.1):
