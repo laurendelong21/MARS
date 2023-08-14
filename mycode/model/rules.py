@@ -8,6 +8,20 @@ from collections import Counter
 
 """The following three functions are used to update the rule confidences based on the piecewise empirical probabilities"""
 
+
+def sum_dicts(dict1, dict2):
+    """Gets the sum of the values in the two dicts"""
+    new_dict = dict()
+    for key in set(dict1.keys()) & set(dict2.keys()):
+        new_dict[key] = dict1[key] + dict2[key]
+    for key in set(dict1.keys()) - set(dict2.keys()):
+        new_dict[key] = dict1[key]
+    for key in set(dict2.keys()) - set(dict1.keys()):
+        new_dict[key] = dict2[key]
+    return new_dict
+        
+
+
 def get_metapath_chunks(path):
     """Gets all of the two-hop pieces of a metapath, returns them as a dictionary like (rel1, rel2):occurences """
     empirical_nums = dict()
@@ -151,7 +165,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                         rule_instances[query_rel][j] = body
                         # get all of the 2-hop chunks that helped make a match
                         if update_confs == 2:
-                            empirical_nums = Counter(get_metapath_chunks(body)) + Counter(empirical_nums)
+                            empirical_nums = sum_dicts(empirical_nums, get_metapath_chunks(body))
                     break
 
     print(f"Total bodies matched: {rule_count_body}")
