@@ -84,6 +84,17 @@ def check_rule(body, obj, obj_string, rule, only_body):
     return retval
 
 
+def init_empirical_nums(rule_dict):
+    """Initializes the empirical nums dict"""
+    empirical_nums = dict()
+    for head in rule_dict.keys():
+        for count, mpath in enumerate(rule_dict[head]):
+            empirical_nums = Counter(get_metapath_chunks(mpath[2::])) + Counter(empirical_nums)
+
+    empirical_nums = {key: 0 for key in empirical_nums.keys()}
+    return empirical_nums
+
+
 def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, 
                    rewards, only_body, update_confs, alpha):
     """Modifies the rewards according to whether the metapath corresponds to a rule
@@ -101,7 +112,8 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     rule_count = 0
     rule_count_body = 0
     entities_traversed = set()
-    empirical_nums = dict()
+    if update_confs == 2:
+        empirical_nums = init_empirical_nums(rule_list)
     # get the total number of rules
     num_rules = len(sum([val for val in rule_list.values()], []))
     expected_prob = 1 / num_rules
