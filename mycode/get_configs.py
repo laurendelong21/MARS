@@ -14,7 +14,7 @@ for subdir in os.listdir(parent_directory):
     subdir_path = os.path.join(parent_directory, subdir)
     
     # Check if it's a directory and starts with "14"
-    if os.path.isdir(subdir_path) and subdir.startswith("14"):
+    if os.path.isdir(subdir_path) and subdir.startswith("15"):
         scores_file_path = os.path.join(subdir_path, "scores.txt")
         configs_file_path = os.path.join(subdir_path, "config.txt")
         
@@ -27,8 +27,8 @@ for subdir in os.listdir(parent_directory):
                 for line in reversed(lines):
                     if "Hits@10:" in line:
                         print("Subdirectory:", subdir_path)
-                        print("Last Hits@10 line:", line.strip())
                         metric = float(line.split()[1])
+                        print(f"Hits@10: {metric}")
                         if metric > best_score:
                             best_score = metric
                             best_configs = configs_file_path
@@ -41,3 +41,4 @@ print("Top 5 configs files:")
 largest_keys = sorted(top_configs.keys(), reverse=True)[:5]
 for key in largest_keys:
     print(top_configs[key])
+    print(key)
