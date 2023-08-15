@@ -26,7 +26,7 @@ for subdir in os.listdir(parent_directory):
                     if "Hits@10:" in line:
                         print("Subdirectory:", subdir_path)
                         print("Last Hits@10 line:", line.strip())
-                        metric = int(line.split()[1])
+                        metric = float(line.split()[1])
                         if metric > best_score:
                             best_score = metric
                             # read json file
