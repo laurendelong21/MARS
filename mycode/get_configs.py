@@ -4,6 +4,8 @@ import json
 best_configs = None
 best_score = 0
 
+top_configs = dict()
+
 # Specify the parent directory
 parent_directory = '../output/MOA-net'
 
@@ -30,6 +32,12 @@ for subdir in os.listdir(parent_directory):
                         if metric > best_score:
                             best_score = metric
                             best_configs = configs_file_path
+                        top_configs[metric] = configs_file_path
 
 print("Best configs file:")
 print(best_configs)
+
+print("Top 5 configs files:")
+largest_keys = sorted(top_configs.keys(), reverse=True)[:5]
+for key in largest_keys:
+    print(top_configs[key])

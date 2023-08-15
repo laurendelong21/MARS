@@ -186,7 +186,8 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     # the piecewise option
     if update_confs == 2:
         total_count = sum(empirical_nums.values())
-        empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
-        rule_list = update_confs_piecewise(rule_list, empirical_probs, alpha)
+        if total_count > 0:
+            empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
+            rule_list = update_confs_piecewise(rule_list, empirical_probs, alpha)
 
     return rewards, rule_count, rule_count_body, rule_list
