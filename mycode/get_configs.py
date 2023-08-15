@@ -29,11 +29,7 @@ for subdir in os.listdir(parent_directory):
                         metric = float(line.split()[1])
                         if metric > best_score:
                             best_score = metric
-                            # read json file
-                            with open(configs_file_path, 'r') as configs_file:
-                                best_configs = json.load(configs_file)
+                            best_configs = configs_file_path
 
-# write a json file
-best_configs_filepath = os.path.join(parent_directory, "best_configs.json")
-with open(best_configs_filepath, 'w') as best_configs_file:
-    json.dump(best_configs, best_configs_file)
+print("Best configs file:")
+print(best_configs)
