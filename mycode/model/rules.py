@@ -21,7 +21,6 @@ def sum_dicts(dict1, dict2):
     return new_dict
         
 
-
 def get_metapath_chunks(path):
     """Gets all of the two-hop pieces of a metapath, returns them as a dictionary like (rel1, rel2):occurences """
     empirical_nums = dict()
@@ -59,10 +58,25 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
             normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
             # get the average of the new and old confidences
-            adjustment = map_to_penalty(normed_prob, alpha)
+            adjustment = map_ratio_to_penalty(normed_prob, alpha)
             # adjustment = (normed_prob - old_conf) * old_conf * alpha
             rule_dict[head][count][0] = str(old_conf + adjustment)
     return rule_dict
+
+
+def map_ratio_to_penalty(ratio, alpha=0.1):
+    """This function was written by ChatGPT
+    
+    It maps an observed/expected ratio to some penalty (-1, 1) in which a ratio > 1 gets a positive penalty, and 
+    a ratio < 1 gets a negative penalty. The penalty is scaled by the ratio, so that the penalty is more dramatic.
+    """
+    # Ensure ratio is within a valid range
+    ratio = max(0.001, min(1000, ratio))  # Avoid division by zero and extreme values
+
+    # Map ratio to penalty between -1 and 1
+    penalty = 2 * (ratio - 1) / (ratio + 1)
+
+    return penalty * alpha
 
 
 def map_to_penalty(score: float, alpha: float = 0.1):
@@ -179,7 +193,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             for rule_body, num_instances in rule_bodies.items():
                 # TODO: does it make sense to use rule_count rather than rule_count_body?
                 observed_prob = num_instances / rule_count
-                adjustment = map_to_penalty(observed_prob / expected_prob, alpha)
+                adjustment = map_ratio_to_penalty(observed_prob / expected_prob, alpha)
                 old_conf = float(rule_list[rule_head][rule_body][0])
                 rule_list[rule_head][rule_body][0] = str(old_conf + (adjustment * old_conf))
 
