@@ -60,7 +60,7 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
             # get the average of the new and old confidences
             adjustment = map_ratio_to_penalty(normed_prob, alpha)
             # adjustment = (normed_prob - old_conf) * old_conf * alpha
-            rule_dict[head][count][0] = str(old_conf + adjustment)
+            rule_dict[head][count][0] = str(old_conf + (old_conf * adjustment))
     return rule_dict
 
 
