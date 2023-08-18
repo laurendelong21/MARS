@@ -59,8 +59,13 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
             normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
             # get the average of the new and old confidences
             adjustment = map_ratio_to_penalty(normed_prob, alpha)
-            # adjustment = (normed_prob - old_conf) * old_conf * alpha
-            rule_dict[head][count][0] = str(old_conf + (old_conf * adjustment))
+            new_conf = old_conf + (old_conf * adjustment)
+            if new_conf > 1:
+                rule_dict[head][count][0] = str(new_conf)
+            elif new_conf < 0:
+                rule_dict[head][count][0] = str(0)
+            else:
+                rule_dict[head][count][0] = str(1)
     return rule_dict
 
 
