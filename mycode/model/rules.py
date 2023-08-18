@@ -61,11 +61,11 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
             adjustment = map_ratio_to_penalty(normed_prob, alpha)
             new_conf = old_conf + (old_conf * adjustment)
             if new_conf > 1:
-                rule_dict[head][count][0] = str(new_conf)
+                rule_dict[head][count][0] = str(1)
             elif new_conf < 0:
                 rule_dict[head][count][0] = str(0)
             else:
-                rule_dict[head][count][0] = str(1)
+                rule_dict[head][count][0] = str(new_conf)
     return rule_dict
 
 
