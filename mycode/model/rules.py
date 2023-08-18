@@ -56,6 +56,8 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
         for count, mpath in enumerate(rule_dict[head]):
             old_conf = float(rule_dict[head][count][0])
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
+            #if pw_prob == 0:
+            #    continue
             normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
             # get the average of the new and old confidences
             adjustment = map_ratio_to_penalty(normed_prob, alpha)
@@ -124,7 +126,7 @@ def init_empirical_nums(rule_dict):
         for count, mpath in enumerate(rule_dict[head]):
             empirical_nums = Counter(get_metapath_chunks(mpath[2::])) + Counter(empirical_nums)
 
-    empirical_nums = {key: 0 for key in empirical_nums.keys()}
+    empirical_nums = {key: 1 for key in empirical_nums.keys()}
     return empirical_nums
 
 
@@ -200,7 +202,14 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                 observed_prob = num_instances / rule_count
                 adjustment = map_ratio_to_penalty(observed_prob / expected_prob, alpha)
                 old_conf = float(rule_list[rule_head][rule_body][0])
-                rule_list[rule_head][rule_body][0] = str(old_conf + (adjustment * old_conf))
+
+                new_conf = old_conf + (old_conf * adjustment)
+                if new_conf > 1:
+                    rule_list[rule_head][rule_body][0] = str(1)
+                elif new_conf < 0:
+                    rule_list[rule_head][rule_body][0] = str(0)
+                else:
+                    rule_list[rule_head][rule_body][0] = str(new_conf)
 
     # the piecewise option
     if update_confs == 2:
