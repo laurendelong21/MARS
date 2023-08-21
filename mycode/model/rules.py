@@ -40,7 +40,13 @@ def piecewise_probability(mpath, empirical_probs):
     prob = 1
     for rel in range(len(mpath)-1):
         key = (mpath[rel], mpath[rel+1])
-        chunk_prob = empirical_probs[key] if key in empirical_probs else 0
+        if key[1] == 'NO_OP' or (key[0] == 'NO_OP' and rel == 0):  # if we stayed where we are, prob is 1
+            chunk_prob = 1
+        elif key[0] == 'NO_OP':  # if we came from NO_OP, get the previous relation
+            key = (mpath[rel-1], mpath[rel+1])
+            chunk_prob = empirical_probs[key] if key in empirical_probs else 0
+        else:
+            chunk_prob = empirical_probs[key] if key in empirical_probs else 0
         prob *= chunk_prob
     return prob
 
