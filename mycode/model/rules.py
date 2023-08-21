@@ -25,7 +25,16 @@ def get_metapath_chunks(path):
     """Gets all of the two-hop pieces of a metapath, returns them as a dictionary like (rel1, rel2):occurences """
     empirical_nums = dict()
     for rel in range(len(path)-1):
-        key = (path[rel], path[rel+1])
+        if path[rel] == 'NO_OP':
+            continue
+        elif path[rel+1] == 'NO_OP':
+            if rel+1 != len(path)-1:
+                key = (path[rel], path[rel+2])
+            else:
+                continue
+        else:
+            key = (path[rel], path[rel+1])
+
         if key in empirical_nums:
             empirical_nums[key] += 1
         else:
@@ -38,16 +47,10 @@ def piecewise_probability(mpath, empirical_probs):
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     """
     prob = 1
-    for rel in range(len(mpath)-1):
-        key = (mpath[rel], mpath[rel+1])
-        if key[1] == 'NO_OP' or (key[0] == 'NO_OP' and rel == 0):  # if we stayed where we are, prob is 1
-            chunk_prob = 1
-        elif key[0] == 'NO_OP':  # if we came from NO_OP, get the previous relation
-            key = (mpath[rel-1], mpath[rel+1])
-            chunk_prob = empirical_probs[key] if key in empirical_probs else 0
-        else:
-            chunk_prob = empirical_probs[key] if key in empirical_probs else 0
-        prob *= chunk_prob
+    chunks = get_metapath_chunks(mpath)
+    for key, val in chunks.items():
+        chunk_prob = empirical_probs[key] if key in empirical_probs else 0
+        prob *= chunk_prob ** val
     return prob
 
 
