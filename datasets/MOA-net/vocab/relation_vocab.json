@@ -1,1 +1,1 @@
-{"PAD": 0, "DUMMY_START_RELATION": 1, "NO_OP": 2, "UNK": 3, "CtBP": 4, "CuG": 5, "_GpBP": 6, "GiG": 7, "_GiG": 8, "CdG": 9, "_CdG": 10, "GpBP": 11, "_CuG": 12}
+{"PAD": 0, "DUMMY_START_RELATION": 1, "NO_OP": 2, "UNK": 3, "CtBP": 4, "GpBP": 5, "_GiG": 6, "CdG": 7, "_GpBP": 8, "_CdG": 9, "_CuG": 10, "CuG": 11, "GiG": 12}
