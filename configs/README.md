@@ -53,7 +53,9 @@ located.
 
 ```--negative_reward```*: float. Negative reward if the end entity is incorrect.
 
-```--only_body```*: int. Either 0 or 1. Flag to check whether the extracted paths should only be compared against the body of the rules, or if the correctness of the end entity should also be taken into account. This is b in the reward function; 0 means we set it equal to the first term, and 1 means we set it equal to 1.
+```--only_body```*: int. Either 0 or 1. Flag to check whether the extracted paths should only be compared against the body of the rules, or if the correctness of the end entity should also be taken into account. 
+
+This is b in the reward function; 0 means we set it equal to the first term, and 1 means we set it equal to 1.
 
 ```--pool```*: str. ```max``` or ```sum```. Pooling operation for evaluation.
 

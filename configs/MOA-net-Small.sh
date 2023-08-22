@@ -1,5 +1,5 @@
-input_dir="datasets/MOA-net/"
-base_output_dir="output/MOA-net/"
+input_dir="datasets/MOA-net-Small/"
+base_output_dir="output/MOA-net-Small/"
 update_confs=0
 path_length="3 4"
 total_iterations=1000
@@ -19,4 +19,4 @@ use_entity_embeddings=1
 num_rollouts=50
 test_rollouts=100
 load_model=0
-model_load_path="./models/MOA-net/model.ckpt"
+model_load_path="./models/MOA-net-Small/model.ckpt"
