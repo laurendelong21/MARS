@@ -8,6 +8,8 @@ from collections import Counter
 
 """The following three functions are used to update the rule confidences based on the piecewise empirical probabilities"""
 
+subgraphs = [set(), set()]
+
 
 def sum_dicts(dict1, dict2):
     """Gets the sum of the values in the two dicts"""
@@ -105,6 +107,20 @@ def map_ratio_to_penalty(ratio, alpha=0.1):
     return penalty * alpha
 
 
+def compute_subgraph_penalty(subgraphs, entities, sg_penalty):
+    """Computes the subgraph penalty for a given path
+    :param subgraphs: a list of set, where each set comprises the proteins in a given subgraph/pathway
+    :param entities: a set of entities in the found path
+    :param sg_penalty: the penalty imposed for crossing subgraphs / pathways while traversing the graph
+    """
+    crosses = 0
+    for subgraph in subgraphs:
+        if bool(subgraph & entities):
+            crosses += 1
+    return crosses * sg_penalty
+
+
+
 def get_entities(argument):
     body = set(argument[1::2])  # get all entities, no relations
     return body
@@ -142,7 +158,7 @@ def init_empirical_nums(rule_dict):
 
 
 def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, 
-                   rewards, only_body, update_confs, alpha):
+                   rewards, only_body, update_confs, sg_penalty, alpha):
     """Modifies the rewards according to whether the metapath corresponds to a rule
     :param rule_list: 2D array containing rules and corresponding confidences 
     :param arguments: a string which is like a list, alternating between the next possible relation and entity
@@ -153,6 +169,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     :param only_body: Either 0 or 1. Flag to check whether the extracted paths should only be compared against
         the body of the rules, or if the correctness of the end entity should also be taken into account.
     :param update_confs: Either 0 or 1. Flag to check whether the rule confidences should be updated.
+    :param sg_penalty: the penalty imposed for crossing subgraphs / pathways while traversing the graph
     :param alpha: if doing confidence updates, alpha controls how drastically the confidences are updated
     """
     rule_count = 0
@@ -172,18 +189,18 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             # separate into relation sequence, last entity
             body, obj = prepare_argument(argument_temp)
             
-            # entities = get_entities(argument_temp)
             
-            # now, loop through the metapaths and add a reward if the path matches metapath
-            # the rule added corresponds to the metapath confidence
-            for j in range(len(rel_rules)):  # for each rule body corresponding to that rule head:
-                if check_rule(body, obj, obj_string[k], rel_rules[j], only_body):
-                    add_reward = rule_base_reward * float(rel_rules[j][0])  # the 0th element is the confidence
-                    rewards[k] += add_reward
-                    break
+            if sg_penalty > 0:  # if we are penalizing subgraph crossings, get the proteins from the path
+                entities = get_entities(argument_temp)
+            
             for j in range(len(rel_rules)):
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=True):  # only checks if the metapath matches
                     rule_count_body += 1
+                    penalty = compute_subgraph_penalty(subgraphs, entities, sg_penalty) if sg_penalty > 0 else 0
+                    # possible penalty
+                    take_penalty = penalty * rewards[k]
+                    rewards[k] -= take_penalty
+
                     if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):  # checks if the last entity is a true sink node
                         rule_count += 1
                         if update_confs == 1:
@@ -192,6 +209,15 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                         if update_confs == 2:
                             # get all of the 2-hop chunks that helped make a match
                             empirical_nums = sum_dicts(empirical_nums, get_metapath_chunks(body))
+                    break
+
+            # now, loop through the metapaths and add a reward if the path matches metapath
+            # the rule added corresponds to the metapath confidence
+            for j in range(len(rel_rules)):  # for each rule body corresponding to that rule head:
+                if check_rule(body, obj, obj_string[k], rel_rules[j], only_body):
+                    # additional reward for matching rule body
+                    add_reward = rule_base_reward * float(rel_rules[j][0])  # the 0th element is the confidence
+                    rewards[k] += add_reward
                     break
 
     print(f"Total bodies matched: {rule_count_body}")
