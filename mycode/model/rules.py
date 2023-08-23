@@ -60,23 +60,17 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     :param alpha: the parameter that controls how drastically the confidences are updated
     """
-    expected = 1 / len(empirical_probs)
+    expected = 1 / len(empirical_probs)  ## the expected probability of each chunk
     for head in rule_dict.keys():
         for count, mpath in enumerate(rule_dict[head]):
             old_conf = float(rule_dict[head][count][0])
+            # get the piecewise probability
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
-            #if pw_prob == 0:
-            #    continue
             normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
             # get the average of the new and old confidences
             adjustment = map_ratio_to_penalty(normed_prob, alpha)
             new_conf = old_conf + (old_conf * adjustment)
-            if new_conf > 1:
-                rule_dict[head][count][0] = str(1)
-            elif new_conf < 0:
-                rule_dict[head][count][0] = str(0)
-            else:
-                rule_dict[head][count][0] = str(new_conf)
+            rule_dict[head][count][0] = str(max(min(1, new_conf), 0))  # bounds it between 0 and 1
     return rule_dict
 
 
@@ -93,14 +87,6 @@ def map_ratio_to_penalty(ratio, alpha=0.1):
     penalty = 2 * (ratio - 1) / (ratio + 1)
 
     return penalty * alpha
-
-
-def map_to_penalty(score: float, alpha: float = 0.1):
-    """
-    The naive way to update the rule confidences.
-    :param score: the observed/expected ratio to map
-    :param alpha: adjustable parameter to change how dramatic the penalty is"""
-    return alpha * (np.tanh(score-1))**3
 
 
 def get_entities(argument):
@@ -129,7 +115,7 @@ def check_rule(body, obj, obj_string, rule, only_body):
 
 
 def init_empirical_nums(rule_dict):
-    """Initializes the empirical nums dict"""
+    """Initializes the empirical nums dict: initializes each with 1 to avoid division by 0"""
     empirical_nums = dict()
     for head in rule_dict.keys():
         for count, mpath in enumerate(rule_dict[head]):
@@ -207,18 +193,12 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     if update_confs == 1 and rule_count > 0:
         for rule_head, rule_bodies in no_rule_instances.items():
             for rule_body, num_instances in rule_bodies.items():
-                # TODO: does it make sense to use rule_count rather than rule_count_body?
                 observed_prob = num_instances / rule_count
                 adjustment = map_ratio_to_penalty(observed_prob / expected_prob, alpha)
                 old_conf = float(rule_list[rule_head][rule_body][0])
 
                 new_conf = old_conf + (old_conf * adjustment)
-                if new_conf > 1:
-                    rule_list[rule_head][rule_body][0] = str(1)
-                elif new_conf < 0:
-                    rule_list[rule_head][rule_body][0] = str(0)
-                else:
-                    rule_list[rule_head][rule_body][0] = str(new_conf)
+                rule_list[rule_head][rule_body][0] = str(max(min(1, new_conf), 0))  # bounds it between 0 and 1
 
     # the piecewise option
     if update_confs == 2:
