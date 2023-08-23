@@ -55,7 +55,7 @@ def piecewise_probability(mpath, empirical_probs):
 
 
 def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
-    """Updates the confidences in the rule list based on empirical probabilities computed during the batch
+    """Updates the confidences in the rule list based on piecewise empirical probabilities computed during the batch
     :param rule_dict
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     :param alpha: the parameter that controls how drastically the confidences are updated
@@ -71,6 +71,22 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
             adjustment = map_ratio_to_penalty(normed_prob, alpha)
             new_conf = old_conf + (old_conf * adjustment)
             rule_dict[head][count][0] = str(max(min(1, new_conf), 0))  # bounds it between 0 and 1
+    return rule_dict
+
+
+def update_confs_basic(rule_dict, no_rule_instances, rule_count, alpha=0.1):
+    """Updates confidences the basic way, based on number of occurrences of each rule"""
+    num_rules = len(sum([val for val in rule_dict.values()], []))
+    expected_prob = 1 / num_rules
+
+    for rule_head, rule_bodies in no_rule_instances.items():
+        for rule_body, num_instances in rule_bodies.items():
+            observed_prob = num_instances / rule_count
+            adjustment = map_ratio_to_penalty(observed_prob / expected_prob, alpha)
+            old_conf = float(rule_dict[rule_head][rule_body][0])
+            new_conf = old_conf + (old_conf * adjustment)
+            rule_dict[rule_head][rule_body][0] = str(max(min(1, new_conf), 0))  # bounds it between 0 and 1
+
     return rule_dict
 
 
@@ -141,16 +157,11 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     """
     rule_count = 0
     rule_count_body = 0
-    entities_traversed = set()
     if update_confs == 2:
         empirical_nums = init_empirical_nums(rule_list)
-    # get the total number of rules
-    num_rules = len(sum([val for val in rule_list.values()], []))
-    expected_prob = 1 / num_rules
-    # to store the number of occurrences of each rule:
-    no_rule_instances = {key: {i: 0 for i in range(len(val))} for key, val in rule_list.items()}
-    # to store the rule instances
-    rule_instances = {key: dict() for key in rule_list.keys()}
+    if update_confs == 1:
+        # to store the number of occurrences of each rule:
+        no_rule_instances = {key: {i: 0 for i in range(len(val))} for key, val in rule_list.items()}
     for k in range(len(obj_string)):
         # get all of the relations/ rule heads applicable from k
         query_rel = query_rel_string[k]
@@ -161,7 +172,8 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             # separate into relation sequence, last entity
             body, obj = prepare_argument(argument_temp)
             
-            entities = get_entities(argument_temp)
+            # entities = get_entities(argument_temp)
+            
             # now, loop through the metapaths and add a reward if the path matches metapath
             # the rule added corresponds to the metapath confidence
             for j in range(len(rel_rules)):  # for each rule body corresponding to that rule head:
@@ -172,33 +184,22 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             for j in range(len(rel_rules)):
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=True):  # only checks if the metapath matches
                     rule_count_body += 1
-                    entities_traversed.update(entities)
                     if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):  # checks if the last entity is a true sink node
                         rule_count += 1
-                        # count the number of instances for each rule
-                        no_rule_instances[query_rel][j] += 1
-                        # store that rule instance
-                        rule_instances[query_rel][j] = body
-                        # get all of the 2-hop chunks that helped make a match
+                        if update_confs == 1:
+                            # count the number of instances for each rule
+                            no_rule_instances[query_rel][j] += 1
                         if update_confs == 2:
+                            # get all of the 2-hop chunks that helped make a match
                             empirical_nums = sum_dicts(empirical_nums, get_metapath_chunks(body))
                     break
 
     print(f"Total bodies matched: {rule_count_body}")
     print(f"Total complete matches: {rule_count}")
 
-    print(f"Entities traversed: {len(entities_traversed)}")
-
-    # the naive option
+    # the naive / simple option
     if update_confs == 1 and rule_count > 0:
-        for rule_head, rule_bodies in no_rule_instances.items():
-            for rule_body, num_instances in rule_bodies.items():
-                observed_prob = num_instances / rule_count
-                adjustment = map_ratio_to_penalty(observed_prob / expected_prob, alpha)
-                old_conf = float(rule_list[rule_head][rule_body][0])
-
-                new_conf = old_conf + (old_conf * adjustment)
-                rule_list[rule_head][rule_body][0] = str(max(min(1, new_conf), 0))  # bounds it between 0 and 1
+        rule_list = update_confs_basic(rule_list, no_rule_instances, rule_count, alpha)
 
     # the piecewise option
     if update_confs == 2:
