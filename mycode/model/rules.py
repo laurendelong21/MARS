@@ -8,8 +8,6 @@ from collections import Counter
 
 """The following three functions are used to update the rule confidences based on the piecewise empirical probabilities"""
 
-subgraphs = [set(), set()]
-
 
 def sum_dicts(dict1, dict2):
     """Gets the sum of the values in the two dicts"""
