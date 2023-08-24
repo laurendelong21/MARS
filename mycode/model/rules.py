@@ -158,7 +158,7 @@ def init_empirical_nums(rule_dict):
 
 
 def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, 
-                   rewards, only_body, update_confs, sg_penalty, alpha):
+                   rewards, only_body, update_confs, alpha, sg_penalty, subgraphs):
     """Modifies the rewards according to whether the metapath corresponds to a rule
     :param rule_list: 2D array containing rules and corresponding confidences 
     :param arguments: a string which is like a list, alternating between the next possible relation and entity
@@ -168,9 +168,10 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     :param rewards: array containing rewards for each entity
     :param only_body: Either 0 or 1. Flag to check whether the extracted paths should only be compared against
         the body of the rules, or if the correctness of the end entity should also be taken into account.
-    :param update_confs: Either 0 or 1. Flag to check whether the rule confidences should be updated.
-    :param sg_penalty: the penalty imposed for crossing subgraphs / pathways while traversing the graph
+    :param update_confs: 0 indicates no conf updates, 1 indicates frequency-based conf updates, 2 indicates piecewise
     :param alpha: if doing confidence updates, alpha controls how drastically the confidences are updated
+    :param sg_penalty: the penalty imposed for crossing subgraphs / pathways while traversing the graph
+    :param subgraphs: a list of sets, where each set comprises the proteins in a given subgraph/pathway
     """
     rule_count = 0
     rule_count_body = 0

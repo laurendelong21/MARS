@@ -45,6 +45,10 @@ class Trainer(object):
         self.rule_list_dir = self.input_dir + self.rule_file
         with open(self.rule_list_dir, 'r') as file:
             self.rule_list = json.load(file)
+        # load in the biological pathway subgraphs for the penalty
+        self.subgraphs_dir = self.input_dir + self.subgraphs_file
+        with open(self.subgraphs_dir, 'r') as file:
+            self.subgraphs = [set(v) for v in json.load(file).values()]  # just get the proteins for now.
         self.baseline = ReactiveBaseline(self.Lambda)
         self.optimizer = tf.compat.v1.train.AdamOptimizer(self.learning_rate)
         self.best_metric = -1
@@ -518,7 +522,8 @@ class Trainer(object):
             # Here, they modify the rewards to take into account whether it fits rules.
             rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
-                                                                            self.only_body, self.update_confs, self.alpha)
+                                                                            self.only_body, self.update_confs, self.alpha,
+                                                                            self.sg_penalty, self.subgraphs)
 
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
