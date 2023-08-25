@@ -111,10 +111,12 @@ def compute_subgraph_penalty(subgraphs, entities, sg_penalty):
     :param entities: a set of entities in the found path
     :param sg_penalty: the penalty imposed for crossing subgraphs / pathways while traversing the graph
     """
-    crosses = 0
+    crosses = -1
     for subgraph in subgraphs:
         if bool(subgraph & entities):
             crosses += 1
+    if crosses <= 0: ## if it does not cross 2+ subgraphs,
+        return 0
     return crosses * sg_penalty
 
 
