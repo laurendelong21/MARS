@@ -199,7 +199,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
                     rule_count_body += 1
                     penalty = compute_subgraph_penalty(subgraphs, entities, sg_penalty) if sg_penalty > 0 else 0
                     # possible penalty
-                    take_penalty = penalty * rewards[k]
+                    take_penalty = penalty * abs(rewards[k])  ## reward can be negative, so abs val necessary
                     rewards[k] -= take_penalty
 
                     if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):  # checks if the last entity is a true sink node
