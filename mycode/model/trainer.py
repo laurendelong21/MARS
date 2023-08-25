@@ -814,7 +814,7 @@ if __name__ == '__main__':
 
         with multiprocessing.Pool(processes=num_cores) as pool:
             # use starmap to take multiple args
-            results = pool.starmap(optimization, arguments, chunksize=len(hp_permutations)/(num_cores*4))
+            results = pool.starmap(optimization, arguments)
         
         # get the parameters with the best functions
         for met_num, met in enumerate(results):
