@@ -725,23 +725,23 @@ def create_output_and_model_dir(params, mode):
         params['output_dir'] = params['base_output_dir'] + str(current_time) + '_TEST' + \
                                '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
-                               '_L' + str(params['LSTM_layers']) + '_l' + str(params['learning_rate']) + \
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
                                '_A' + str(params['max_num_actions']) + \
-                                '_LR' + str(params['learning_rate'])  + '/'
+                               '_LR' + str(params['learning_rate']) + \
+                                '_pen' + str(params['sg_penalty'])  + '/'
         os.makedirs(params['output_dir'])
     else:
         params['output_dir'] = params['base_output_dir'] + str(current_time) + \
                                '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
-                               '_L' + str(params['LSTM_layers']) + '_l' + str(params['learning_rate']) + \
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
                                '_A' + str(params['max_num_actions']) + \
-                                '_LR' + str(params['learning_rate'])  + '/'
+                               '_LR' + str(params['learning_rate']) + \
+                                '_pen' + str(params['sg_penalty'])  + '/'
         params['model_dir'] = params['output_dir'] + 'model/'
         os.makedirs(params['output_dir'])
         os.makedirs(params['model_dir'])
