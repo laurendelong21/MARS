@@ -9,6 +9,8 @@ This implementation is based on [Shehzaad Dhuliawala's repository](https://githu
 
 <h2> How To Run </h2>
 
+<h3>  Dependencies and Virtual Environment: </h3>
+
 The dependencies are specified in [ENV.yml](ENV.yml) as well as [requirements.txt](requirements.txt) The user can use either of the following to create
 a virtual environment:
 
@@ -34,10 +36,13 @@ docker run -it --workdir /work --volume $HOME_DIR$/PoLo:/work --name polo_cont l
 
 ```
 
+<h3>  Hyperparameter Configurations: </h3>
 
 To run PoLo, use one of the config files or create your own. For an explanation of each hyperparameter, refer to the [README file in the configs folder](configs/README.md).
 
-**Note**: The Hetionet graph is split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
+<h3>  Large Files: </h3>
+
+**Note**: Both the Hetionet and MOA-net graphs are split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
 These two files **need to be combined into one file** (with the name ```graph.txt```) before running the code.
 
 To do this, you have to create a file called ```graph.txt```, as explained above:
@@ -45,14 +50,33 @@ To do this, you have to create a file called ```graph.txt```, as explained above
 cat datasets/Hetionet/graph_triples.txt datasets/Hetionet/graph_inverses.txt > datasets/Hetionet/graph.txt
 ```
 
-Then, change the permissions of the ```run.sh``` file:
+or, for MOA-net:
+
+```
+cat datasets/MOA-net/graph_triples.txt datasets/MOA-net/graph_inverses.txt > datasets/MOA-net/graph.txt
+```
+
+The permissions for the ```run.sh``` file are typically editable for all, but in case they aren't, run:
 ```
 chmod a+x ./run.sh
 ```
 
-Then, run the command
+<h3> Run PoLo: </h3>
+
+Once you're ready to run PoLo, use the `run.sh` bash script, followed by the proper configuration file:
+
 ```
+cd PoLo
+
 ./run.sh configs/${config_file}.sh
+```
+
+If you want to run replicates of the same configuration, you can use the replicates bash script, with the first argument being the configuration file, and the second being the number of replicates:
+
+```
+cd PoLo
+
+./replicates.sh configs/${config_file}.sh {n_replicates}
 ```
 
 
