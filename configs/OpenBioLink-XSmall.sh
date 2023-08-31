@@ -1,5 +1,5 @@
-input_dir="datasets/OpenBioLink/"
-base_output_dir="output/OpenBioLink/"
+input_dir="datasets/OpenBioLink-XSmall/"
+base_output_dir="output/OpenBioLink-XSmall/"
 update_confs=0
 sg_penalty=0
 path_length=3
@@ -20,4 +20,4 @@ use_entity_embeddings=1
 num_rollouts=50
 test_rollouts=100
 load_model=0
-model_load_path="./models/OpenBioLink/model.ckpt"
+model_load_path="./models/OpenBioLink-XSmall/model.ckpt"
