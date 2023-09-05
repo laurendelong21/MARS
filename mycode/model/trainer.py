@@ -45,6 +45,10 @@ class Trainer(object):
         self.rule_list_dir = self.input_dir + self.rule_file
         with open(self.rule_list_dir, 'r') as file:
             self.rule_list = json.load(file)
+        # load in the biological pathway subgraphs for the penalty
+        self.subgraphs_dir = self.input_dir + self.subgraphs_file
+        with open(self.subgraphs_dir, 'r') as file:
+            self.subgraphs = [set(v) for v in json.load(file).values()]  # just get the proteins for now.
         self.baseline = ReactiveBaseline(self.Lambda)
         self.optimizer = tf.compat.v1.train.AdamOptimizer(self.learning_rate)
         self.best_metric = -1
@@ -518,7 +522,8 @@ class Trainer(object):
             # Here, they modify the rewards to take into account whether it fits rules.
             rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
-                                                                            self.only_body, self.update_confs, self.alpha)
+                                                                            self.only_body, self.update_confs, self.alpha,
+                                                                            self.sg_penalty, self.subgraphs)
 
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
@@ -720,23 +725,23 @@ def create_output_and_model_dir(params, mode):
         params['output_dir'] = params['base_output_dir'] + str(current_time) + '_TEST' + \
                                '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
-                               '_L' + str(params['LSTM_layers']) + '_l' + str(params['learning_rate']) + \
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
                                '_A' + str(params['max_num_actions']) + \
-                                '_LR' + str(params['learning_rate'])  + '/'
+                               '_LR' + str(params['learning_rate']) + \
+                                '_pen' + str(params['sg_penalty'])  + '/'
         os.makedirs(params['output_dir'])
     else:
         params['output_dir'] = params['base_output_dir'] + str(current_time) + \
                                '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
-                               '_L' + str(params['LSTM_layers']) + '_l' + str(params['learning_rate']) + \
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
                                '_A' + str(params['max_num_actions']) + \
-                                '_LR' + str(params['learning_rate'])  + '/'
+                               '_LR' + str(params['learning_rate']) + \
+                                '_pen' + str(params['sg_penalty'])  + '/'
         params['model_dir'] = params['output_dir'] + 'model/'
         os.makedirs(params['output_dir'])
         os.makedirs(params['model_dir'])
