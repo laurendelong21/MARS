@@ -717,6 +717,9 @@ class Trainer(object):
         for i in range(len(metrics_rule)):
             logger.info(metrics_rule[i] + ': {0:7.4f}'.format(final_metrics_rule[i]))
 
+        with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
+            json.dump(self.rule_list, rule_fl, indent=2)
+
 
 def create_output_and_model_dir(params, mode):
     current_time = datetime.datetime.now()
