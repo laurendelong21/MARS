@@ -6,6 +6,7 @@ def read_options():
     parser.add_argument('--input_dir', default='', type=str)
     parser.add_argument('--base_output_dir', default='', type=str)
     parser.add_argument('--rule_file', default='rules.txt', type=str)
+    parser.add_argument('--subgraphs_file', default='subgraphs.txt', type=str)
     parser.add_argument('--pretrained_embeddings_dir', default='', type=str)
     parser.add_argument('--load_model', default=0, type=int)
     parser.add_argument('--model_load_path', default='', type=str)
@@ -34,6 +35,9 @@ def read_options():
     parser.add_argument('--use_entity_embeddings', default=0, type=int)
     parser.add_argument('--train_entity_embeddings', default=0, type=int)
     parser.add_argument('--train_relation_embeddings', default=1, type=int)
+    parser.add_argument('--update_confs', default=0, type=int, nargs='+')
+    parser.add_argument('--alpha', default=0.1, type=float, nargs='+')
+    parser.add_argument('--sg_penalty', default=0, type=float, nargs='+')
 
     try:
         parsed = vars(parser.parse_args())

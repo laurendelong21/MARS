@@ -11,6 +11,7 @@ import numpy as np
 from tqdm import tqdm
 from pprint import pprint
 from collections import defaultdict
+from copy import deepcopy
 from scipy.special import logsumexp as lse
 from sklearn.model_selection import ParameterGrid
 from mycode.options import read_options
@@ -18,6 +19,8 @@ from mycode.model.agent import Agent
 from mycode.model.environment import Env
 from mycode.model.baseline import ReactiveBaseline
 from mycode.model.rules import prepare_argument, check_rule, modify_rewards
+
+import multiprocessing
 
 
 logger = logging.getLogger(__name__)
@@ -30,6 +33,7 @@ class Trainer(object):
         for k, v in params.items():
             setattr(self, k, v)
         self.set_random_seeds(self.seed)
+        # the trainer initializes an agent
         self.agent = Agent(params)
         self.train_environment = Env(params, 'train')
         self.dev_test_environment = Env(params, 'dev')
@@ -37,9 +41,14 @@ class Trainer(object):
         self.test_environment = self.dev_test_environment
         self.rev_entity_vocab = self.train_environment.grapher.rev_entity_vocab
         self.rev_relation_vocab = self.train_environment.grapher.rev_relation_vocab
+        # load in the rules and corresponding confidences
         self.rule_list_dir = self.input_dir + self.rule_file
         with open(self.rule_list_dir, 'r') as file:
             self.rule_list = json.load(file)
+        # load in the biological pathway subgraphs for the penalty
+        self.subgraphs_dir = self.input_dir + self.subgraphs_file
+        with open(self.subgraphs_dir, 'r') as file:
+            self.subgraphs = [set(v) for v in json.load(file).values()]  # just get the proteins for now.
         self.baseline = ReactiveBaseline(self.Lambda)
         self.optimizer = tf.compat.v1.train.AdamOptimizer(self.learning_rate)
         self.best_metric = -1
@@ -52,6 +61,7 @@ class Trainer(object):
             np.random.seed(seed)
 
     def calc_reinforce_loss(self):
+        # self.per_example_loss is returned by calling the agent in the initialize function
         loss = tf.stack(self.per_example_loss, axis=1)
         self.tf_baseline = self.baseline.get_baseline_value()
 
@@ -82,7 +92,12 @@ class Trainer(object):
         self.cum_discounted_rewards = tf.compat.v1.placeholder(tf.float32, [None, self.path_length],
                                                                name='cumulative_discounted_rewards')
 
+        # NOTE: params like path_length and max_num_actions come from the user-specified configs
         for t in range(self.path_length):
+            # here, we create lists of lengths self.path_length which include tensors storing next actions, 
+                # and the entities which the agent traversed
+
+            # here, we make tensors which are capped at the max branching factor
             next_possible_relations = tf.compat.v1.placeholder(tf.int32, [None, self.max_num_actions],
                                                                name='next_relations_{}'.format(t))
             next_possible_entities = tf.compat.v1.placeholder(tf.int32, [None, self.max_num_actions],
@@ -91,11 +106,15 @@ class Trainer(object):
             self.candidate_relation_sequence.append(next_possible_relations)
             self.candidate_entity_sequence.append(next_possible_entities)
             self.entity_sequence.append(start_entities)
+        
+        # here, the agent populates those lists and returns the final loss, scores, and action sequences
         self.per_example_loss, self.per_example_logits, self.actions_idx = self.agent(
             self.candidate_relation_sequence, self.candidate_entity_sequence, self.entity_sequence,
             self.query_relations, self.range_arr, self.path_length)
 
+        # calculate the final loss, including rewards
         self.loss_op = self.calc_reinforce_loss()
+        # TODO: no idea what this is
         self.train_op = self.bp(self.loss_op)
 
         # Building the test graph
@@ -333,17 +352,17 @@ class Trainer(object):
 
     def calculate_query_metrics(self, query_metrics, answer_pos):
         if answer_pos is not None:
-            query_metrics[5] += 1.0 / (answer_pos + 1)
+            query_metrics[5] += 1.0 / (answer_pos + 1)  # MRR
             if answer_pos < 20:
-                query_metrics[4] += 1
+                query_metrics[4] += 1  # Hits@20
                 if answer_pos < 10:
-                    query_metrics[3] += 1
+                    query_metrics[3] += 1  # Hits@10
                     if answer_pos < 5:
-                        query_metrics[2] += 1
+                        query_metrics[2] += 1  # Hits@5
                         if answer_pos < 3:
-                            query_metrics[1] += 1
+                            query_metrics[1] += 1  # Hits@3
                             if answer_pos < 1:
-                                query_metrics[0] += 1
+                                query_metrics[0] += 1  # Hits@1
         return query_metrics
 
     def add_paths(self, b, sorted_idx, qr, start_e, se, ce, end_e, answer_pos, answers, rewards):
@@ -462,13 +481,18 @@ class Trainer(object):
         train_loss = 0.0
         self.batch_counter = 0
 
+        # for each batch / episode
+        # TODO: understand why the trainer starts with old scores each time
         for episode in self.train_environment.get_episodes():
             self.batch_counter += 1
+            # parallelization
             h = sess.partial_run_setup(fetches=fetches, feeds=feeds)
+            # get all the next relations from query
             feed_dict[0][self.query_relations] = episode.get_query_relations()
             states = episode.get_states()
 
             arguments = []
+            # here is where the agent finds a path between the query and the answer
             for i in range(self.path_length):
                 feed_dict[i][self.candidate_relation_sequence[i]] = states['next_relations']
                 feed_dict[i][self.candidate_entity_sequence[i]] = states['next_entities']
@@ -479,20 +503,28 @@ class Trainer(object):
 
                 rel = np.copy(states['next_relations'][np.arange(states['next_relations'].shape[0]), actions_idx])
                 ent = np.copy(states['next_entities'][np.arange(states['next_entities'].shape[0]), actions_idx])
+                # get the names of the relations and entities from the IDs
                 rel_string = np.array([self.rev_relation_vocab[x] for x in rel])
                 ent_string = np.array([self.rev_entity_vocab[x] for x in ent])
+                # rel_string and ent_string are actually lists of possibilities from the current state
                 arguments.append(rel_string)
                 arguments.append(ent_string)
+                # get the next set of states
                 states = episode(actions_idx)
 
+            # all relations
             query_rel_string = np.array([self.rev_relation_vocab[x] for x in episode.get_query_relations()])
+            # all sink nodes
             obj_string = np.array([self.rev_entity_vocab[x] for x in episode.get_query_objects()])
 
+            # positive or negative reward values per starting node
             rewards = episode.get_rewards()
             # Here, they modify the rewards to take into account whether it fits rules.
-            rewards, rule_count, rule_count_body = modify_rewards(self.rule_list, arguments, query_rel_string,
-                                                                  obj_string, self.rule_base_reward, rewards,
-                                                                  self.only_body)
+            rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
+                                                                            obj_string, self.rule_base_reward, rewards,
+                                                                            self.only_body, self.update_confs, self.alpha,
+                                                                            self.sg_penalty, self.subgraphs)
+
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
             # Backpropagation
@@ -532,8 +564,12 @@ class Trainer(object):
             gc.collect()
 
             if self.early_stopping:
+                with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
+                    json.dump(self.rule_list, rule_fl, indent=2)
                 break
             if self.batch_counter >= self.total_iterations:
+                with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
+                    json.dump(self.rule_list, rule_fl, indent=2)
                 break
 
     def test(self, sess, print_paths=False, save_model=True, beam=True):
@@ -654,7 +690,7 @@ class Trainer(object):
 
         if save_model:
             if final_metrics[-1] > self.best_metric:
-                self.best_metric = final_metrics[-1]
+                self.best_metric = final_metrics[-1]  # MRR
                 self.model_saver.save(sess, self.model_dir + 'model.ckpt')
                 self.current_patience = self.patience
             elif self.best_metric >= final_metrics[-1]:
@@ -664,6 +700,7 @@ class Trainer(object):
 
         self.write_paths_summary()
         if print_paths:
+            # HERE: print the paths found for each pair:
             logger.info('Printing paths at {}'.format(self.output_dir + 'test_beam/'))
             self.write_paths_file(answers)
 
@@ -688,15 +725,23 @@ def create_output_and_model_dir(params, mode):
         params['output_dir'] = params['base_output_dir'] + str(current_time) + '_TEST' + \
                                '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
-                               '_L' + str(params['LSTM_layers']) + '_l' + str(params['learning_rate']) + \
-                               '_o' + str(params['only_body']) + '/'
+                               '_a' + str(params['alpha']) + \
+                               '_b' + str(params['beta']) + \
+                               '_Lb' + str(params['Lambda']) + \
+                               '_A' + str(params['max_num_actions']) + \
+                               '_LR' + str(params['learning_rate']) + \
+                                '_pen' + str(params['sg_penalty'])  + '/'
         os.makedirs(params['output_dir'])
     else:
         params['output_dir'] = params['base_output_dir'] + str(current_time) + \
                                '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
-                               '_L' + str(params['LSTM_layers']) + '_l' + str(params['learning_rate']) + \
-                               '_o' + str(params['only_body']) + '/'
+                               '_a' + str(params['alpha']) + \
+                               '_b' + str(params['beta']) + \
+                               '_Lb' + str(params['Lambda']) + \
+                               '_A' + str(params['max_num_actions']) + \
+                               '_LR' + str(params['learning_rate']) + \
+                                '_pen' + str(params['sg_penalty'])  + '/'
         params['model_dir'] = params['output_dir'] + 'model/'
         os.makedirs(params['output_dir'])
         os.makedirs(params['model_dir'])
@@ -717,6 +762,25 @@ def initialize_setting(params, relation_vocab, entity_vocab, mode=''):
     params['relation_vocab'] = relation_vocab
     params['entity_vocab'] = entity_vocab
     return params
+
+
+def optimization(permutation, config, logfile):
+    """The training function on which to optimize hps"""
+    logger.removeHandler(logfile)
+    logfile = logging.FileHandler(permutation['output_dir'] + 'log.txt', 'w')
+    logfile.setFormatter(fmt)
+    logger.addHandler(logfile)
+    # Training
+    trainer = Trainer(permutation)
+    with tf.compat.v1.Session(config=config) as sess:
+        sess.run(trainer.initialize())
+        trainer.initialize_pretrained_embeddings(sess=sess)
+        trainer.train(sess)
+
+    local_metric = trainer.best_metric  # this is MRR right now
+    tf.compat.v1.reset_default_graph()
+
+    return local_metric
 
 
 if __name__ == '__main__':
@@ -743,24 +807,29 @@ if __name__ == '__main__':
                 options[k] = [v]
         best_permutation = None
         best_metric = -1
-        for permutation in ParameterGrid(options):
-            permutation = initialize_setting(permutation, relation_vocab, entity_vocab)
-            logger.removeHandler(logfile)
-            logfile = logging.FileHandler(permutation['output_dir'] + 'log.txt', 'w')
-            logfile.setFormatter(fmt)
-            logger.addHandler(logfile)
 
-            # Training
-            trainer = Trainer(permutation)
-            with tf.compat.v1.Session(config=config) as sess:
-                sess.run(trainer.initialize())
-                trainer.initialize_pretrained_embeddings(sess=sess)
-                trainer.train(sess)
+        # get all of the hp permutations
+        hp_permutations = list(ParameterGrid(options))
+        arguments = [(initialize_setting(perm, relation_vocab, entity_vocab), config, logfile) for perm in hp_permutations]
 
-            if (best_permutation is None) or (trainer.best_metric > best_metric):
-                best_metric = trainer.best_metric
-                best_permutation = permutation
-            tf.compat.v1.reset_default_graph()
+        # get number of cores for parallelization
+        num_cores = multiprocessing.cpu_count()
+
+        print(f"Executing {len(hp_permutations)} permutations of hyperparameters on {num_cores} cores.")
+
+        with multiprocessing.Pool(processes=num_cores) as pool:
+            # use starmap to take multiple args
+            results = pool.starmap(optimization, arguments)
+        
+        # get the parameters with the best functions
+        for met_num, met in enumerate(results):
+            if (best_permutation is None) or (met > best_metric):
+                best_metric = met
+                best_permutation = arguments[met_num][0]
+
+        tf.compat.v1.reset_default_graph()
+
+        print(f"Best permutation: {best_permutation}")
 
         # Testing on test set with best model
         best_permutation['old_output_dir'] = best_permutation['output_dir']
