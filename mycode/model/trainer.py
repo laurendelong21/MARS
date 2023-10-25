@@ -808,26 +808,25 @@ if __name__ == '__main__':
         best_permutation = None
         best_metric = -1
 
-        # get all of the hp permutations
-        hp_permutations = list(ParameterGrid(options))
-        arguments = [(initialize_setting(perm, relation_vocab, entity_vocab), config, logfile) for perm in hp_permutations]
+        for permutation in ParameterGrid(options):
+            permutation = initialize_setting(permutation, relation_vocab, entity_vocab)
+            logger.removeHandler(logfile)
+            logfile = logging.FileHandler(permutation['output_dir'] + 'log.txt', 'w')
+            logfile.setFormatter(fmt)
+            logger.addHandler(logfile)
 
-        # get number of cores for parallelization
-        num_cores = multiprocessing.cpu_count()
+            # Training
+            trainer = Trainer(permutation)
+            with tf.compat.v1.Session(config=config) as sess:
+                sess.run(trainer.initialize())
+                trainer.initialize_pretrained_embeddings(sess=sess)
+                trainer.train(sess)
 
-        print(f"Executing {len(hp_permutations)} permutations of hyperparameters on {num_cores} cores.")
+            if (best_permutation is None) or (trainer.best_metric > best_metric):
+                best_metric = trainer.best_metric
+                best_permutation = permutation
+            tf.compat.v1.reset_default_graph()
 
-        with multiprocessing.Pool(processes=num_cores) as pool:
-            # use starmap to take multiple args
-            results = pool.starmap(optimization, arguments)
-        
-        # get the parameters with the best functions
-        for met_num, met in enumerate(results):
-            if (best_permutation is None) or (met > best_metric):
-                best_metric = met
-                best_permutation = arguments[met_num][0]
-
-        tf.compat.v1.reset_default_graph()
 
         print(f"Best permutation: {best_permutation}")
 
