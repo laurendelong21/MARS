@@ -482,7 +482,6 @@ class Trainer(object):
         self.batch_counter = 0
 
         # for each batch / episode
-        # TODO: understand why the trainer starts with old scores each time
         for episode in self.train_environment.get_episodes():
             self.batch_counter += 1
             # parallelization
@@ -552,7 +551,7 @@ class Trainer(object):
                 rule_count, self.batch_size * self.num_rollouts,
                 rule_count / (self.batch_size * self.num_rollouts)))
 
-            if self.batch_counter % self.eval_every == 0:
+            if self.batch_counter % self.eval_every == 0:  ## validation / dev set testing
                 with open(self.output_dir + 'scores.txt', 'a') as score_file:
                     score_file.write('Scores for iteration ' + str(self.batch_counter) + '\n')
                 paths_log_dir = self.output_dir + str(self.batch_counter) + '/'
@@ -811,26 +810,24 @@ if __name__ == '__main__':
         best_permutation = None
         best_metric = -1
 
-        # get all of the hp permutations
-        hp_permutations = list(ParameterGrid(options))
-        arguments = [(initialize_setting(perm, relation_vocab, entity_vocab), config, logfile) for perm in hp_permutations]
+        for permutation in ParameterGrid(options):
+            permutation = initialize_setting(permutation, relation_vocab, entity_vocab)
+            logger.removeHandler(logfile)
+            logfile = logging.FileHandler(permutation['output_dir'] + 'log.txt', 'w')
+            logfile.setFormatter(fmt)
+            logger.addHandler(logfile)
 
-        # get number of cores for parallelization
-        num_cores = multiprocessing.cpu_count()
+            # Training
+            trainer = Trainer(permutation)
+            with tf.compat.v1.Session(config=config) as sess:
+                sess.run(trainer.initialize())
+                trainer.initialize_pretrained_embeddings(sess=sess)
+                trainer.train(sess)
 
-        print(f"Executing {len(hp_permutations)} permutations of hyperparameters on {num_cores} cores.")
-
-        with multiprocessing.Pool(processes=num_cores) as pool:
-            # use starmap to take multiple args
-            results = pool.starmap(optimization, arguments)
-        
-        # get the parameters with the best functions
-        for met_num, met in enumerate(results):
-            if (best_permutation is None) or (met > best_metric):
-                best_metric = met
-                best_permutation = arguments[met_num][0]
-
-        tf.compat.v1.reset_default_graph()
+            if (best_permutation is None) or (trainer.best_metric > best_metric):
+                best_metric = trainer.best_metric
+                best_permutation = permutation
+            tf.compat.v1.reset_default_graph()
 
         print(f"Best permutation: {best_permutation}")
 
