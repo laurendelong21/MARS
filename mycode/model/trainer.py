@@ -555,6 +555,8 @@ class Trainer(object):
             if self.batch_counter % self.eval_every == 0:
                 with open(self.output_dir + 'scores.txt', 'a') as score_file:
                     score_file.write('Scores for iteration ' + str(self.batch_counter) + '\n')
+                with open(self.output_dir + f'confidences_{self.batch_counter}.txt', 'w') as rule_fl:
+                    json.dump(self.rule_list, rule_fl, indent=2)
                 paths_log_dir = self.output_dir + str(self.batch_counter) + '/'
                 os.makedirs(paths_log_dir)
                 self.paths_log = paths_log_dir + 'paths'
