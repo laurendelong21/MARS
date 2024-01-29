@@ -67,8 +67,8 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
             # get the piecewise probability
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
             # de-bugging statements
-            if pw_prob != 0 and pw_prob < expected ** len(mpath[2::]):
-                print("PW prob is low")
+            if pw_prob != 0:
+                print(pw_prob, expected ** len(mpath[2::]))
             normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
             # get the average of the new and old confidences
             adjustment = map_ratio_to_penalty(normed_prob, alpha)
