@@ -49,7 +49,7 @@ def piecewise_probability(mpath, empirical_probs):
     prob = 1
     chunks = get_metapath_chunks(mpath)
     for key, val in chunks.items():
-        chunk_prob = empirical_probs[key] if key in empirical_probs else 0
+        chunk_prob = empirical_probs[key] if key in empirical_probs else (1 / len(empirical_probs)) ** 2
         prob *= chunk_prob ** val
     return prob
 
@@ -67,8 +67,8 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
             # get the piecewise probability
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
             # de-bugging statements
-            if pw_prob != 0:
-                print(pw_prob, expected ** len(mpath[2::]))
+            #if pw_prob != 0:
+            #    print(pw_prob, expected ** len(mpath[2::]))
             normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
             # get the average of the new and old confidences
             adjustment = map_ratio_to_penalty(normed_prob, alpha)
@@ -97,7 +97,7 @@ def map_ratio_to_penalty(ratio, alpha=0.1):
     """This function was written by ChatGPT
     
     It maps an observed/expected ratio to some penalty (-1, 1) in which a ratio > 1 gets a positive penalty, and 
-    a ratio < 1 gets a negative penalty. The penalty is scaled by the ratio, so that the penalty is more dramatic.
+    a ratio < 1 gets a negative penalty. The penalty is scaled by alpha, so that the penalty is less dramatic.
     """
     # Ensure ratio is within a valid range
     ratio = max(0.001, min(1000, ratio))  # Avoid division by zero and extreme values
