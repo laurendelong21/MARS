@@ -23,7 +23,7 @@ def sum_dicts(dict1, dict2):
 
 def get_metapath_chunks(path):
     """Gets all of the two-hop pieces of a metapath, returns them as a dictionary like (rel1, rel2):occurences """
-    empirical_nums = dict()
+    chunks_dict = dict()
     for rel in range(len(path)-1):
         if path[rel] == 'NO_OP':
             continue
@@ -35,11 +35,11 @@ def get_metapath_chunks(path):
         else:
             key = (path[rel], path[rel+1])
 
-        if key in empirical_nums:
-            empirical_nums[key] += 1
+        if key in chunks_dict:
+            chunks_dict[key] += 1
         else:
-            empirical_nums[key] = 1
-    return empirical_nums
+            chunks_dict[key] = 1
+    return chunks_dict
 
 def piecewise_probability(mpath, empirical_probs):
     """Compute the piecewise probability of a metapath, given the empirical probabilities of its two-hop chunks
@@ -234,5 +234,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
         if total_count > 0:
             empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
             rule_list = update_confs_piecewise(rule_list, empirical_probs, alpha)
+
+            print(empirical_probs)
 
     return rewards, rule_count, rule_count_body, rule_list
