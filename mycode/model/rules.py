@@ -147,13 +147,13 @@ def check_rule(body, obj, obj_string, rule, only_body):
 
 
 def init_empirical_nums(rule_dict):
-    """Initializes the empirical nums dict: initializes each with 1 to avoid division by 0"""
+    """Initializes the empirical nums dict"""
     empirical_nums = dict()
     for head in rule_dict.keys():
         for count, mpath in enumerate(rule_dict[head]):
             empirical_nums = Counter(get_metapath_chunks(mpath[2::])) + Counter(empirical_nums)
 
-    empirical_nums = {key: 1 for key in empirical_nums.keys()}
+    empirical_nums = {key: 0 for key in empirical_nums.keys()}
     return empirical_nums
 
 
