@@ -235,6 +235,6 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
             rule_list = update_confs_piecewise(rule_list, empirical_probs, alpha)
 
-            print(set(empirical_probs.values()))
+            print(Counter(empirical_probs.values()))
 
     return rewards, rule_count, rule_count_body, rule_list
