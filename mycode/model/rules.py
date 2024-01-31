@@ -49,16 +49,18 @@ def piecewise_probability(mpath, empirical_probs):
     prob = 1
     chunks = get_metapath_chunks(mpath)
     for key, val in chunks.items():
-        chunk_prob = empirical_probs[key] if key in empirical_probs else (1 / len(empirical_probs)) ** 2
+        chunk_prob = empirical_probs[key] if key in empirical_probs else 0
         prob *= chunk_prob ** val
     return prob
 
 
-def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
+def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.001, max_ratio=1000):
     """Updates the confidences in the rule list based on piecewise empirical probabilities computed during the batch
     :param rule_dict
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     :param alpha: the parameter that controls how drastically the confidences are updated
+    :param min_ratio: the minimum ratio of observed to expected probability that is allowed (prevents zero division)
+    :param max_ratio: the maximum ratio of observed to expected probability that is allowed (prevents extreme values)
     """
     expected = 1 / len(empirical_probs)  ## the expected probability of each chunk
     for head in rule_dict.keys():
@@ -71,7 +73,7 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1):
             #    print(pw_prob, expected ** len(mpath[2::]))
             normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
             # get the average of the new and old confidences
-            adjustment = map_ratio_to_penalty(normed_prob, alpha)
+            adjustment = map_ratio_to_penalty(normed_prob, alpha, min_ratio, max_ratio)
             new_conf = old_conf + (old_conf * adjustment)
             rule_dict[head][count][0] = str(max(min(1, new_conf), 0))  # bounds it between 0 and 1
     return rule_dict
@@ -93,14 +95,14 @@ def update_confs_basic(rule_dict, no_rule_instances, rule_count, alpha=0.1):
     return rule_dict
 
 
-def map_ratio_to_penalty(ratio, alpha=0.1):
+def map_ratio_to_penalty(ratio, alpha=0.1, min_ratio=0.001, max_ratio=1000):
     """This function was written by ChatGPT
     
     It maps an observed/expected ratio to some penalty (-1, 1) in which a ratio > 1 gets a positive penalty, and 
     a ratio < 1 gets a negative penalty. The penalty is scaled by alpha, so that the penalty is less dramatic.
     """
     # Ensure ratio is within a valid range
-    ratio = max(0.001, min(1000, ratio))  # Avoid division by zero and extreme values
+    ratio = max(min_ratio, min(max_ratio, ratio))  # Avoid division by zero and extreme values
 
     # Map ratio to penalty between -1 and 1
     penalty = 2 * (ratio - 1) / (ratio + 1)
@@ -161,7 +163,7 @@ def init_empirical_nums(rule_dict):
 
 
 def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, 
-                   rewards, only_body, update_confs, alpha, sg_penalty, subgraphs):
+                   rewards, only_body, update_confs, alpha, batch_size, rollouts):
     """Modifies the rewards according to whether the metapath corresponds to a rule
     :param rule_list: 2D array containing rules and corresponding confidences 
     :param arguments: a string which is like a list, alternating between the next possible relation and entity
@@ -173,8 +175,10 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
         the body of the rules, or if the correctness of the end entity should also be taken into account.
     :param update_confs: 0 indicates no conf updates, 1 indicates frequency-based conf updates, 2 indicates piecewise
     :param alpha: if doing confidence updates, alpha controls how drastically the confidences are updated
-    :param sg_penalty: the penalty imposed for crossing subgraphs / pathways while traversing the graph
-    :param subgraphs: a list of sets, where each set comprises the proteins in a given subgraph/pathway
+    :param sg_penalty: (ARCHIVED) the penalty imposed for crossing subgraphs / pathways while traversing the graph
+    :param subgraphs: (ARCHIVED) a list of sets, where each set comprises the proteins in a given subgraph/pathway
+    :param batch_size: batch size
+    :param rollouts: number of rollouts
     """
     rule_count = 0
     rule_count_body = 0
@@ -194,16 +198,16 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             body, obj = prepare_argument(argument_temp)
             
             
-            if sg_penalty > 0:  # if we are penalizing subgraph crossings, get the proteins from the path
-                entities = get_entities(argument_temp)
+            #if sg_penalty > 0:  # if we are penalizing subgraph crossings, get the proteins from the path
+            #    entities = get_entities(argument_temp)
             
             for j in range(len(rel_rules)):
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=True):  # only checks if the metapath matches
                     rule_count_body += 1
-                    penalty = compute_subgraph_penalty(subgraphs, entities, sg_penalty) if sg_penalty > 0 else 0
+                    #penalty = compute_subgraph_penalty(subgraphs, entities, sg_penalty) if sg_penalty > 0 else 0
                     # possible penalty
-                    take_penalty = penalty * abs(rewards[k])  ## reward can be negative, so abs val necessary
-                    rewards[k] -= take_penalty
+                    #take_penalty = penalty * abs(rewards[k])  ## reward can be negative, so abs val necessary
+                    #rewards[k] -= take_penalty
 
                     if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):  # checks if the last entity is a true sink node
                         rule_count += 1
@@ -236,7 +240,8 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
         total_count = sum(empirical_nums.values())
         if total_count > 0:
             empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
-            rule_list = update_confs_piecewise(rule_list, empirical_probs, alpha)
+            min_ratio = len(empirical_probs) / (batch_size * rollouts)
+            rule_list = update_confs_piecewise(rule_list, empirical_probs, alpha, min_ratio)
 
             print(Counter(empirical_probs.values()))
 

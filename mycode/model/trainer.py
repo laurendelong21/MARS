@@ -523,7 +523,7 @@ class Trainer(object):
             rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
                                                                             self.only_body, self.update_confs, self.alpha,
-                                                                            self.sg_penalty, self.subgraphs)
+                                                                            self.batch_size, self.num_rollouts)
 
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
