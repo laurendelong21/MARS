@@ -68,7 +68,7 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.00
             old_conf = float(rule_dict[head][count][0])
             # get the piecewise probability
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
-            normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
+            normed_prob = pw_prob / (expected ** (len(mpath[2::])-1))  ## normalize it by the prob we expect
             ratios.append(normed_prob)  # store the ratio for debugging
             # get new confidence value
             adjustment = map_ratio_to_penalty(normed_prob, alpha, min_ratio, max_ratio)
@@ -244,7 +244,8 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
         if total_count > 0:
             empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
             min_ratio = len(empirical_probs) / (batch_size * rollouts)
-            rule_list, ratios = update_confs_piecewise(rule_list, empirical_probs, alpha, min_ratio, 1000, ratios)
+            max_ratio = len(empirical_probs) * batch_size * rollouts
+            rule_list, ratios = update_confs_piecewise(rule_list, empirical_probs, alpha, min_ratio, max_ratio, ratios)
 
             print(Counter(empirical_probs.values()))
 
