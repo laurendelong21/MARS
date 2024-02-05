@@ -54,6 +54,7 @@ class Trainer(object):
         self.best_metric = -1
         self.early_stopping = False
         self.current_patience = self.patience
+        self.ratios = []
 
     def set_random_seeds(self, seed):
         if seed is not None:
@@ -525,6 +526,8 @@ class Trainer(object):
                                                                             self.only_body, self.update_confs, self.alpha,
                                                                             self.batch_size, self.num_rollouts)
             
+            self.ratios.extend(ratios)
+            
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
             # Backpropagation
@@ -571,7 +574,7 @@ class Trainer(object):
                 # output the ratios before adjustment:
                 with open(self.output_dir + 'ratios.txt', 'w') as file:
                 # Write each element of the list to a new line in the file
-                    for item in ratios:
+                    for item in self.ratios:
                         file.write(str(item) + '\n')
                 break
             if self.batch_counter >= self.total_iterations:
@@ -580,7 +583,7 @@ class Trainer(object):
                 # output the ratios before adjustment:
                 with open(self.output_dir + 'ratios.txt', 'w') as file:
                 # Write each element of the list to a new line in the file
-                    for item in ratios:
+                    for item in self.ratios:
                         file.write(str(item) + '\n')
                 break
 
