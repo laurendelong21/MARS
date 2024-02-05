@@ -54,7 +54,7 @@ def piecewise_probability(mpath, empirical_probs):
     return prob
 
 
-def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.001, max_ratio=1000):
+def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.001, max_ratio=1000, ratios=[]):
     """Updates the confidences in the rule list based on piecewise empirical probabilities computed during the batch
     :param rule_dict
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
@@ -68,15 +68,13 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.00
             old_conf = float(rule_dict[head][count][0])
             # get the piecewise probability
             pw_prob = piecewise_probability(mpath[2::], empirical_probs)
-            # de-bugging statements
-            #if pw_prob != 0:
-            #    print(pw_prob, expected ** len(mpath[2::]))
             normed_prob = pw_prob / (expected ** len(mpath[2::]))  ## normalize it by the prob we expect
-            # get the average of the new and old confidences
+            ratios.append(normed_prob)  # store the ratio for debugging
+            # get new confidence value
             adjustment = map_ratio_to_penalty(normed_prob, alpha, min_ratio, max_ratio)
             new_conf = old_conf + (old_conf * adjustment)
             rule_dict[head][count][0] = str(max(min(1, new_conf), 0))  # bounds it between 0 and 1
-    return rule_dict
+    return rule_dict, ratios
 
 
 def update_confs_basic(rule_dict, no_rule_instances, rule_count, alpha=0.1):
@@ -96,10 +94,14 @@ def update_confs_basic(rule_dict, no_rule_instances, rule_count, alpha=0.1):
 
 
 def map_ratio_to_penalty(ratio, alpha=0.1, min_ratio=0.001, max_ratio=1000):
-    """This function was written by ChatGPT
-    
-    It maps an observed/expected ratio to some penalty (-1, 1) in which a ratio > 1 gets a positive penalty, and 
-    a ratio < 1 gets a negative penalty. The penalty is scaled by alpha, so that the penalty is less dramatic.
+    """This function maps an observed/expected ratio to some penalty (-1, 1)
+    in which a ratio > 1 gets a positive penalty, and 
+    a ratio < 1 gets a negative penalty. 
+    The penalty is scaled by alpha, so that the penalty is less dramatic.
+    :param ratio: the observed/expected ratio
+    :param alpha: the parameter that controls how drastically the confidences are updated
+    :param min_ratio: the minimum ratio of observed to expected probability that is allowed (prevents zero division)
+    :param max_ratio: the maximum ratio of observed to expected probability that is allowed (prevents extreme values)
     """
     # Ensure ratio is within a valid range
     ratio = max(min_ratio, min(max_ratio, ratio))  # Avoid division by zero and extreme values
@@ -180,6 +182,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     :param batch_size: batch size
     :param rollouts: number of rollouts
     """
+    ratios = []
     rule_count = 0
     rule_count_body = 0
     if update_confs == 2:
@@ -241,8 +244,8 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
         if total_count > 0:
             empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
             min_ratio = len(empirical_probs) / (batch_size * rollouts)
-            rule_list = update_confs_piecewise(rule_list, empirical_probs, alpha, min_ratio)
+            rule_list, ratios = update_confs_piecewise(rule_list, empirical_probs, alpha, min_ratio, 1000, ratios)
 
             print(Counter(empirical_probs.values()))
 
-    return rewards, rule_count, rule_count_body, rule_list
+    return rewards, rule_count, rule_count_body, rule_list, ratios
