@@ -45,10 +45,6 @@ class Trainer(object):
         self.rule_list_dir = self.input_dir + self.rule_file
         with open(self.rule_list_dir, 'r') as file:
             self.rule_list = json.load(file)
-        # load in the biological pathway subgraphs for the penalty
-        self.subgraphs_dir = self.input_dir + self.subgraphs_file
-        with open(self.subgraphs_dir, 'r') as file:
-            self.subgraphs = [set(v) for v in json.load(file).values()]  # just get the proteins for now.
         self.baseline = ReactiveBaseline(self.Lambda)
         self.optimizer = tf.compat.v1.train.AdamOptimizer(self.learning_rate)
         self.best_metric = -1
@@ -744,8 +740,7 @@ def create_output_and_model_dir(params, mode):
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
                                '_A' + str(params['max_num_actions']) + \
-                               '_LR' + str(params['learning_rate']) + \
-                                '_pen' + str(params['sg_penalty'])  + '/'
+                               '_LR' + str(params['learning_rate']) + '/'
         os.makedirs(params['output_dir'])
     else:
         params['output_dir'] = params['base_output_dir'] + str(current_time) + \
@@ -755,8 +750,7 @@ def create_output_and_model_dir(params, mode):
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
                                '_A' + str(params['max_num_actions']) + \
-                               '_LR' + str(params['learning_rate']) + \
-                                '_pen' + str(params['sg_penalty'])  + '/'
+                               '_LR' + str(params['learning_rate']) + '/'
         params['model_dir'] = params['output_dir'] + 'model/'
         os.makedirs(params['output_dir'])
         os.makedirs(params['model_dir'])
