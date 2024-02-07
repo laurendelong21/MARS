@@ -6,7 +6,7 @@ from collections import Counter
     modify the reward accordingly
 """
 
-"""The following three functions are used to update the rule confidences based on the piecewise empirical probabilities"""
+"""The following three functions are used to update the rule confidences based on the P2H empirical probabilities"""
 
 
 def sum_dicts(dict1, dict2):
@@ -42,8 +42,8 @@ def get_metapath_chunks(path):
     return chunks_dict
 
 
-def piecewise_probability(mpath, empirical_probs):
-    """Compute the piecewise probability of a metapath, given the empirical probabilities of its two-hop chunks
+def p2h_probability(mpath, empirical_probs):
+    """Compute the P2H probability of a metapath, given the empirical probabilities of its two-hop chunks
     :param mpath: the full metapath, in terms the relations it constitutes
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     """
@@ -55,8 +55,8 @@ def piecewise_probability(mpath, empirical_probs):
     return prob
 
 
-def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.001, max_ratio=1000, ratios=[]):
-    """Updates the confidences in the rule list based on piecewise empirical probabilities computed during the batch
+def update_confs_P2H(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.001, max_ratio=1000, ratios=[]):
+    """Updates the confidences in the rule list based on P2H empirical probabilities computed during the batch
     :param rule_dict: the rules and corresponding confidences
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     :param alpha: the parameter that controls how drastically the confidences are updated
@@ -67,9 +67,9 @@ def update_confs_piecewise(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.00
     for head in rule_dict.keys():
         for count, mpath in enumerate(rule_dict[head]):
             old_conf = float(rule_dict[head][count][0])
-            # get the piecewise probability
-            pw_prob = piecewise_probability(mpath[2::], empirical_probs)
-            normed_prob = pw_prob / (expected ** (len(mpath[2::])-1))  ## normalize it by the prob we expect
+            # get the P2H probability
+            p2h_prob = p2h_probability(mpath[2::], empirical_probs)
+            normed_prob = p2h_prob / (expected ** (len(mpath[2::])-1))  ## normalize it by the prob we expect
             ratios.append(normed_prob)  # store the ratio for debugging
             # get new confidence value
             adjustment = map_ratio_to_penalty(normed_prob, alpha, min_ratio, max_ratio)
@@ -167,7 +167,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     :param rewards: array containing rewards for each entity
     :param only_body: Either 0 or 1. Flag to check whether the extracted paths should only be compared against
         the body of the rules, or if the correctness of the end entity should also be taken into account.
-    :param update_confs: 0 indicates no conf updates, 1 indicates frequency-based conf updates, 2 indicates piecewise
+    :param update_confs: 0 indicates no conf updates, 1 indicates frequency-based conf updates, 2 indicates P2H
     :param alpha: if doing confidence updates, alpha controls how drastically the confidences are updated
     :param batch_size: batch size
     :param rollouts: number of rollouts
@@ -225,13 +225,13 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
         max_ratio = num_rules * batch_size * rollouts
         rule_list, ratios = update_confs_basic(rule_list, no_rule_instances, rule_count, alpha, min_ratio, max_ratio, ratios)
 
-    # the piecewise option
+    # the P2H option
     if update_confs == 2:
         total_count = sum(empirical_nums.values())
         if total_count > 0:
             empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
             min_ratio = len(empirical_probs) / (batch_size * rollouts)
             max_ratio = len(empirical_probs) * batch_size * rollouts
-            rule_list, ratios = update_confs_piecewise(rule_list, empirical_probs, alpha, min_ratio, max_ratio, ratios)
+            rule_list, ratios = update_confs_P2H(rule_list, empirical_probs, alpha, min_ratio, max_ratio, ratios)
 
     return rewards, rule_count, rule_count_body, rule_list, ratios
