@@ -111,7 +111,6 @@ class Trainer(object):
 
         # calculate the final loss, including rewards
         self.loss_op = self.calc_reinforce_loss()
-        # TODO: no idea what this is
         self.train_op = self.bp(self.loss_op)
 
         # Building the test graph
@@ -479,7 +478,6 @@ class Trainer(object):
         self.batch_counter = 0
 
         # for each batch / episode
-        # TODO: understand why the trainer starts with old scores each time
         for episode in self.train_environment.get_episodes():
             self.batch_counter += 1
             # parallelization
