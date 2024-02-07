@@ -41,6 +41,7 @@ def get_metapath_chunks(path):
             chunks_dict[key] = 1
     return chunks_dict
 
+
 def piecewise_probability(mpath, empirical_probs):
     """Compute the piecewise probability of a metapath, given the empirical probabilities of its two-hop chunks
     :param mpath: the full metapath, in terms the relations it constitutes
@@ -135,7 +136,7 @@ def prepare_argument(argument, string='NO_OP'):
 
 def check_rule(body, obj, obj_string, rule, only_body):
     """
-    Compare the argument with a rule.
+    Compare the argument with a rule. only_body=False checks whether the end entity makes it a true pair
     """
     if only_body:  # Compare only the body of the rule to the argument
         retval = (body == rule[2:])
@@ -145,7 +146,7 @@ def check_rule(body, obj, obj_string, rule, only_body):
 
 
 def init_empirical_nums(rule_dict):
-    """Initializes the empirical nums dict"""
+    """Initializes the empirical nums dict, where each 2-hop chunk is assigned to a value of zero."""
     empirical_nums = dict()
     for head in rule_dict.keys():
         for count, mpath in enumerate(rule_dict[head]):
@@ -175,6 +176,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     rule_count = 0
     rule_count_body = 0
     if update_confs == 2:
+        # to store the number of occurrences of each 2-hop chunk:
         empirical_nums = init_empirical_nums(rule_list)
     if update_confs == 1:
         # to store the number of occurrences of each rule:
@@ -215,6 +217,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     print(f"Total bodies matched: {rule_count_body}")
     print(f"Total complete matches: {rule_count}")
 
+    # UPDATE THE CONFIDENCES: UNIQUE TO MARS
     # the naive / simple option
     if update_confs == 1 and rule_count > 0:
         num_rules = len(sum([val for val in rule_list.values()], []))
