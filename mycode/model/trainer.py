@@ -518,7 +518,7 @@ class Trainer(object):
             rewards, rule_count, rule_count_body, self.rule_list, ratios = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
                                                                             self.only_body, self.update_confs, self.alpha,
-                                                                            self.batch_size, self.num_rollouts)
+                                                                            self.batch_size, self.num_rollouts, self.mixing_ratio)
             
             self.ratios.extend(ratios)
             

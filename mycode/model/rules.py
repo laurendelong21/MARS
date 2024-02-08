@@ -217,7 +217,7 @@ def init_empirical_nums(rule_dict):
 
 
 def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, 
-                   rewards, only_body, update_confs, alpha, batch_size, rollouts):
+                   rewards, only_body, update_confs, alpha, batch_size, rollouts, mixing_ratio):
     """Modifies the rewards according to whether the metapath corresponds to a rule
     :param rule_list: 2D array containing rules and corresponding confidences 
     :param arguments: a string which is like a list, alternating between the next possible relation and entity
@@ -234,6 +234,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     :param alpha: if doing confidence updates, alpha controls how drastically the confidences are updated
     :param batch_size: batch size
     :param rollouts: number of rollouts
+    :param mixing_ratio: the ratio of the first penalty to the second penalty; default of 0.5 means equal weighting
     """
     ratios = []
     rule_count = 0
@@ -300,7 +301,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
 
             rule_list, ratios = update_confs_mixed(rule_list, no_rule_instances, rule_count, empirical_probs, 
                                                    alpha, min_ratio_naive, max_ratio_naive, 
-                                                   min_ratio_p2h, max_ratio_p2h, 0.5, ratios)
+                                                   min_ratio_p2h, max_ratio_p2h, mixing_ratio, ratios)
 
     # the naive / simple option
     if update_confs == 1 and rule_count > 0:
