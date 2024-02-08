@@ -103,19 +103,53 @@ def update_confs_basic(rule_dict, no_rule_instances, rule_count, alpha=0.1, min_
 
 
 def update_confs_mixed(rule_dict, no_rule_instances, rule_count, empirical_probs,
-                       alpha=0.1, min_ratio=0.001, max_ratio=1000, ratios=[]):
+                       alpha=0.1, min_ratio_naive=0.001, max_ratio_naive=1000, 
+                       min_ratio_p2h=0.001, max_ratio_p2h=1000, 
+                       mixing_ratio=0.5, ratios=[]):
     """Updates the confidences in the rule list based on a mix between 
                     P2H empirical probabilities and frequency-based probabilities
     :param rule_dict: the rules and corresponding confidences
     :param no_rule_instances: the number of instances of each rule
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
     :param alpha: the parameter that controls how drastically the confidences are updated
-    :param min_ratio: the minimum ratio of observed to expected probability that is allowed (prevents zero division)
-    :param max_ratio: the maximum ratio of observed to expected probability that is allowed (prevents extreme values)
+    :param min_ratio_naive: the minimum ratio of observed to expected probability that is allowed (prevents zero division)
+    :param max_ratio_naive: the maximum ratio of observed to expected probability that is allowed (prevents extreme values)
+    :param min_ratio_p2h: the minimum ratio of observed to expected probability that is allowed (prevents zero division)
+    :param max_ratio_p2h: the maximum ratio of observed to expected probability that is allowed (prevents extreme values)
+    :param mixing_ratio: the ratio of the first penalty to the second penalty; default of 0.5 means equal weighting
     """
     expected_p2h = 1 / len(empirical_probs)  ## the expected probability of each chunk
     num_rules = len(sum([val for val in rule_dict.values()], []))
     expected_naive = 1 / num_rules  ## the expected probability of each rule
+
+    for rule_head, rule_bodies in no_rule_instances.items():
+
+        adjustment_dict = dict()
+
+        for rule_body_num, num_instances in rule_bodies.items():
+            # frequency-based updates:
+            observed_naive = num_instances / rule_count
+            normed_naive = observed_naive / expected_naive
+            ratios.append(normed_naive)  # store the ratio for debugging
+            adjustment_naive = map_ratio_to_penalty(normed_naive, alpha, min_ratio_naive, max_ratio_naive)
+            adjustment_dict[rule_body_num] = adjustment_naive
+
+        # P2H-based updates:
+        for rule_body_num, mpath in enumerate(rule_dict[rule_head]):
+            p2h_prob = p2h_probability(mpath[2::], empirical_probs)
+            normed_p2h = p2h_prob / (expected_p2h ** (len(mpath[2::])-1))  ## normalize it by the prob we expect
+            ratios.append(normed_p2h)  # store the ratio for debugging
+            # get new confidence value
+            adjustment_p2h = map_ratio_to_penalty(normed_p2h, alpha, min_ratio_p2h, max_ratio_p2h)
+            adjustment_dict[rule_body_num] = mix_penalties(adjustment_dict[rule_body_num], 
+                                                                        adjustment_p2h, mixing_ratio)
+            
+        for rule_body_num, adjustment in adjustment_dict.items():
+            old_conf = float(rule_dict[rule_head][rule_body_num][0])
+            new_conf = old_conf + (old_conf * adjustment)
+            rule_dict[rule_head][rule_body_num][0] = str(max(min(1, new_conf), 0))
+
+    return rule_dict, ratios
 
     
 
@@ -244,6 +278,27 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     print(f"Total complete matches: {rule_count}")
 
     # UPDATE THE CONFIDENCES: UNIQUE TO MARS
+
+    # mixed option
+    if update_confs == 3:
+        if rule_count <= 0:  # if no full metapath matches, just do the P2H update
+            update_confs = 2
+        elif sum(empirical_nums.values()) <= 0:  # if no 2-hop chunks, just do the basic update
+            update_confs = 1
+        else:
+            num_rules = len(sum([val for val in rule_list.values()], []))
+            min_ratio_naive = num_rules / (batch_size * rollouts)
+            max_ratio_naive = num_rules * batch_size * rollouts
+
+            total_count = sum(empirical_nums.values())
+            empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
+            min_ratio_p2h = len(empirical_probs) / (batch_size * rollouts)
+            max_ratio_p2h = len(empirical_probs) * batch_size * rollouts
+
+            rule_list, ratios = update_confs_mixed(rule_list, no_rule_instances, rule_count, empirical_probs, 
+                                                   alpha, min_ratio_naive, max_ratio_naive, 
+                                                   min_ratio_p2h, max_ratio_p2h, 0.5, ratios)
+
     # the naive / simple option
     if update_confs == 1 and rule_count > 0:
         num_rules = len(sum([val for val in rule_list.values()], []))
@@ -260,6 +315,6 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             max_ratio = len(empirical_probs) * batch_size * rollouts
             rule_list, ratios = update_confs_P2H(rule_list, empirical_probs, alpha, min_ratio, max_ratio, ratios)
 
-    # mixed option
+    
 
     return rewards, rule_count, rule_count_body, rule_list, ratios
