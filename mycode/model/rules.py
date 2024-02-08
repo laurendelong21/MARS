@@ -227,7 +227,10 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     :param rewards: array containing rewards for each entity
     :param only_body: Either 0 or 1. Flag to check whether the extracted paths should only be compared against
         the body of the rules, or if the correctness of the end entity should also be taken into account.
-    :param update_confs: 0 indicates no conf updates, 1 indicates frequency-based conf updates, 2 indicates P2H
+    :param update_confs: 0 indicates no conf updates, 
+                        1 indicates frequency-based conf updates, 
+                        2 indicates P2H conf updates,
+                        3 indicates mixed conf updates
     :param alpha: if doing confidence updates, alpha controls how drastically the confidences are updated
     :param batch_size: batch size
     :param rollouts: number of rollouts
@@ -235,10 +238,10 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
     ratios = []
     rule_count = 0
     rule_count_body = 0
-    if update_confs == 2:
+    if update_confs == 2 or update_confs == 3:
         # to store the number of occurrences of each 2-hop chunk:
         empirical_nums = init_empirical_nums(rule_list)
-    if update_confs == 1:
+    if update_confs == 1 or update_confs == 3:
         # to store the number of occurrences of each rule:
         no_rule_instances = {key: {i: 0 for i in range(len(val))} for key, val in rule_list.items()}
     for k in range(len(obj_string)):
@@ -257,10 +260,10 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
 
                     if check_rule(body, obj, obj_string[k], rel_rules[j], only_body=False):  # checks if the last entity is a true sink node
                         rule_count += 1
-                        if update_confs == 1:
+                        if update_confs == 1 or update_confs == 3:
                             # count the number of instances for each rule
                             no_rule_instances[query_rel][j] += 1
-                        if update_confs == 2:
+                        if update_confs == 2 or update_confs == 3:
                             # get all of the 2-hop chunks that helped make a match
                             empirical_nums = sum_dicts(empirical_nums, get_metapath_chunks(body))
                     break
