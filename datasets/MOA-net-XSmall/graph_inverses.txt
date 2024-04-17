@@ -18,6 +18,7 @@ ncbigene:2792	_GiG	ncbigene:5734
 GO:0007165	_GpBP	ncbigene:4869
 GO:0032880	_GpBP	ncbigene:9101
 ncbigene:5156	_GiG	ncbigene:2255
+GO:0051301	_CtBP	pubchem.compound:55245
 ncbigene:3274	_CdG	pubchem.compound:2756
 ncbigene:2782	_GiG	ncbigene:143502
 ncbigene:2619	_GiG	ncbigene:3549
@@ -79,6 +80,7 @@ ncbigene:246184	_GiG	ncbigene:5721
 ncbigene:51764	_GiG	ncbigene:143496
 ncbigene:3586	_CdG	pubchem.compound:37542
 ncbigene:9536	_CuG	pubchem.compound:5280360
+GO:0050877	_CtBP	pubchem.compound:5405
 ncbigene:11315	_GiG	ncbigene:9063
 ncbigene:2790	_GiG	ncbigene:55811
 ncbigene:92	_GiG	ncbigene:83729
@@ -115,6 +117,7 @@ ncbigene:2906	_CuG	pubchem.compound:12035
 ncbigene:5609	_GiG	ncbigene:9175
 ncbigene:375	_GiG	ncbigene:160622
 ncbigene:2782	_GiG	ncbigene:390261
+GO:0050877	_CtBP	pubchem.compound:60854
 ncbigene:50846	_GiG	ncbigene:147111
 ncbigene:2176	_GiG	ncbigene:7398
 ncbigene:6622	_CdG	pubchem.compound:1548943
@@ -140,6 +143,7 @@ GO:0043065	_GpBP	ncbigene:468
 ncbigene:64750	_GiG	ncbigene:5690
 ncbigene:9448	_GiG	ncbigene:8738
 ncbigene:150	_CdG	pubchem.compound:3559
+GO:0030154	_CtBP	pubchem.compound:10635
 ncbigene:8826	_GiG	ncbigene:23265
 GO:0006954	_GpBP	ncbigene:301
 ncbigene:8829	_GiG	ncbigene:3897
@@ -166,6 +170,7 @@ GO:0010951	_GpBP	ncbigene:5265
 ncbigene:1000	_GiG	ncbigene:3799
 GO:0007165	_GpBP	ncbigene:22914
 ncbigene:1440	_CdG	pubchem.compound:444795
+GO:0030154	_CtBP	pubchem.compound:1548887
 GO:0007155	_GpBP	ncbigene:3694
 ncbigene:7294	_CdG	pubchem.compound:5743
 ncbigene:148	_CdG	pubchem.compound:2092
@@ -183,6 +188,7 @@ ncbigene:9021	_CuG	pubchem.compound:54687
 ncbigene:2905	_CdG	pubchem.compound:33741
 ncbigene:474382	_GiG	ncbigene:54892
 ncbigene:2475	_CdG	pubchem.compound:5284616
+GO:0006629	_CtBP	pubchem.compound:3671
 ncbigene:22808	_GiG	ncbigene:115727
 ncbigene:4988	_CdG	pubchem.compound:5311304
 ncbigene:5732	_CdG	pubchem.compound:3715
@@ -271,6 +277,7 @@ GO:0051301	_GpBP	ncbigene:11200
 ncbigene:64798	_GiG	ncbigene:10670
 ncbigene:2022	_CuG	pubchem.compound:445643
 ncbigene:8829	_GiG	ncbigene:223117
+GO:0030154	_CtBP	pubchem.compound:5280453
 ncbigene:1132	_GiG	ncbigene:3765
 ncbigene:3552	_GiG	ncbigene:9559
 ncbigene:3643	_GiG	ncbigene:5967
@@ -309,12 +316,14 @@ ncbigene:9184	_GiG	ncbigene:29882
 ncbigene:54205	_GiG	ncbigene:7419
 ncbigene:3827	_CdG	pubchem.compound:3715
 ncbigene:2056	_CuG	pubchem.compound:444795
+GO:0048856	_CtBP	pubchem.compound:444795
 ncbigene:51764	_GiG	ncbigene:346525
 ncbigene:3558	_CdG	pubchem.compound:444795
 GO:0007165	_GpBP	ncbigene:3303
 ncbigene:25909	_GiG	ncbigene:406887
 ncbigene:51764	_GiG	ncbigene:143502
 GO:0030154	_GpBP	ncbigene:6935
+GO:0008283	_CtBP	pubchem.compound:5284373
 ncbigene:1536	_CdG	pubchem.compound:5360696
 ncbigene:9630	_GiG	ncbigene:57105
 ncbigene:4543	_CuG	pubchem.compound:9444
@@ -359,6 +368,7 @@ ncbigene:2353	_CuG	pubchem.compound:3559
 ncbigene:5600	_GiG	ncbigene:1848
 ncbigene:330	_GiG	ncbigene:5705
 ncbigene:3337	_GiG	ncbigene:55466
+GO:0006914	_CtBP	pubchem.compound:5284616
 ncbigene:153	_CuG	pubchem.compound:3343
 ncbigene:213	_CdG	pubchem.compound:702
 ncbigene:5728	_GiG	ncbigene:206358
@@ -367,6 +377,7 @@ ncbigene:2176	_GiG	ncbigene:8553
 ncbigene:4915	_CuG	pubchem.compound:4497
 ncbigene:4843	_CdG	pubchem.compound:5280343
 ncbigene:1814	_CdG	pubchem.compound:3151
+GO:0007585	_CtBP	pubchem.compound:5717
 ncbigene:10057	_CuG	pubchem.compound:31703
 GO:0007049	_GpBP	ncbigene:9994
 ncbigene:2550	_CuG	pubchem.compound:5665
@@ -437,6 +448,7 @@ ncbigene:3075	_GiG	ncbigene:3381
 GO:0043065	_GpBP	ncbigene:3569
 ncbigene:3791	_CuG	pubchem.compound:702
 GO:0000902	_GpBP	ncbigene:26999
+GO:0007165	_CtBP	pubchem.compound:3671
 ncbigene:213	_CuG	pubchem.compound:3117
 ncbigene:2776	_GiG	ncbigene:5021
 ncbigene:51764	_GiG	ncbigene:392376
@@ -516,6 +528,7 @@ ncbigene:9470	_GiG	ncbigene:2872
 GO:0030154	_GpBP	ncbigene:9047
 ncbigene:3837	_GiG	ncbigene:5901
 ncbigene:9212	_GiG	ncbigene:1072
+GO:0030154	_CtBP	pubchem.compound:11625818
 GO:0051301	_GpBP	ncbigene:701
 ncbigene:51764	_GiG	ncbigene:125958
 ncbigene:2977	_CuG	pubchem.compound:145068
@@ -536,6 +549,7 @@ ncbigene:5329	_CdG	pubchem.compound:5280453
 ncbigene:3696	_GiG	ncbigene:1282
 ncbigene:51764	_GiG	ncbigene:338662
 ncbigene:151	_CdG	pubchem.compound:5073
+GO:0050821	_CtBP	pubchem.compound:444795
 ncbigene:7043	_GiG	ncbigene:22925
 ncbigene:2534	_GiG	ncbigene:55243
 ncbigene:2782	_GiG	ncbigene:283160
@@ -640,6 +654,7 @@ ncbigene:6385	_GiG	ncbigene:1311
 ncbigene:2769	_GiG	ncbigene:57105
 GO:0007165	_GpBP	ncbigene:1839
 GO:0051301	_GpBP	ncbigene:890
+GO:0030154	_CtBP	pubchem.compound:55245
 GO:0006508	_GpBP	ncbigene:1512
 GO:0030154	_GpBP	ncbigene:8742
 GO:0007059	_GpBP	ncbigene:80152
@@ -675,6 +690,7 @@ ncbigene:3630	_GiG	ncbigene:4760
 ncbigene:2782	_GiG	ncbigene:81327
 GO:0050821	_GpBP	ncbigene:11040
 ncbigene:8945	_GiG	ncbigene:9040
+GO:0007165	_CtBP	pubchem.compound:2554
 ncbigene:6804	_GiG	ncbigene:200081
 ncbigene:8844	_GiG	ncbigene:55750
 GO:0007165	_GpBP	ncbigene:1808
@@ -702,6 +718,7 @@ ncbigene:2782	_GiG	ncbigene:401667
 GO:0006605	_GpBP	ncbigene:7531
 ncbigene:51764	_GiG	ncbigene:441308
 GO:0007165	_GpBP	ncbigene:9536
+GO:0030154	_CtBP	pubchem.compound:5833
 ncbigene:7533	_GiG	ncbigene:10971
 ncbigene:627	_CuG	pubchem.compound:448537
 GO:0006508	_GpBP	ncbigene:3082
@@ -799,6 +816,7 @@ GO:0032880	_GpBP	ncbigene:1857
 ncbigene:9656	_GiG	ncbigene:9150
 ncbigene:3696	_GiG	ncbigene:1277
 ncbigene:5810	_GiG	ncbigene:2072
+GO:0007267	_CtBP	pubchem.compound:16362
 GO:0061024	_GpBP	ncbigene:3312
 ncbigene:9531	_CuG	pubchem.compound:36462
 GO:0006914	_GpBP	ncbigene:10533
@@ -815,6 +833,7 @@ ncbigene:3315	_GiG	ncbigene:54205
 ncbigene:25937	_GiG	ncbigene:7159
 ncbigene:860	_CuG	pubchem.compound:5283731
 GO:0007165	_GpBP	ncbigene:26740
+GO:0006805	_CtBP	pubchem.compound:444795
 GO:0007585	_GpBP	ncbigene:5090
 GO:0007165	_GpBP	ncbigene:6357
 ncbigene:1132	_CdG	pubchem.compound:4474
@@ -824,6 +843,7 @@ GO:0031638	_GpBP	ncbigene:2678
 ncbigene:23236	_GiG	ncbigene:51305
 GO:0050877	_GpBP	ncbigene:1136
 ncbigene:367	_CuG	pubchem.compound:55245
+GO:0007165	_CtBP	pubchem.compound:5280723
 GO:0043065	_GpBP	ncbigene:10276
 ncbigene:5451	_CdG	pubchem.compound:702
 ncbigene:2885	_GiG	ncbigene:53358
@@ -859,6 +879,7 @@ ncbigene:6532	_CdG	pubchem.compound:2771
 GO:0006457	_GpBP	ncbigene:9531
 ncbigene:409	_GiG	ncbigene:254786
 ncbigene:891	_GiG	ncbigene:286826
+GO:0007010	_CtBP	pubchem.compound:444795
 GO:0007267	_GpBP	ncbigene:2261
 ncbigene:216	_CdG	pubchem.compound:3117
 ncbigene:3269	_CdG	pubchem.compound:124087
@@ -880,6 +901,7 @@ ncbigene:51764	_GiG	ncbigene:26189
 GO:0007059	_GpBP	ncbigene:10664
 ncbigene:5971	_GiG	ncbigene:5720
 ncbigene:3643	_GiG	ncbigene:1545
+GO:0030154	_CtBP	pubchem.compound:57363
 ncbigene:152	_CdG	pubchem.compound:4011
 GO:0007267	_GpBP	ncbigene:4908
 ncbigene:3565	_CuG	pubchem.compound:4943
@@ -892,6 +914,7 @@ ncbigene:2782	_GiG	ncbigene:341416
 ncbigene:150	_CdG	pubchem.compound:5095
 ncbigene:5728	_GiG	ncbigene:5090
 ncbigene:10257	_GiG	ncbigene:7350
+GO:0007165	_CtBP	pubchem.compound:6167
 ncbigene:1813	_CuG	pubchem.compound:6047
 ncbigene:246184	_GiG	ncbigene:25906
 ncbigene:3596	_CuG	pubchem.compound:5360373
@@ -911,6 +934,7 @@ ncbigene:1053	_GiG	ncbigene:216
 ncbigene:6402	_CuG	pubchem.compound:5284616
 ncbigene:2782	_GiG	ncbigene:393046
 GO:0051301	_GpBP	ncbigene:8607
+GO:0007165	_CtBP	pubchem.compound:3715
 ncbigene:781	_CdG	pubchem.compound:3333
 GO:0007165	_GpBP	ncbigene:4192
 ncbigene:3556	_GiG	ncbigene:27179
@@ -931,6 +955,7 @@ ncbigene:1432	_GiG	ncbigene:1846
 GO:0043085	_GpBP	ncbigene:6647
 ncbigene:7200	_CuG	pubchem.compound:5280453
 ncbigene:407042	_GiG	ncbigene:4137
+GO:0007165	_CtBP	pubchem.compound:9444
 ncbigene:2737	_GiG	ncbigene:8100
 ncbigene:51764	_GiG	ncbigene:389090
 ncbigene:3553	_CdG	pubchem.compound:3559
@@ -964,6 +989,7 @@ ncbigene:81565	_GiG	ncbigene:83540
 ncbigene:2792	_GiG	ncbigene:3363
 ncbigene:51764	_GiG	ncbigene:219493
 GO:0006913	_GpBP	ncbigene:4869
+GO:0007267	_CtBP	pubchem.compound:5280360
 ncbigene:5144	_CuG	pubchem.compound:5311181
 ncbigene:8772	_GiG	ncbigene:79027
 ncbigene:2782	_GiG	ncbigene:255725
@@ -1003,6 +1029,7 @@ ncbigene:5970	_GiG	ncbigene:1962
 GO:0006914	_GpBP	ncbigene:203228
 GO:0016192	_GpBP	ncbigene:9882
 ncbigene:83939	_GiG	ncbigene:7442
+GO:0007267	_CtBP	pubchem.compound:55245
 ncbigene:3600	_CdG	pubchem.compound:445643
 ncbigene:7335	_GiG	ncbigene:3092
 ncbigene:4683	_GiG	ncbigene:5983
@@ -1027,6 +1054,7 @@ GO:0007049	_GpBP	ncbigene:988
 GO:0007165	_GpBP	ncbigene:6019
 ncbigene:367	_CdG	pubchem.compound:3314
 ncbigene:5465	_CuG	pubchem.compound:3339
+GO:0007010	_CtBP	pubchem.compound:37542
 ncbigene:595	_CdG	pubchem.compound:3385
 GO:0008283	_GpBP	ncbigene:23246
 ncbigene:6517	_CdG	pubchem.compound:702
@@ -1053,6 +1081,7 @@ GO:0030154	_GpBP	ncbigene:8856
 ncbigene:5596	_GiG	ncbigene:1139
 ncbigene:155	_CuG	pubchem.compound:4828
 ncbigene:2782	_GiG	ncbigene:390323
+GO:0030154	_CtBP	pubchem.compound:445354
 ncbigene:81565	_GiG	ncbigene:6249
 ncbigene:1386	_GiG	ncbigene:27302
 ncbigene:9530	_GiG	ncbigene:567
@@ -1176,6 +1205,7 @@ ncbigene:4221	_GiG	ncbigene:8945
 ncbigene:8392	_GiG	ncbigene:7905
 GO:0006508	_GpBP	ncbigene:5624
 GO:0007059	_GpBP	ncbigene:672
+GO:0007267	_CtBP	pubchem.compound:54687
 GO:0016485	_GpBP	ncbigene:4325
 ncbigene:23513	_GiG	ncbigene:10413
 ncbigene:81631	_GiG	ncbigene:92421
@@ -1197,6 +1227,7 @@ ncbigene:3696	_GiG	ncbigene:1299
 ncbigene:3586	_CuG	pubchem.compound:448537
 GO:0006914	_GpBP	ncbigene:11345
 GO:0007267	_GpBP	ncbigene:7253
+GO:0007165	_CtBP	pubchem.compound:11625818
 GO:0030198	_GpBP	ncbigene:8516
 GO:0006397	_GpBP	ncbigene:3297
 GO:0030198	_GpBP	ncbigene:1298
@@ -1214,6 +1245,7 @@ GO:0007155	_GpBP	ncbigene:1524
 ncbigene:51764	_GiG	ncbigene:441670
 ncbigene:10062	_GiG	ncbigene:10197
 GO:0007049	_GpBP	ncbigene:6477
+GO:0007049	_CtBP	pubchem.compound:5833
 ncbigene:153	_CdG	pubchem.compound:3396
 ncbigene:2792	_GiG	ncbigene:196883
 ncbigene:5881	_GiG	ncbigene:27071
@@ -1237,6 +1269,7 @@ ncbigene:5595	_GiG	ncbigene:2697
 ncbigene:2782	_GiG	ncbigene:219469
 ncbigene:4086	_GiG	ncbigene:4762
 ncbigene:150	_CdG	pubchem.compound:4748
+GO:0007165	_CtBP	pubchem.compound:4474
 ncbigene:2152	_GiG	ncbigene:462
 ncbigene:100506658	_CuG	pubchem.compound:3715
 ncbigene:9020	_GiG	ncbigene:7185
@@ -1248,6 +1281,7 @@ ncbigene:2782	_GiG	ncbigene:392133
 ncbigene:801	_CuG	pubchem.compound:3559
 ncbigene:7398	_GiG	ncbigene:146956
 ncbigene:9611	_CdG	pubchem.compound:10635
+GO:0008283	_CtBP	pubchem.compound:5280360
 ncbigene:79643	_GiG	ncbigene:51510
 ncbigene:60	_GiG	ncbigene:7408
 ncbigene:2861	_GiG	ncbigene:3305
@@ -1482,8 +1516,10 @@ ncbigene:6364	_CdG	pubchem.compound:3547
 ncbigene:6387	_GiG	ncbigene:8854
 ncbigene:2782	_GiG	ncbigene:26693
 GO:0007267	_GpBP	ncbigene:1947
+GO:0007010	_CtBP	pubchem.compound:3117
 ncbigene:3066	_CdG	pubchem.compound:54454
 ncbigene:81671	_CuG	pubchem.compound:5284616
+GO:0007165	_CtBP	pubchem.compound:44462760
 ncbigene:27006	_GiG	ncbigene:83888
 GO:0007049	_GpBP	ncbigene:2033
 ncbigene:3696	_GiG	ncbigene:1298
@@ -1625,6 +1661,7 @@ ncbigene:6711	_GiG	ncbigene:7048
 GO:0006508	_GpBP	ncbigene:23621
 ncbigene:6532	_CdG	pubchem.compound:33741
 GO:0030154	_GpBP	ncbigene:1997
+GO:0006805	_CtBP	pubchem.compound:2955
 ncbigene:2736	_GiG	ncbigene:8481
 GO:0007267	_GpBP	ncbigene:6863
 ncbigene:5908	_GiG	ncbigene:10411
@@ -1650,6 +1687,7 @@ ncbigene:367	_GiG	ncbigene:1025
 GO:0007275	_GpBP	ncbigene:10468
 ncbigene:2288	_GiG	ncbigene:10121
 GO:0007165	_GpBP	ncbigene:7867
+GO:0007165	_CtBP	pubchem.compound:10635
 ncbigene:10683	_GiG	ncbigene:182
 ncbigene:55294	_GiG	ncbigene:5799
 ncbigene:3002	_CuG	pubchem.compound:36462
@@ -1696,6 +1734,7 @@ ncbigene:6774	_GiG	ncbigene:10128
 ncbigene:3360	_CuG	pubchem.compound:4168
 GO:0006508	_GpBP	ncbigene:5327
 GO:0007165	_GpBP	ncbigene:7186
+GO:0007165	_CtBP	pubchem.compound:4477
 ncbigene:5599	_GiG	ncbigene:3798
 ncbigene:6361	_GiG	ncbigene:602
 ncbigene:2769	_GiG	ncbigene:3357
@@ -1729,6 +1768,7 @@ GO:0007155	_GpBP	ncbigene:2811
 GO:0007059	_GpBP	ncbigene:57405
 ncbigene:10131	_GiG	ncbigene:6392
 ncbigene:5604	_GiG	ncbigene:57144
+GO:0007165	_CtBP	pubchem.compound:5330286
 ncbigene:3553	_CdG	pubchem.compound:54454
 ncbigene:5597	_GiG	ncbigene:8555
 ncbigene:26235	_GiG	ncbigene:26267
@@ -1753,6 +1793,7 @@ ncbigene:3665	_GiG	ncbigene:83666
 GO:0006914	_GpBP	ncbigene:9474
 GO:0007059	_GpBP	ncbigene:7272
 ncbigene:9376	_CuG	pubchem.compound:6013
+GO:0006913	_CtBP	pubchem.compound:4011
 ncbigene:3358	_GiG	ncbigene:1394
 ncbigene:51764	_GiG	ncbigene:343172
 ncbigene:3308	_CdG	pubchem.compound:5073
@@ -1898,6 +1939,7 @@ ncbigene:4089	_GiG	ncbigene:10131
 GO:0007165	_GpBP	ncbigene:7532
 ncbigene:51764	_GiG	ncbigene:341418
 ncbigene:147111	_GiG	ncbigene:7481
+GO:0007165	_CtBP	pubchem.compound:5280453
 ncbigene:672	_GiG	ncbigene:51497
 ncbigene:3066	_CdG	pubchem.compound:3121
 ncbigene:3552	_CuG	pubchem.compound:5280453
@@ -1905,6 +1947,7 @@ ncbigene:5179	_CuG	pubchem.compound:702
 ncbigene:5054	_CuG	pubchem.compound:5284616
 GO:0007049	_GpBP	ncbigene:1843
 GO:0007165	_GpBP	ncbigene:728
+GO:0051301	_CtBP	pubchem.compound:31703
 ncbigene:3558	_CdG	pubchem.compound:5280453
 ncbigene:8029	_CuG	pubchem.compound:444795
 ncbigene:2782	_GiG	ncbigene:120796
@@ -1942,6 +1985,7 @@ ncbigene:26268	_GiG	ncbigene:26270
 ncbigene:51764	_GiG	ncbigene:391195
 ncbigene:3952	_CuG	pubchem.compound:5770
 ncbigene:5580	_CdG	pubchem.compound:2733526
+GO:0030154	_CtBP	pubchem.compound:60854
 ncbigene:116442	_GiG	ncbigene:140775
 ncbigene:7153	_CdG	pubchem.compound:30323
 GO:0007155	_GpBP	ncbigene:3914
@@ -2028,6 +2072,7 @@ ncbigene:2782	_GiG	ncbigene:390167
 ncbigene:5599	_GiG	ncbigene:1848
 ncbigene:3985	_GiG	ncbigene:56924
 ncbigene:6663	_GiG	ncbigene:6660
+GO:0006914	_CtBP	pubchem.compound:4748
 GO:0030154	_GpBP	ncbigene:5583
 ncbigene:1756	_CuG	pubchem.compound:6741
 ncbigene:22808	_GiG	ncbigene:8437
@@ -2047,6 +2092,7 @@ GO:0007010	_GpBP	ncbigene:6348
 GO:0007165	_GpBP	ncbigene:1139
 GO:0006397	_GpBP	ncbigene:7307
 ncbigene:2782	_GiG	ncbigene:283110
+GO:0050877	_CtBP	pubchem.compound:31703
 GO:0055085	_GpBP	ncbigene:6554
 ncbigene:2782	_GiG	ncbigene:26188
 ncbigene:6688	_CdG	pubchem.compound:444795
@@ -2062,12 +2108,14 @@ GO:0006629	_GpBP	ncbigene:247
 ncbigene:1808	_GiG	ncbigene:195814
 ncbigene:716	_GiG	ncbigene:713
 ncbigene:3309	_CuG	pubchem.compound:36314
+GO:0007155	_CtBP	pubchem.compound:444795
 ncbigene:50649	_GiG	ncbigene:9351
 ncbigene:5071	_GiG	ncbigene:9101
 ncbigene:867	_GiG	ncbigene:3635
 ncbigene:1133	_CdG	pubchem.compound:3372
 ncbigene:3553	_CuG	pubchem.compound:36314
 ncbigene:597	_CuG	pubchem.compound:3343
+GO:0030154	_CtBP	pubchem.compound:456201
 GO:0007275	_GpBP	ncbigene:5159
 ncbigene:51764	_GiG	ncbigene:283160
 ncbigene:3398	_GiG	ncbigene:4093
@@ -2095,6 +2143,7 @@ ncbigene:5908	_GiG	ncbigene:23683
 ncbigene:1869	_GiG	ncbigene:8900
 ncbigene:51764	_GiG	ncbigene:26248
 ncbigene:840	_CuG	pubchem.compound:31703
+GO:0006457	_CtBP	pubchem.compound:5284616
 ncbigene:51764	_GiG	ncbigene:4993
 ncbigene:7003	_GiG	ncbigene:7005
 ncbigene:2597	_CuG	pubchem.compound:5280453
@@ -2244,6 +2293,7 @@ ncbigene:2161	_GiG	ncbigene:710
 ncbigene:598	_GiG	ncbigene:9131
 ncbigene:8795	_CuG	pubchem.compound:3385
 ncbigene:3760	_CdG	pubchem.compound:3386
+GO:0061024	_CtBP	pubchem.compound:6167
 ncbigene:5156	_GiG	ncbigene:284
 ncbigene:2056	_CdG	pubchem.compound:2719
 ncbigene:2833	_GiG	ncbigene:9547
@@ -2307,6 +2357,7 @@ ncbigene:2645	_GiG	ncbigene:2646
 ncbigene:81565	_GiG	ncbigene:701
 ncbigene:51764	_GiG	ncbigene:79345
 ncbigene:5617	_CdG	pubchem.compound:53232
+GO:0006629	_CtBP	pubchem.compound:4197
 ncbigene:7409	_GiG	ncbigene:3122
 GO:0051301	_GpBP	ncbigene:27183
 ncbigene:7852	_CdG	pubchem.compound:8378
@@ -2357,6 +2408,7 @@ ncbigene:5054	_GiG	ncbigene:56938
 ncbigene:51764	_GiG	ncbigene:8590
 GO:0007049	_GpBP	ncbigene:5596
 ncbigene:4048	_CdG	pubchem.compound:44093
+GO:0008219	_CtBP	pubchem.compound:5280360
 ncbigene:7124	_GiG	ncbigene:3178
 GO:0007009	_GpBP	ncbigene:1378
 ncbigene:26268	_GiG	ncbigene:26272
@@ -2426,6 +2478,7 @@ ncbigene:8772	_GiG	ncbigene:4049
 ncbigene:2782	_GiG	ncbigene:282770
 ncbigene:6654	_GiG	ncbigene:10128
 GO:0008219	_GpBP	ncbigene:3356
+GO:0030154	_CtBP	pubchem.compound:448537
 ncbigene:8714	_CuG	pubchem.compound:4594
 GO:0006508	_GpBP	ncbigene:5641
 ncbigene:3596	_GiG	ncbigene:240
@@ -2445,6 +2498,7 @@ ncbigene:22914	_GiG	ncbigene:135250
 ncbigene:51764	_GiG	ncbigene:390067
 ncbigene:3269	_CdG	pubchem.compound:3964
 GO:0007165	_GpBP	ncbigene:162998
+GO:0032880	_CtBP	pubchem.compound:1548887
 ncbigene:8714	_GiG	ncbigene:9970
 ncbigene:83756	_CdG	pubchem.compound:702
 ncbigene:4090	_GiG	ncbigene:94
@@ -2468,12 +2522,14 @@ ncbigene:2782	_GiG	ncbigene:390442
 GO:0007155	_GpBP	ncbigene:3921
 ncbigene:7535	_GiG	ncbigene:3119
 ncbigene:3796	_GiG	ncbigene:146057
+GO:0007165	_CtBP	pubchem.compound:4748
 ncbigene:801	_CdG	pubchem.compound:3372
 GO:0043065	_GpBP	ncbigene:1676
 GO:0007005	_GpBP	ncbigene:4846
 GO:0007165	_GpBP	ncbigene:89941
 ncbigene:786	_CdG	pubchem.compound:4507
 ncbigene:375	_GiG	ncbigene:10565
+GO:0043065	_CtBP	pubchem.compound:3117
 ncbigene:2243	_GiG	ncbigene:5037
 ncbigene:5584	_GiG	ncbigene:9322
 ncbigene:3596	_CdG	pubchem.compound:444795
@@ -2507,6 +2563,7 @@ ncbigene:1816	_CuG	pubchem.compound:3372
 GO:0007165	_GpBP	ncbigene:55367
 GO:0007005	_GpBP	ncbigene:2629
 ncbigene:51305	_CdG	pubchem.compound:3156
+GO:0008283	_CtBP	pubchem.compound:445354
 ncbigene:6774	_GiG	ncbigene:59307
 ncbigene:51764	_GiG	ncbigene:390326
 GO:0007010	_GpBP	ncbigene:375790
@@ -2548,6 +2605,7 @@ ncbigene:2782	_GiG	ncbigene:79295
 GO:0051301	_GpBP	ncbigene:91768
 GO:0043065	_GpBP	ncbigene:23097
 GO:0007165	_GpBP	ncbigene:2890
+GO:0007165	_CtBP	pubchem.compound:4197
 ncbigene:2782	_GiG	ncbigene:390152
 ncbigene:2782	_GiG	ncbigene:256892
 ncbigene:8353	_GiG	ncbigene:1024
@@ -2585,6 +2643,7 @@ ncbigene:4846	_CdG	pubchem.compound:3715
 ncbigene:6776	_GiG	ncbigene:10461
 ncbigene:998	_GiG	ncbigene:9732
 ncbigene:5054	_CdG	pubchem.compound:702
+GO:0007010	_CtBP	pubchem.compound:5284616
 ncbigene:9099	_GiG	ncbigene:10616
 GO:0051301	_GpBP	ncbigene:51433
 ncbigene:2735	_CuG	pubchem.compound:448537
@@ -2601,6 +2660,7 @@ ncbigene:5315	_CdG	pubchem.compound:5284616
 ncbigene:7436	_GiG	ncbigene:7376
 ncbigene:4915	_GiG	ncbigene:7423
 ncbigene:356	_CuG	pubchem.compound:36462
+GO:0007267	_CtBP	pubchem.compound:3715
 ncbigene:4843	_CdG	pubchem.compound:54454
 ncbigene:344	_CdG	pubchem.compound:2797
 ncbigene:51764	_GiG	ncbigene:144125
@@ -2620,6 +2680,7 @@ ncbigene:80152	_GiG	ncbigene:80776
 ncbigene:10517	_GiG	ncbigene:123879
 ncbigene:155	_CuG	pubchem.compound:4916
 ncbigene:259217	_GiG	ncbigene:10049
+GO:0006914	_CtBP	pubchem.compound:4011
 ncbigene:898	_GiG	ncbigene:5071
 GO:0030154	_GpBP	ncbigene:10075
 ncbigene:6774	_CdG	pubchem.compound:24826799
@@ -2638,11 +2699,13 @@ ncbigene:6513	_CuG	pubchem.compound:5503
 ncbigene:51764	_GiG	ncbigene:26532
 ncbigene:51764	_GiG	ncbigene:390265
 GO:0006805	_GpBP	ncbigene:6283
+GO:0055085	_CtBP	pubchem.compound:3715
 ncbigene:5340	_CdG	pubchem.compound:4091
 ncbigene:51764	_GiG	ncbigene:26716
 ncbigene:6233	_GiG	ncbigene:5698
 GO:0007155	_GpBP	ncbigene:4301
 ncbigene:7295	_GiG	ncbigene:50488
+GO:0007267	_CtBP	pubchem.compound:10635
 GO:0051301	_GpBP	ncbigene:996
 GO:0006508	_GpBP	ncbigene:8720
 ncbigene:2782	_GiG	ncbigene:390063
@@ -2714,10 +2777,13 @@ GO:0043065	_GpBP	ncbigene:3001
 ncbigene:5741	_CdG	pubchem.compound:702
 GO:0048856	_GpBP	ncbigene:5080
 GO:0007165	_GpBP	ncbigene:3561
+GO:0009790	_CtBP	pubchem.compound:3715
 ncbigene:808	_CdG	pubchem.compound:3372
 GO:0031638	_GpBP	ncbigene:3818
+GO:0007165	_CtBP	pubchem.compound:2083
 ncbigene:3381	_CuG	pubchem.compound:5280360
 ncbigene:5880	_GiG	ncbigene:8874
+GO:0043085	_CtBP	pubchem.compound:448537
 GO:0043065	_GpBP	ncbigene:839
 GO:0030154	_GpBP	ncbigene:5465
 GO:0007165	_GpBP	ncbigene:5602
@@ -2778,6 +2844,7 @@ GO:0007155	_GpBP	ncbigene:3897
 ncbigene:3984	_CdG	pubchem.compound:44462760
 GO:0007049	_GpBP	ncbigene:93973
 ncbigene:8431	_GiG	ncbigene:1581
+GO:0008283	_CtBP	pubchem.compound:3715
 ncbigene:2782	_GiG	ncbigene:79501
 ncbigene:246184	_GiG	ncbigene:9113
 ncbigene:10057	_CuG	pubchem.compound:3385
@@ -2796,12 +2863,14 @@ GO:0007165	_GpBP	ncbigene:94
 ncbigene:2782	_GiG	ncbigene:79490
 ncbigene:5742	_CdG	pubchem.compound:2244
 ncbigene:2782	_GiG	ncbigene:254879
+GO:0050877	_CtBP	pubchem.compound:4748
 GO:0006605	_GpBP	ncbigene:10971
 ncbigene:3553	_CdG	pubchem.compound:5564
 ncbigene:7321	_GiG	ncbigene:7324
 ncbigene:4314	_CdG	pubchem.compound:5280343
 GO:0050821	_GpBP	ncbigene:287
 GO:0007165	_GpBP	ncbigene:7305
+GO:0030154	_CtBP	pubchem.compound:31703
 GO:0043065	_GpBP	ncbigene:3655
 ncbigene:4089	_GiG	ncbigene:1488
 ncbigene:1128	_CuG	pubchem.compound:4168
@@ -2883,6 +2952,7 @@ ncbigene:8737	_GiG	ncbigene:7128
 ncbigene:1143	_CdG	pubchem.compound:3386
 ncbigene:2562	_GiG	ncbigene:6529
 GO:0061024	_GpBP	ncbigene:51100
+GO:0043065	_CtBP	pubchem.compound:31703
 GO:0007165	_GpBP	ncbigene:285
 GO:0007585	_GpBP	ncbigene:4204
 ncbigene:3586	_CuG	pubchem.compound:3547
@@ -2919,6 +2989,7 @@ GO:0007155	_GpBP	ncbigene:256076
 ncbigene:4790	_CdG	pubchem.compound:5426
 ncbigene:2977	_GiG	ncbigene:4846
 ncbigene:1027	_CdG	pubchem.compound:5284616
+GO:0007165	_CtBP	pubchem.compound:5282379
 GO:0000902	_GpBP	ncbigene:3071
 ncbigene:23237	_GiG	ncbigene:3358
 ncbigene:2152	_CdG	pubchem.compound:54454
@@ -3051,6 +3122,7 @@ GO:0051301	_GpBP	ncbigene:899
 ncbigene:3312	_GiG	ncbigene:10294
 ncbigene:3383	_CdG	pubchem.compound:4912
 GO:0007165	_GpBP	ncbigene:896
+GO:0030154	_CtBP	pubchem.compound:16362
 ncbigene:860	_CuG	pubchem.compound:54454
 ncbigene:5054	_CdG	pubchem.compound:3961
 ncbigene:643	_GiG	ncbigene:9547
@@ -3060,6 +3132,8 @@ ncbigene:51764	_GiG	ncbigene:392309
 GO:0007165	_GpBP	ncbigene:356
 ncbigene:2737	_GiG	ncbigene:51098
 ncbigene:1816	_CuG	pubchem.compound:6047
+GO:0007267	_CtBP	pubchem.compound:2375
+GO:0007267	_CtBP	pubchem.compound:5917
 ncbigene:596	_GiG	ncbigene:100506742
 ncbigene:409	_GiG	ncbigene:26245
 GO:0007165	_GpBP	ncbigene:54518
@@ -3080,7 +3154,9 @@ ncbigene:3357	_CdG	pubchem.compound:3386
 ncbigene:1440	_CdG	pubchem.compound:3715
 ncbigene:5008	_CdG	pubchem.compound:3715
 ncbigene:11197	_GiG	ncbigene:7472
+GO:0006805	_CtBP	pubchem.compound:4114
 ncbigene:387	_GiG	ncbigene:3691
+GO:0006520	_CtBP	pubchem.compound:38853
 ncbigene:5294	_CdG	pubchem.compound:5280343
 ncbigene:6608	_GiG	ncbigene:53944
 ncbigene:89832	_CdG	pubchem.compound:4737
@@ -3171,6 +3247,7 @@ ncbigene:3274	_CdG	pubchem.compound:3964
 GO:0043065	_GpBP	ncbigene:356
 ncbigene:3156	_CuG	pubchem.compound:6013
 GO:0007267	_GpBP	ncbigene:1234
+GO:0030154	_CtBP	pubchem.compound:12035
 ncbigene:6654	_GiG	ncbigene:3645
 ncbigene:2697	_CuG	pubchem.compound:4171
 ncbigene:28514	_GiG	ncbigene:3955
@@ -3226,6 +3303,7 @@ ncbigene:2782	_GiG	ncbigene:120065
 ncbigene:51764	_GiG	ncbigene:391109
 ncbigene:3651	_CdG	pubchem.compound:5280343
 GO:0007165	_GpBP	ncbigene:10681
+GO:0008283	_CtBP	pubchem.compound:4485
 GO:0007049	_GpBP	ncbigene:904
 ncbigene:627	_CuG	pubchem.compound:54454
 ncbigene:2782	_GiG	ncbigene:390437
@@ -3247,6 +3325,7 @@ ncbigene:57104	_CuG	pubchem.compound:2797
 ncbigene:1512	_GiG	ncbigene:331
 ncbigene:673	_GiG	ncbigene:5583
 ncbigene:3383	_GiG	ncbigene:60490
+GO:0043065	_CtBP	pubchem.compound:11625818
 GO:0006457	_GpBP	ncbigene:10131
 ncbigene:207	_GiG	ncbigene:7431
 ncbigene:26525	_GiG	ncbigene:56300
@@ -3260,6 +3339,7 @@ GO:0006913	_GpBP	ncbigene:23636
 ncbigene:729230	_GiG	ncbigene:6367
 ncbigene:60	_GiG	ncbigene:2317
 ncbigene:5908	_GiG	ncbigene:57568
+GO:0043065	_CtBP	pubchem.compound:54687
 ncbigene:3269	_CdG	pubchem.compound:71360
 ncbigene:55294	_GiG	ncbigene:123263
 ncbigene:246184	_GiG	ncbigene:26524
@@ -3275,6 +3355,7 @@ ncbigene:51764	_GiG	ncbigene:219957
 ncbigene:2495	_GiG	ncbigene:3276
 ncbigene:4131	_GiG	ncbigene:9423
 GO:0007165	_GpBP	ncbigene:4301
+GO:0000902	_CtBP	pubchem.compound:5280453
 GO:0030154	_GpBP	ncbigene:4093
 ncbigene:8379	_GiG	ncbigene:29945
 ncbigene:6777	_GiG	ncbigene:2322
@@ -3293,8 +3374,11 @@ GO:0007049	_GpBP	ncbigene:5289
 GO:0006629	_GpBP	ncbigene:2683
 ncbigene:2252	_CdG	pubchem.compound:2471
 ncbigene:6622	_CdG	pubchem.compound:33741
+GO:0030154	_CtBP	pubchem.compound:44462760
 GO:0007155	_GpBP	ncbigene:6402
 ncbigene:116443	_CdG	pubchem.compound:4737
+GO:0006629	_CtBP	pubchem.compound:1548943
+GO:0030154	_CtBP	pubchem.compound:4497
 ncbigene:3480	_CdG	pubchem.compound:702
 GO:0007155	_GpBP	ncbigene:1291
 ncbigene:2792	_GiG	ncbigene:107
@@ -3317,6 +3401,7 @@ GO:0006913	_GpBP	ncbigene:8480
 GO:0006914	_GpBP	ncbigene:10013
 ncbigene:54583	_GiG	ncbigene:5708
 ncbigene:354	_GiG	ncbigene:8353
+GO:0032880	_CtBP	pubchem.compound:3715
 GO:0050821	_GpBP	ncbigene:60485
 GO:0007165	_GpBP	ncbigene:9047
 ncbigene:3953	_CdG	pubchem.compound:5280343
@@ -3389,6 +3474,7 @@ ncbigene:627	_CuG	pubchem.compound:3365
 GO:0007165	_GpBP	ncbigene:341152
 ncbigene:4986	_CuG	pubchem.compound:4184
 ncbigene:1027	_GiG	ncbigene:10664
+GO:0007165	_CtBP	pubchem.compound:564
 GO:0006457	_GpBP	ncbigene:22824
 ncbigene:9656	_GiG	ncbigene:25920
 GO:0007165	_GpBP	ncbigene:1742
@@ -3515,12 +3601,14 @@ GO:0050821	_GpBP	ncbigene:84447
 GO:0007267	_GpBP	ncbigene:6366
 ncbigene:2902	_CuG	pubchem.compound:12035
 ncbigene:5586	_GiG	ncbigene:1133
+GO:0000902	_CtBP	pubchem.compound:55245
 GO:0007059	_GpBP	ncbigene:2068
 GO:0030154	_GpBP	ncbigene:9970
 ncbigene:51764	_GiG	ncbigene:219487
 ncbigene:728	_GiG	ncbigene:6223
 ncbigene:3350	_CuG	pubchem.compound:5639
 GO:0007005	_GpBP	ncbigene:89941
+GO:0030198	_CtBP	pubchem.compound:445354
 ncbigene:4216	_GiG	ncbigene:10912
 ncbigene:51764	_GiG	ncbigene:219965
 ncbigene:3398	_GiG	ncbigene:4090
@@ -3533,6 +3621,7 @@ ncbigene:2668	_CuG	pubchem.compound:5070
 ncbigene:5653	_GiG	ncbigene:1288
 ncbigene:56957	_GiG	ncbigene:257397
 ncbigene:8085	_GiG	ncbigene:1487
+GO:0002376	_CtBP	pubchem.compound:3715
 GO:0016485	_GpBP	ncbigene:2155
 ncbigene:2335	_GiG	ncbigene:100126337
 ncbigene:9429	_CdG	pubchem.compound:55245
@@ -3558,6 +3647,7 @@ GO:0006913	_GpBP	ncbigene:8536
 GO:0007049	_GpBP	ncbigene:8812
 GO:0007165	_GpBP	ncbigene:138881
 ncbigene:2782	_GiG	ncbigene:8390
+GO:0006914	_CtBP	pubchem.compound:16362
 GO:0030198	_GpBP	ncbigene:4325
 ncbigene:6513	_CdG	pubchem.compound:4943
 ncbigene:3357	_CuG	pubchem.compound:5095
@@ -3616,6 +3706,7 @@ GO:0007165	_GpBP	ncbigene:6789
 GO:0007267	_GpBP	ncbigene:3440
 ncbigene:387	_GiG	ncbigene:7984
 ncbigene:3294	_CuG	pubchem.compound:5280453
+GO:0043065	_CtBP	pubchem.compound:444795
 GO:0006457	_GpBP	ncbigene:3308
 ncbigene:6750	_CuG	pubchem.compound:4497
 ncbigene:1445	_GiG	ncbigene:1003
@@ -3697,6 +3788,7 @@ GO:0050821	_GpBP	ncbigene:2316
 ncbigene:3897	_GiG	ncbigene:26052
 GO:0007165	_GpBP	ncbigene:613
 ncbigene:2782	_GiG	ncbigene:390082
+GO:0030154	_CtBP	pubchem.compound:3715
 ncbigene:146	_CuG	pubchem.compound:4636
 GO:0008283	_GpBP	ncbigene:4838
 GO:0007267	_GpBP	ncbigene:1942
@@ -3709,7 +3801,9 @@ ncbigene:83540	_CdG	pubchem.compound:5284616
 ncbigene:5295	_GiG	ncbigene:10892
 ncbigene:5881	_GiG	ncbigene:57580
 ncbigene:1808	_GiG	ncbigene:2242
+GO:0007049	_CtBP	pubchem.compound:444795
 ncbigene:7155	_CdG	pubchem.compound:2764
+GO:0007267	_CtBP	pubchem.compound:444795
 ncbigene:2776	_GiG	ncbigene:4923
 ncbigene:1019	_GiG	ncbigene:8464
 ncbigene:3292	_CdG	pubchem.compound:10635
@@ -3777,6 +3871,7 @@ ncbigene:81565	_GiG	ncbigene:51143
 ncbigene:2782	_GiG	ncbigene:8387
 ncbigene:10018	_CuG	pubchem.compound:5284616
 ncbigene:367	_CdG	pubchem.compound:10635
+GO:0030154	_CtBP	pubchem.compound:6918638
 ncbigene:2782	_GiG	ncbigene:504191
 GO:0007165	_GpBP	ncbigene:7200
 ncbigene:2904	_CuG	pubchem.compound:12035
@@ -3814,6 +3909,7 @@ GO:0048856	_GpBP	ncbigene:7181
 GO:0007165	_GpBP	ncbigene:7913
 ncbigene:1020	_GiG	ncbigene:7531
 ncbigene:3593	_CdG	pubchem.compound:3488
+GO:0008219	_CtBP	pubchem.compound:60854
 ncbigene:2776	_GiG	ncbigene:3357
 ncbigene:3306	_GiG	ncbigene:3301
 GO:0007585	_GpBP	ncbigene:9935
@@ -3821,6 +3917,7 @@ GO:0043065	_GpBP	ncbigene:5915
 ncbigene:81565	_GiG	ncbigene:79980
 GO:0043065	_GpBP	ncbigene:7043
 ncbigene:51764	_GiG	ncbigene:120065
+GO:0006805	_CtBP	pubchem.compound:3278
 ncbigene:1581	_CdG	pubchem.compound:448537
 ncbigene:10517	_GiG	ncbigene:126433
 ncbigene:6402	_GiG	ncbigene:3075
@@ -3829,6 +3926,7 @@ ncbigene:1136	_CdG	pubchem.compound:3386
 ncbigene:2782	_GiG	ncbigene:390174
 ncbigene:3694	_GiG	ncbigene:7143
 ncbigene:375	_GiG	ncbigene:8729
+GO:0032880	_CtBP	pubchem.compound:5284616
 ncbigene:1030	_GiG	ncbigene:7709
 GO:0000902	_GpBP	ncbigene:3082
 GO:0007165	_GpBP	ncbigene:140
@@ -3856,16 +3954,19 @@ ncbigene:51764	_GiG	ncbigene:127385
 GO:0055085	_GpBP	ncbigene:7991
 ncbigene:4843	_CdG	pubchem.compound:448537
 ncbigene:808	_CdG	pubchem.compound:3488
+GO:0006629	_CtBP	pubchem.compound:10635
 GO:0006913	_GpBP	ncbigene:6396
 GO:0007155	_GpBP	ncbigene:2812
 ncbigene:9656	_GiG	ncbigene:6924
 ncbigene:51764	_GiG	ncbigene:125962
 ncbigene:2776	_GiG	ncbigene:887
+GO:0007155	_CtBP	pubchem.compound:6167
 ncbigene:10000	_GiG	ncbigene:7862
 ncbigene:354	_GiG	ncbigene:94239
 ncbigene:2782	_GiG	ncbigene:125962
 ncbigene:8844	_GiG	ncbigene:54845
 ncbigene:6777	_GiG	ncbigene:5788
+GO:0051301	_CtBP	pubchem.compound:10607
 ncbigene:8737	_GiG	ncbigene:292
 GO:0006805	_GpBP	ncbigene:54577
 GO:0007165	_GpBP	ncbigene:5915
@@ -3899,6 +4000,7 @@ GO:0007267	_GpBP	ncbigene:5744
 ncbigene:11345	_GiG	ncbigene:441925
 ncbigene:5580	_GiG	ncbigene:65108
 GO:0007275	_GpBP	ncbigene:3953
+GO:0043065	_CtBP	pubchem.compound:10607
 ncbigene:9254	_CdG	pubchem.compound:5833
 ncbigene:2782	_GiG	ncbigene:26493
 ncbigene:885	_GiG	ncbigene:1363
@@ -3910,6 +4012,7 @@ ncbigene:10156	_GiG	ncbigene:5157
 ncbigene:6915	_GiG	ncbigene:9630
 ncbigene:5609	_GiG	ncbigene:4294
 ncbigene:55294	_GiG	ncbigene:6636
+GO:0032880	_CtBP	pubchem.compound:5833
 ncbigene:2776	_GiG	ncbigene:11211
 ncbigene:10131	_GiG	ncbigene:6390
 ncbigene:6513	_CuG	pubchem.compound:448537
@@ -3989,6 +4092,7 @@ ncbigene:10599	_CdG	pubchem.compound:3463
 GO:0030198	_GpBP	ncbigene:10893
 ncbigene:1292	_GiG	ncbigene:5033
 GO:0050790	_GpBP	ncbigene:7273
+GO:0005975	_CtBP	pubchem.compound:4828
 ncbigene:5914	_GiG	ncbigene:5742
 ncbigene:51764	_GiG	ncbigene:219981
 ncbigene:51764	_GiG	ncbigene:79490
@@ -4014,6 +4118,7 @@ ncbigene:114548	_CuG	pubchem.compound:702
 ncbigene:891	_GiG	ncbigene:91750
 ncbigene:2782	_GiG	ncbigene:390154
 GO:0007155	_GpBP	ncbigene:1000
+GO:0043065	_CtBP	pubchem.compound:3033
 ncbigene:51564	_GiG	ncbigene:2317
 GO:0007155	_GpBP	ncbigene:7414
 GO:0006914	_GpBP	ncbigene:55062
@@ -4138,6 +4243,7 @@ GO:0007585	_GpBP	ncbigene:1909
 ncbigene:93	_GiG	ncbigene:10637
 GO:0021700	_GpBP	ncbigene:4131
 ncbigene:4988	_CdG	pubchem.compound:702
+GO:0006805	_CtBP	pubchem.compound:5472
 ncbigene:3002	_GiG	ncbigene:112714
 ncbigene:672	_GiG	ncbigene:2966
 GO:0030198	_GpBP	ncbigene:10049
@@ -4157,6 +4263,7 @@ ncbigene:59340	_CdG	pubchem.compound:4184
 GO:0055085	_GpBP	ncbigene:89845
 ncbigene:1000	_GiG	ncbigene:1460
 ncbigene:7410	_GiG	ncbigene:3702
+GO:0030154	_CtBP	pubchem.compound:3117
 ncbigene:5801	_GiG	ncbigene:1000
 ncbigene:805	_CdG	pubchem.compound:4485
 ncbigene:2792	_GiG	ncbigene:774
@@ -4201,6 +4308,7 @@ GO:0007049	_GpBP	ncbigene:1452
 ncbigene:948	_GiG	ncbigene:9862
 ncbigene:51764	_GiG	ncbigene:403277
 ncbigene:2769	_GiG	ncbigene:10800
+GO:0055085	_CtBP	pubchem.compound:1548943
 ncbigene:3667	_CuG	pubchem.compound:448537
 ncbigene:8431	_CuG	pubchem.compound:4091
 ncbigene:2782	_GiG	ncbigene:401663
@@ -4303,6 +4411,7 @@ ncbigene:7150	_CdG	pubchem.compound:36462
 ncbigene:9184	_GiG	ncbigene:64682
 ncbigene:51764	_GiG	ncbigene:390439
 ncbigene:18	_CdG	pubchem.compound:5665
+GO:0007267	_CtBP	pubchem.compound:2756
 ncbigene:2782	_GiG	ncbigene:391195
 ncbigene:3125	_GiG	ncbigene:5993
 ncbigene:2774	_GiG	ncbigene:3360
@@ -4324,6 +4433,7 @@ GO:0007165	_GpBP	ncbigene:9706
 ncbigene:3458	_CdG	pubchem.compound:3339
 ncbigene:1634	_GiG	ncbigene:3673
 ncbigene:91807	_CuG	pubchem.compound:702
+GO:0007165	_CtBP	pubchem.compound:10607
 ncbigene:7316	_GiG	ncbigene:9958
 ncbigene:4846	_CuG	pubchem.compound:53232
 ncbigene:7852	_CdG	pubchem.compound:5743
@@ -4335,6 +4445,7 @@ ncbigene:1814	_CdG	pubchem.compound:2913
 ncbigene:25805	_CdG	pubchem.compound:5284616
 ncbigene:387	_CuG	pubchem.compound:5280453
 ncbigene:367	_CdG	pubchem.compound:5833
+GO:0007267	_CtBP	pubchem.compound:57363
 ncbigene:8844	_GiG	ncbigene:9061
 ncbigene:5327	_GiG	ncbigene:6281
 GO:0007165	_GpBP	ncbigene:3588
@@ -4360,6 +4471,7 @@ GO:0007010	_GpBP	ncbigene:10152
 ncbigene:375	_GiG	ncbigene:10564
 ncbigene:203228	_GiG	ncbigene:5861
 GO:0007059	_GpBP	ncbigene:699
+GO:0030154	_CtBP	pubchem.compound:5284616
 GO:0007165	_GpBP	ncbigene:1439
 ncbigene:148	_CdG	pubchem.compound:60854
 GO:0006629	_GpBP	ncbigene:7804
@@ -4552,6 +4664,7 @@ ncbigene:3363	_CdG	pubchem.compound:16362
 ncbigene:6932	_GiG	ncbigene:5329
 ncbigene:2810	_GiG	ncbigene:85417
 ncbigene:7484	_GiG	ncbigene:64840
+GO:0007165	_CtBP	pubchem.compound:3033
 ncbigene:2792	_GiG	ncbigene:111
 GO:0043065	_GpBP	ncbigene:8743
 GO:0008283	_GpBP	ncbigene:207
@@ -4794,8 +4907,10 @@ GO:0030198	_GpBP	ncbigene:89780
 ncbigene:1374	_CuG	pubchem.compound:2796
 ncbigene:3276	_GiG	ncbigene:8363
 GO:0048856	_GpBP	ncbigene:9839
+GO:0006805	_CtBP	pubchem.compound:5983
 GO:0043065	_GpBP	ncbigene:3663
 ncbigene:3586	_CuG	pubchem.compound:126941
+GO:0051301	_CtBP	pubchem.compound:6167
 ncbigene:5327	_CuG	pubchem.compound:702
 ncbigene:3696	_GiG	ncbigene:1280
 ncbigene:153	_CdG	pubchem.compound:5073
@@ -4827,6 +4942,7 @@ ncbigene:51083	_CuG	pubchem.compound:6167
 ncbigene:354	_GiG	ncbigene:55766
 GO:0007165	_GpBP	ncbigene:347168
 ncbigene:2782	_GiG	ncbigene:390432
+GO:0002376	_CtBP	pubchem.compound:4775
 ncbigene:2793	_GiG	ncbigene:112
 ncbigene:3643	_GiG	ncbigene:5771
 ncbigene:6232	_GiG	ncbigene:54821
@@ -4853,6 +4969,7 @@ ncbigene:3990	_CdG	pubchem.compound:54454
 GO:0043065	_GpBP	ncbigene:6422
 GO:0051301	_GpBP	ncbigene:85417
 GO:0051301	_GpBP	ncbigene:51434
+GO:0008283	_CtBP	pubchem.compound:448537
 ncbigene:50833	_CdG	pubchem.compound:4911
 GO:0007165	_GpBP	ncbigene:10846
 GO:0007010	_GpBP	ncbigene:5338
@@ -5000,11 +5117,13 @@ ncbigene:1128	_CdG	pubchem.compound:5593
 ncbigene:2737	_GiG	ncbigene:8452
 GO:0006629	_GpBP	ncbigene:7442
 ncbigene:3558	_CdG	pubchem.compound:2554
+GO:0007267	_CtBP	pubchem.compound:4158
 GO:0008283	_GpBP	ncbigene:8454
 ncbigene:51764	_GiG	ncbigene:81797
 GO:0030154	_GpBP	ncbigene:2077
 ncbigene:7046	_GiG	ncbigene:51377
 ncbigene:5617	_CuG	pubchem.compound:5505
+GO:0070989	_CtBP	pubchem.compound:4748
 GO:0007267	_GpBP	ncbigene:6753
 ncbigene:3683	_GiG	ncbigene:3384
 GO:0007165	_GpBP	ncbigene:7088
@@ -5087,12 +5206,14 @@ ncbigene:55294	_GiG	ncbigene:5730
 GO:0030198	_GpBP	ncbigene:4763
 ncbigene:81565	_GiG	ncbigene:11004
 ncbigene:6232	_GiG	ncbigene:378708
+GO:0006914	_CtBP	pubchem.compound:60854
 ncbigene:26999	_GiG	ncbigene:1977
 ncbigene:3357	_CdG	pubchem.compound:4830
 ncbigene:51764	_GiG	ncbigene:390167
 ncbigene:2782	_GiG	ncbigene:346528
 ncbigene:5580	_GiG	ncbigene:7225
 ncbigene:10000	_GiG	ncbigene:23774
+GO:0007059	_CtBP	pubchem.compound:31703
 ncbigene:51764	_GiG	ncbigene:81127
 ncbigene:9630	_GiG	ncbigene:7201
 GO:0030154	_GpBP	ncbigene:2296
@@ -5107,6 +5228,7 @@ ncbigene:2782	_GiG	ncbigene:391190
 ncbigene:55957	_GiG	ncbigene:1859
 ncbigene:7200	_GiG	ncbigene:9342
 ncbigene:3362	_GiG	ncbigene:2868
+GO:0006629	_CtBP	pubchem.compound:5284616
 GO:0051301	_GpBP	ncbigene:27152
 ncbigene:3717	_GiG	ncbigene:8973
 ncbigene:5156	_GiG	ncbigene:285
@@ -5231,6 +5353,7 @@ ncbigene:1128	_CdG	pubchem.compound:4993
 GO:0008283	_GpBP	ncbigene:26259
 ncbigene:3553	_CuG	pubchem.compound:5280723
 ncbigene:6385	_GiG	ncbigene:1298
+GO:0008283	_CtBP	pubchem.compound:4477
 ncbigene:51764	_GiG	ncbigene:390201
 ncbigene:81565	_GiG	ncbigene:147841
 ncbigene:2965	_GiG	ncbigene:1066
@@ -5244,6 +5367,7 @@ ncbigene:6608	_GiG	ncbigene:1455
 GO:0030154	_GpBP	ncbigene:8536
 GO:0007165	_GpBP	ncbigene:7534
 GO:0007165	_GpBP	ncbigene:117579
+GO:0006805	_CtBP	pubchem.compound:5284616
 ncbigene:5144	_CdG	pubchem.compound:3671
 GO:0007165	_GpBP	ncbigene:5598
 ncbigene:3659	_CdG	pubchem.compound:5284616
@@ -5251,6 +5375,7 @@ ncbigene:55503	_CuG	pubchem.compound:5280453
 ncbigene:1282	_GiG	ncbigene:8974
 ncbigene:7879	_CdG	pubchem.compound:5284616
 ncbigene:3269	_CdG	pubchem.compound:3559
+GO:0051301	_CtBP	pubchem.compound:10635
 GO:0006508	_GpBP	ncbigene:60559
 GO:0009308	_GpBP	ncbigene:8639
 ncbigene:3553	_CdG	pubchem.compound:5281004
@@ -5302,6 +5427,8 @@ ncbigene:7480	_GiG	ncbigene:50999
 ncbigene:1815	_CdG	pubchem.compound:4168
 ncbigene:2255	_GiG	ncbigene:6899
 ncbigene:56670	_GiG	ncbigene:51738
+GO:0007165	_CtBP	pubchem.compound:1548887
+GO:0007165	_CtBP	pubchem.compound:5344
 ncbigene:54567	_GiG	ncbigene:4242
 ncbigene:5617	_CdG	pubchem.compound:6047
 ncbigene:716	_GiG	ncbigene:714
@@ -5351,6 +5478,7 @@ ncbigene:1786	_CdG	pubchem.compound:53232
 ncbigene:6833	_GiG	ncbigene:1559
 ncbigene:948	_GiG	ncbigene:81857
 ncbigene:4909	_GiG	ncbigene:30844
+GO:0043065	_CtBP	pubchem.compound:1548943
 GO:0006805	_GpBP	ncbigene:6579
 GO:0007165	_GpBP	ncbigene:3683
 GO:0051301	_GpBP	ncbigene:29086
@@ -5359,6 +5487,7 @@ ncbigene:3558	_CuG	pubchem.compound:5904
 ncbigene:2776	_GiG	ncbigene:3761
 GO:0055085	_GpBP	ncbigene:10864
 ncbigene:1813	_CdG	pubchem.compound:60854
+GO:0007165	_CtBP	pubchem.compound:54687
 ncbigene:5599	_GiG	ncbigene:1844
 ncbigene:51764	_GiG	ncbigene:138804
 ncbigene:5465	_CuG	pubchem.compound:2796
@@ -5385,6 +5514,7 @@ GO:0050821	_GpBP	ncbigene:2597
 ncbigene:60	_GiG	ncbigene:93408
 ncbigene:51764	_GiG	ncbigene:403244
 ncbigene:83667	_CdG	pubchem.compound:5280343
+GO:0007049	_CtBP	pubchem.compound:5280360
 ncbigene:8515	_GiG	ncbigene:1286
 ncbigene:1910	_CuG	pubchem.compound:9444
 ncbigene:8678	_GiG	ncbigene:23604
@@ -5393,6 +5523,7 @@ ncbigene:7534	_GiG	ncbigene:1496
 ncbigene:51701	_GiG	ncbigene:166
 ncbigene:4209	_CuG	pubchem.compound:6013
 ncbigene:6844	_CuG	pubchem.compound:702
+GO:0007165	_CtBP	pubchem.compound:4114
 ncbigene:2626	_GiG	ncbigene:27302
 ncbigene:3565	_CdG	pubchem.compound:4171
 ncbigene:59284	_CdG	pubchem.compound:5833
@@ -5439,6 +5570,7 @@ GO:0002376	_GpBP	ncbigene:10521
 ncbigene:7054	_GiG	ncbigene:6530
 GO:0007017	_GpBP	ncbigene:4296
 ncbigene:3276	_GiG	ncbigene:25942
+GO:0030154	_CtBP	pubchem.compound:5743
 ncbigene:3064	_GiG	ncbigene:3766
 ncbigene:7049	_GiG	ncbigene:2022
 ncbigene:43	_CdG	pubchem.compound:3105
@@ -5495,6 +5627,7 @@ GO:0050821	_GpBP	ncbigene:79155
 ncbigene:51764	_GiG	ncbigene:26530
 GO:0051301	_GpBP	ncbigene:119504
 ncbigene:7428	_GiG	ncbigene:4919
+GO:0007267	_CtBP	pubchem.compound:2554
 ncbigene:51764	_GiG	ncbigene:340980
 ncbigene:6389	_GiG	ncbigene:665
 GO:0007049	_GpBP	ncbigene:1022
@@ -5517,6 +5650,7 @@ ncbigene:339403	_GiG	ncbigene:3640
 ncbigene:2790	_GiG	ncbigene:114
 GO:0007165	_GpBP	ncbigene:5905
 ncbigene:581	_GiG	ncbigene:7299
+GO:0042592	_CtBP	pubchem.compound:31703
 GO:0043065	_GpBP	ncbigene:51083
 ncbigene:6385	_GiG	ncbigene:7059
 ncbigene:2782	_GiG	ncbigene:219986
@@ -5562,6 +5696,7 @@ ncbigene:1535	_CdG	pubchem.compound:12035
 ncbigene:596	_GiG	ncbigene:407042
 ncbigene:5601	_GiG	ncbigene:5130
 ncbigene:627	_CuG	pubchem.compound:36314
+GO:0043065	_CtBP	pubchem.compound:5280453
 GO:0030154	_GpBP	ncbigene:3339
 GO:0030154	_GpBP	ncbigene:23090
 ncbigene:7046	_GiG	ncbigene:10261
@@ -5680,6 +5815,7 @@ ncbigene:2782	_GiG	ncbigene:219869
 GO:0007165	_GpBP	ncbigene:2885
 ncbigene:9630	_GiG	ncbigene:3269
 GO:0055085	_GpBP	ncbigene:57369
+GO:0007165	_CtBP	pubchem.compound:31703
 ncbigene:2776	_GiG	ncbigene:2150
 GO:0007165	_GpBP	ncbigene:54567
 ncbigene:2782	_GiG	ncbigene:144124
@@ -5732,6 +5868,7 @@ GO:0007059	_GpBP	ncbigene:81565
 ncbigene:2247	_CdG	pubchem.compound:5344
 ncbigene:2782	_GiG	ncbigene:143496
 ncbigene:6750	_CdG	pubchem.compound:2771
+GO:0007267	_CtBP	pubchem.compound:4477
 ncbigene:4747	_GiG	ncbigene:2678
 ncbigene:1814	_CuG	pubchem.compound:6047
 ncbigene:1677	_GiG	ncbigene:3146
@@ -5807,8 +5944,10 @@ ncbigene:5617	_CdG	pubchem.compound:3676
 ncbigene:5621	_CdG	pubchem.compound:3476
 ncbigene:9656	_GiG	ncbigene:51755
 ncbigene:207	_GiG	ncbigene:84289
+GO:0050877	_CtBP	pubchem.compound:33741
 ncbigene:3357	_CdG	pubchem.compound:2477
 ncbigene:51764	_GiG	ncbigene:8387
+GO:0000902	_CtBP	pubchem.compound:3715
 ncbigene:2782	_GiG	ncbigene:283093
 ncbigene:7153	_CdG	pubchem.compound:149096
 ncbigene:4089	_GiG	ncbigene:657
@@ -5844,6 +5983,7 @@ ncbigene:5595	_GiG	ncbigene:57369
 ncbigene:51411	_GiG	ncbigene:54518
 ncbigene:4086	_GiG	ncbigene:7044
 ncbigene:301	_CuG	pubchem.compound:5745
+GO:0007165	_CtBP	pubchem.compound:445354
 ncbigene:3592	_GiG	ncbigene:3663
 ncbigene:7529	_GiG	ncbigene:4920
 ncbigene:1814	_CdG	pubchem.compound:6013
@@ -5885,6 +6025,7 @@ ncbigene:1559	_CdG	pubchem.compound:3385
 ncbigene:50616	_GiG	ncbigene:116379
 GO:0006457	_GpBP	ncbigene:3301
 ncbigene:7319	_GiG	ncbigene:1361
+GO:0032880	_CtBP	pubchem.compound:6918638
 ncbigene:8900	_GiG	ncbigene:7704
 GO:0007165	_GpBP	ncbigene:5527
 ncbigene:5142	_GiG	ncbigene:6530
@@ -5984,6 +6125,7 @@ ncbigene:8945	_GiG	ncbigene:5686
 ncbigene:51764	_GiG	ncbigene:26339
 ncbigene:2782	_GiG	ncbigene:440153
 ncbigene:3717	_GiG	ncbigene:1143
+GO:0006805	_CtBP	pubchem.compound:448537
 GO:0006457	_GpBP	ncbigene:9093
 ncbigene:51764	_GiG	ncbigene:219874
 GO:0007165	_GpBP	ncbigene:2896
@@ -6018,6 +6160,7 @@ GO:0007165	_GpBP	ncbigene:51378
 ncbigene:8590	_GiG	ncbigene:65055
 ncbigene:51764	_GiG	ncbigene:255725
 ncbigene:8590	_GiG	ncbigene:51308
+GO:0055085	_CtBP	pubchem.compound:5280453
 ncbigene:2903	_CuG	pubchem.compound:12035
 ncbigene:387	_GiG	ncbigene:27128
 ncbigene:7187	_GiG	ncbigene:54476
@@ -6090,6 +6233,7 @@ GO:0007155	_GpBP	ncbigene:5420
 ncbigene:6788	_GiG	ncbigene:23286
 ncbigene:4915	_GiG	ncbigene:7424
 GO:0043065	_GpBP	ncbigene:1647
+GO:0010951	_CtBP	pubchem.compound:3715
 ncbigene:301	_GiG	ncbigene:6811
 ncbigene:1565	_CdG	pubchem.compound:5405
 ncbigene:51764	_GiG	ncbigene:390538
@@ -6157,10 +6301,12 @@ GO:0007267	_GpBP	ncbigene:6469
 ncbigene:6532	_CdG	pubchem.compound:68617
 ncbigene:346562	_GiG	ncbigene:85397
 GO:0007165	_GpBP	ncbigene:6362
+GO:0006520	_CtBP	pubchem.compound:34359
 GO:0007165	_GpBP	ncbigene:1136
 ncbigene:375	_GiG	ncbigene:1314
 ncbigene:55844	_GiG	ncbigene:59283
 ncbigene:1785	_GiG	ncbigene:112574
+GO:0051301	_CtBP	pubchem.compound:5330286
 GO:0043065	_GpBP	ncbigene:10284
 ncbigene:2737	_GiG	ncbigene:374654
 ncbigene:115727	_GiG	ncbigene:3359
@@ -6210,6 +6356,7 @@ ncbigene:65018	_GiG	ncbigene:89941
 ncbigene:51764	_GiG	ncbigene:26595
 ncbigene:6232	_GiG	ncbigene:2491
 ncbigene:5921	_GiG	ncbigene:2046
+GO:0007165	_CtBP	pubchem.compound:667550
 ncbigene:1131	_CdG	pubchem.compound:5405
 ncbigene:11345	_GiG	ncbigene:55054
 ncbigene:79054	_CuG	pubchem.compound:6013
@@ -6280,6 +6427,7 @@ ncbigene:5742	_CdG	pubchem.compound:667550
 ncbigene:2782	_GiG	ncbigene:285659
 ncbigene:2782	_GiG	ncbigene:219437
 ncbigene:5880	_GiG	ncbigene:8440
+GO:0007165	_CtBP	pubchem.compound:16362
 ncbigene:2288	_GiG	ncbigene:832
 GO:0007267	_GpBP	ncbigene:2697
 GO:0030198	_GpBP	ncbigene:1278
@@ -6292,6 +6440,7 @@ GO:0007165	_GpBP	ncbigene:8817
 ncbigene:2782	_GiG	ncbigene:390084
 ncbigene:11200	_GiG	ncbigene:23002
 ncbigene:4846	_CdG	pubchem.compound:5284616
+GO:0008283	_CtBP	pubchem.compound:60854
 ncbigene:672	_GiG	ncbigene:1588
 ncbigene:26291	_GiG	ncbigene:8841
 ncbigene:147968	_GiG	ncbigene:2900
@@ -6385,6 +6534,7 @@ ncbigene:5594	_CuG	pubchem.compound:5280453
 ncbigene:1814	_CdG	pubchem.compound:3964
 ncbigene:3359	_CuG	pubchem.compound:702
 ncbigene:387	_CuG	pubchem.compound:54454
+GO:0007059	_CtBP	pubchem.compound:10607
 ncbigene:959	_GiG	ncbigene:5713
 ncbigene:54205	_GiG	ncbigene:83447
 ncbigene:25793	_GiG	ncbigene:26224
@@ -6441,6 +6591,7 @@ ncbigene:7412	_CdG	pubchem.compound:4775
 ncbigene:26263	_GiG	ncbigene:26267
 ncbigene:2562	_CuG	pubchem.compound:4737
 ncbigene:10637	_GiG	ncbigene:130399
+GO:0007049	_CtBP	pubchem.compound:1548887
 ncbigene:1493	_GiG	ncbigene:23308
 ncbigene:51764	_GiG	ncbigene:441608
 GO:0007165	_GpBP	ncbigene:2248
@@ -6454,6 +6605,7 @@ GO:0007165	_GpBP	ncbigene:5298
 ncbigene:51764	_GiG	ncbigene:441932
 GO:0030154	_GpBP	ncbigene:5367
 ncbigene:1808	_CuG	pubchem.compound:68870
+GO:0030154	_CtBP	pubchem.compound:6167
 ncbigene:3952	_CdG	pubchem.compound:3339
 ncbigene:4843	_CuG	pubchem.compound:5283731
 ncbigene:2782	_GiG	ncbigene:390648
@@ -6497,6 +6649,7 @@ ncbigene:54205	_GiG	ncbigene:7417
 ncbigene:10000	_GiG	ncbigene:388
 GO:0030154	_GpBP	ncbigene:3055
 GO:0050821	_GpBP	ncbigene:10856
+GO:0042592	_CtBP	pubchem.compound:448537
 ncbigene:81565	_GiG	ncbigene:1063
 ncbigene:3358	_CdG	pubchem.compound:33741
 ncbigene:2782	_GiG	ncbigene:338751
@@ -6541,11 +6694,13 @@ ncbigene:5621	_CdG	pubchem.compound:3372
 ncbigene:60	_GiG	ncbigene:29895
 ncbigene:2782	_GiG	ncbigene:341568
 ncbigene:1401	_CdG	pubchem.compound:3339
+GO:0048856	_CtBP	pubchem.compound:448537
 ncbigene:3586	_CuG	pubchem.compound:445643
 ncbigene:11197	_GiG	ncbigene:7475
 ncbigene:4846	_CdG	pubchem.compound:44093
 ncbigene:1559	_CdG	pubchem.compound:3463
 ncbigene:5880	_GiG	ncbigene:10152
+GO:0030154	_CtBP	pubchem.compound:54687
 ncbigene:3777	_CdG	pubchem.compound:3156
 ncbigene:3306	_GiG	ncbigene:6579
 ncbigene:2782	_GiG	ncbigene:442194
@@ -6593,6 +6748,7 @@ ncbigene:2776	_GiG	ncbigene:3768
 ncbigene:5881	_GiG	ncbigene:50649
 ncbigene:3815	_CdG	pubchem.compound:9829523
 ncbigene:147111	_GiG	ncbigene:7484
+GO:0007165	_CtBP	pubchem.compound:3343
 GO:0050821	_GpBP	ncbigene:10273
 ncbigene:3760	_GiG	ncbigene:3283
 GO:0030154	_GpBP	ncbigene:3170
@@ -6664,6 +6820,7 @@ ncbigene:3553	_CuG	pubchem.compound:149096
 ncbigene:7398	_GiG	ncbigene:80233
 GO:0007009	_GpBP	ncbigene:6708
 ncbigene:5617	_CuG	pubchem.compound:4748
+GO:0006913	_CtBP	pubchem.compound:60854
 ncbigene:93	_GiG	ncbigene:3626
 GO:0007267	_GpBP	ncbigene:2069
 ncbigene:5155	_CuG	pubchem.compound:31703
@@ -6741,6 +6898,7 @@ ncbigene:3818	_GiG	ncbigene:710
 GO:0030154	_GpBP	ncbigene:2115
 ncbigene:5054	_CdG	pubchem.compound:448537
 ncbigene:83540	_GiG	ncbigene:8379
+GO:0000902	_CtBP	pubchem.compound:5833
 ncbigene:89953	_GiG	ncbigene:25825
 ncbigene:2792	_GiG	ncbigene:117
 GO:0005975	_GpBP	ncbigene:3643
@@ -6760,6 +6918,7 @@ ncbigene:3309	_CdG	pubchem.compound:4091
 ncbigene:2793	_GiG	ncbigene:108
 ncbigene:3002	_GiG	ncbigene:7277
 GO:0030154	_GpBP	ncbigene:10468
+GO:0007165	_CtBP	pubchem.compound:5360696
 ncbigene:55844	_GiG	ncbigene:5584
 ncbigene:727	_GiG	ncbigene:1378
 GO:0043065	_GpBP	ncbigene:2852
@@ -6809,6 +6968,7 @@ ncbigene:22914	_GiG	ncbigene:154064
 ncbigene:5970	_GiG	ncbigene:51776
 ncbigene:6850	_GiG	ncbigene:26253
 ncbigene:1816	_CdG	pubchem.compound:60854
+GO:0043065	_CtBP	pubchem.compound:55245
 ncbigene:2782	_GiG	ncbigene:391107
 ncbigene:6232	_GiG	ncbigene:151648
 ncbigene:4199	_GiG	ncbigene:10370
@@ -6873,6 +7033,7 @@ ncbigene:1129	_CdG	pubchem.compound:60854
 ncbigene:6899	_CuG	pubchem.compound:448537
 ncbigene:10772	_GiG	ncbigene:3178
 ncbigene:5602	_GiG	ncbigene:147700
+GO:0006629	_CtBP	pubchem.compound:5564
 ncbigene:6249	_GiG	ncbigene:64223
 ncbigene:8379	_GiG	ncbigene:25847
 GO:0005975	_GpBP	ncbigene:6517
@@ -6937,6 +7098,7 @@ ncbigene:2782	_GiG	ncbigene:81061
 ncbigene:2782	_GiG	ncbigene:390075
 ncbigene:4204	_GiG	ncbigene:204851
 GO:0007165	_GpBP	ncbigene:10135
+GO:0007165	_CtBP	pubchem.compound:33741
 GO:0030154	_GpBP	ncbigene:8817
 ncbigene:1440	_CdG	pubchem.compound:3385
 GO:0051301	_GpBP	ncbigene:151648
@@ -7036,6 +7198,7 @@ GO:0007267	_GpBP	ncbigene:8744
 ncbigene:4091	_GiG	ncbigene:57162
 ncbigene:817	_GiG	ncbigene:286151
 ncbigene:2782	_GiG	ncbigene:120776
+GO:0002376	_CtBP	pubchem.compound:5284616
 GO:0007165	_GpBP	ncbigene:4043
 GO:0007049	_GpBP	ncbigene:5580
 ncbigene:5970	_CdG	pubchem.compound:12035
@@ -7064,6 +7227,7 @@ ncbigene:4210	_CdG	pubchem.compound:6167
 ncbigene:8392	_GiG	ncbigene:65055
 ncbigene:51764	_GiG	ncbigene:338675
 ncbigene:4915	_GiG	ncbigene:5228
+GO:0007165	_CtBP	pubchem.compound:5280360
 ncbigene:4040	_GiG	ncbigene:7477
 ncbigene:8717	_GiG	ncbigene:25999
 GO:0006457	_GpBP	ncbigene:4879
@@ -7120,6 +7284,7 @@ GO:0050821	_GpBP	ncbigene:573
 ncbigene:8392	_GiG	ncbigene:80346
 ncbigene:998	_GiG	ncbigene:9138
 GO:0009308	_GpBP	ncbigene:7412
+GO:0007165	_CtBP	pubchem.compound:3658
 ncbigene:5159	_GiG	ncbigene:1945
 ncbigene:283807	_GiG	ncbigene:285231
 ncbigene:143686	_CuG	pubchem.compound:24826799
@@ -7164,6 +7329,7 @@ ncbigene:2782	_GiG	ncbigene:390271
 GO:0007165	_GpBP	ncbigene:1235
 ncbigene:26272	_GiG	ncbigene:283807
 GO:0043085	_GpBP	ncbigene:7520
+GO:0006913	_CtBP	pubchem.compound:6167
 ncbigene:367	_CuG	pubchem.compound:5280453
 GO:0050790	_GpBP	ncbigene:823
 ncbigene:929	_CuG	pubchem.compound:5280453
@@ -7193,6 +7359,7 @@ ncbigene:114548	_GiG	ncbigene:140609
 ncbigene:2782	_GiG	ncbigene:158131
 ncbigene:51764	_GiG	ncbigene:403282
 ncbigene:3355	_CdG	pubchem.compound:4184
+GO:0007165	_CtBP	pubchem.compound:3478
 ncbigene:8631	_GiG	ncbigene:27040
 ncbigene:10370	_GiG	ncbigene:665
 ncbigene:6010	_CdG	pubchem.compound:702
@@ -7205,6 +7372,7 @@ ncbigene:51764	_GiG	ncbigene:26219
 ncbigene:217	_CdG	pubchem.compound:3117
 ncbigene:2921	_GiG	ncbigene:1513
 ncbigene:346562	_GiG	ncbigene:6002
+GO:0006805	_CtBP	pubchem.compound:456201
 ncbigene:2782	_GiG	ncbigene:119749
 ncbigene:5601	_GiG	ncbigene:89953
 ncbigene:51764	_GiG	ncbigene:390260
@@ -7218,9 +7386,11 @@ ncbigene:146	_CdG	pubchem.compound:4184
 ncbigene:255738	_CuG	pubchem.compound:54687
 ncbigene:51764	_GiG	ncbigene:390162
 GO:0043065	_GpBP	ncbigene:8462
+GO:0007165	_CtBP	pubchem.compound:5717
 ncbigene:7054	_CuG	pubchem.compound:3386
 ncbigene:891	_GiG	ncbigene:89845
 GO:0006629	_GpBP	ncbigene:2940
+GO:0007165	_CtBP	pubchem.compound:5983
 ncbigene:9656	_GiG	ncbigene:728929
 GO:0043065	_GpBP	ncbigene:2071
 ncbigene:5908	_GiG	ncbigene:5909
@@ -7236,6 +7406,8 @@ ncbigene:2782	_GiG	ncbigene:441933
 ncbigene:152	_CdG	pubchem.compound:60854
 GO:0055085	_GpBP	ncbigene:8714
 ncbigene:23621	_CdG	pubchem.compound:448537
+GO:0030154	_CtBP	pubchem.compound:9444
+GO:0007165	_CtBP	pubchem.compound:3308
 GO:0007165	_GpBP	ncbigene:27289
 ncbigene:5143	_CdG	pubchem.compound:3671
 ncbigene:285220	_GiG	ncbigene:1946
@@ -7271,7 +7443,9 @@ ncbigene:5970	_GiG	ncbigene:2168
 GO:0043065	_GpBP	ncbigene:1493
 GO:0007017	_GpBP	ncbigene:51512
 ncbigene:2288	_GiG	ncbigene:1780
+GO:0030154	_CtBP	pubchem.compound:4485
 ncbigene:1812	_CdG	pubchem.compound:71360
+GO:0030154	_CtBP	pubchem.compound:36462
 ncbigene:354	_GiG	ncbigene:8970
 ncbigene:5156	_GiG	ncbigene:2250
 ncbigene:51764	_GiG	ncbigene:390321
@@ -7294,6 +7468,7 @@ GO:0030154	_GpBP	ncbigene:27006
 ncbigene:28964	_GiG	ncbigene:23683
 GO:0006508	_GpBP	ncbigene:8837
 ncbigene:1559	_CuG	pubchem.compound:5743
+GO:0007165	_CtBP	pubchem.compound:444795
 GO:0007049	_GpBP	ncbigene:153090
 ncbigene:8639	_CdG	pubchem.compound:4091
 ncbigene:7471	_GiG	ncbigene:6382
@@ -7317,6 +7492,7 @@ ncbigene:4137	_CuG	pubchem.compound:448537
 GO:0007155	_GpBP	ncbigene:1947
 ncbigene:89780	_GiG	ncbigene:147111
 ncbigene:5328	_GiG	ncbigene:7319
+GO:0032880	_CtBP	pubchem.compound:444795
 ncbigene:6609	_CdG	pubchem.compound:2162
 ncbigene:55799	_CdG	pubchem.compound:2162
 GO:0000902	_GpBP	ncbigene:832
@@ -7378,6 +7554,7 @@ ncbigene:3932	_GiG	ncbigene:5795
 GO:0050821	_GpBP	ncbigene:6201
 ncbigene:5329	_CuG	pubchem.compound:5426
 ncbigene:1132	_CuG	pubchem.compound:4171
+GO:0007165	_CtBP	pubchem.compound:2375
 ncbigene:6885	_GiG	ncbigene:11183
 ncbigene:1457	_GiG	ncbigene:139341
 ncbigene:6868	_CdG	pubchem.compound:126941
@@ -7396,6 +7573,7 @@ ncbigene:57104	_CuG	pubchem.compound:3339
 ncbigene:3356	_CdG	pubchem.compound:71360
 ncbigene:2782	_GiG	ncbigene:119692
 ncbigene:7474	_CdG	pubchem.compound:36314
+GO:0007165	_CtBP	pubchem.compound:4485
 ncbigene:4211	_CuG	pubchem.compound:444795
 ncbigene:7428	_GiG	ncbigene:196528
 ncbigene:6774	_CdG	pubchem.compound:5284513
@@ -7533,6 +7711,7 @@ ncbigene:10599	_CuG	pubchem.compound:54687
 ncbigene:11200	_GiG	ncbigene:5981
 GO:0007165	_GpBP	ncbigene:3586
 ncbigene:387	_GiG	ncbigene:10451
+GO:0007165	_CtBP	pubchem.compound:5593
 ncbigene:5159	_GiG	ncbigene:5228
 ncbigene:147	_CdG	pubchem.compound:441074
 ncbigene:3381	_CdG	pubchem.compound:5280453
@@ -7549,6 +7728,7 @@ ncbigene:1815	_CdG	pubchem.compound:2477
 GO:0006914	_GpBP	ncbigene:79735
 ncbigene:2787	_GiG	ncbigene:109
 ncbigene:2252	_GiG	ncbigene:83888
+GO:0007267	_CtBP	pubchem.compound:4748
 ncbigene:5295	_GiG	ncbigene:7145
 ncbigene:8590	_GiG	ncbigene:221035
 ncbigene:354	_GiG	ncbigene:85236
@@ -7568,6 +7748,7 @@ ncbigene:1520	_CdG	pubchem.compound:2719
 ncbigene:51764	_GiG	ncbigene:81168
 GO:0006913	_GpBP	ncbigene:9818
 ncbigene:10663	_GiG	ncbigene:9547
+GO:0008283	_CtBP	pubchem.compound:5833
 ncbigene:51764	_GiG	ncbigene:26737
 GO:0006508	_GpBP	ncbigene:4325
 GO:0007155	_GpBP	ncbigene:394
@@ -7621,6 +7802,7 @@ ncbigene:5071	_GiG	ncbigene:89941
 ncbigene:3980	_CdG	pubchem.compound:5360373
 ncbigene:4313	_CuG	pubchem.compound:5280360
 ncbigene:10383	_CdG	pubchem.compound:6167
+GO:0043065	_CtBP	pubchem.compound:107807
 ncbigene:23411	_CuG	pubchem.compound:3339
 ncbigene:6654	_GiG	ncbigene:247
 ncbigene:672	_GiG	ncbigene:404672
@@ -7644,6 +7826,7 @@ ncbigene:672	_GiG	ncbigene:11198
 ncbigene:140803	_CdG	pubchem.compound:5284616
 ncbigene:659	_GiG	ncbigene:9861
 ncbigene:7124	_CdG	pubchem.compound:5311181
+GO:0007267	_CtBP	pubchem.compound:4775
 GO:0007010	_GpBP	ncbigene:253260
 ncbigene:152	_CdG	pubchem.compound:4158
 ncbigene:2792	_GiG	ncbigene:115
@@ -7651,6 +7834,7 @@ ncbigene:3315	_GiG	ncbigene:8550
 ncbigene:1456	_GiG	ncbigene:6295
 ncbigene:760	_CdG	pubchem.compound:68844
 ncbigene:2782	_GiG	ncbigene:219453
+GO:0051301	_CtBP	pubchem.compound:5833
 ncbigene:5728	_GiG	ncbigene:629
 ncbigene:3064	_GiG	ncbigene:6391
 GO:0043065	_GpBP	ncbigene:55811
@@ -7741,6 +7925,7 @@ ncbigene:59340	_CuG	pubchem.compound:3715
 GO:0007165	_GpBP	ncbigene:3596
 GO:0030154	_GpBP	ncbigene:3624
 GO:0006605	_GpBP	ncbigene:10956
+GO:0032880	_CtBP	pubchem.compound:6167
 GO:0007165	_GpBP	ncbigene:5608
 ncbigene:5528	_GiG	ncbigene:4131
 GO:0030154	_GpBP	ncbigene:57154
@@ -7793,6 +7978,7 @@ ncbigene:6469	_CdG	pubchem.compound:444795
 GO:0007596	_GpBP	ncbigene:79001
 ncbigene:5979	_GiG	ncbigene:7080
 ncbigene:7450	_CdG	pubchem.compound:3157
+GO:0043065	_CtBP	pubchem.compound:5743
 ncbigene:151	_CdG	pubchem.compound:60854
 ncbigene:9423	_CuG	pubchem.compound:2719
 ncbigene:51764	_GiG	ncbigene:219436
@@ -7830,6 +8016,7 @@ GO:0006508	_GpBP	ncbigene:4322
 ncbigene:595	_GiG	ncbigene:182
 ncbigene:801	_CdG	pubchem.compound:445643
 ncbigene:151	_CdG	pubchem.compound:4011
+GO:0007267	_CtBP	pubchem.compound:448537
 GO:0007267	_GpBP	ncbigene:7472
 ncbigene:5021	_CuG	pubchem.compound:448537
 GO:0006259	_GpBP	ncbigene:7486
@@ -7887,6 +8074,7 @@ ncbigene:51764	_GiG	ncbigene:284532
 ncbigene:6232	_GiG	ncbigene:1062
 ncbigene:3600	_CdG	pubchem.compound:6741
 ncbigene:2050	_GiG	ncbigene:1947
+GO:0007267	_CtBP	pubchem.compound:4011
 ncbigene:51764	_GiG	ncbigene:138881
 ncbigene:2194	_CdG	pubchem.compound:1548943
 GO:0043065	_GpBP	ncbigene:3827
@@ -7902,6 +8090,7 @@ ncbigene:5921	_GiG	ncbigene:1943
 ncbigene:5595	_GiG	ncbigene:2705
 ncbigene:6300	_GiG	ncbigene:2209
 ncbigene:5782	_GiG	ncbigene:145957
+GO:0009820	_CtBP	pubchem.compound:4748
 ncbigene:3606	_CuG	pubchem.compound:702
 ncbigene:2793	_GiG	ncbigene:5731
 ncbigene:627	_CuG	pubchem.compound:3386
@@ -7932,10 +8121,12 @@ GO:0016485	_GpBP	ncbigene:5027
 GO:0016192	_GpBP	ncbigene:27183
 GO:0006913	_GpBP	ncbigene:53371
 ncbigene:3315	_GiG	ncbigene:355
+GO:0043065	_CtBP	pubchem.compound:667550
 ncbigene:150	_CdG	pubchem.compound:5073
 ncbigene:811	_CuG	pubchem.compound:40692
 ncbigene:665	_GiG	ncbigene:7507
 ncbigene:10451	_GiG	ncbigene:7294
+GO:0007165	_CtBP	pubchem.compound:3108
 ncbigene:1813	_CdG	pubchem.compound:3964
 ncbigene:4780	_CuG	pubchem.compound:145068
 ncbigene:2909	_CuG	pubchem.compound:702
