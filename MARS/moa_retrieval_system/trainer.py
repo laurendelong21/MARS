@@ -14,11 +14,11 @@ from collections import defaultdict
 from copy import deepcopy
 from scipy.special import logsumexp as lse
 from sklearn.model_selection import ParameterGrid
-from mycode.options import read_options
-from mycode.model.agent import Agent
-from mycode.model.environment import Env
-from mycode.model.baseline import ReactiveBaseline
-from mycode.model.rules import prepare_argument, check_rule, modify_rewards
+from MARS.options import read_options
+from MARS.moa_retrieval_system.agent import Agent
+from MARS.moa_retrieval_system.environment import Env
+from MARS.moa_retrieval_system.baseline import ReactiveBaseline
+from MARS.moa_retrieval_system.rules import prepare_argument, check_rule, modify_rewards
 
 import multiprocessing
 
