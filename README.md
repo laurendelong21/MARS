@@ -112,6 +112,6 @@ Where:
 
 For Hetionet, the complete graph is split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
 
-For rules learned by the method [AnyBURL](http://web.informatik.uni-mannheim.de/AnyBURL/), the script [preprocess_rule_list.py](https://github.com/liu-yushan/PoLo/blob/main/mycode/data/preprocessing_scripts/preprocess_rule_list.py) can be used to preprocess the rules into the format that is needed for PoLo.
+For rules learned by the method [AnyBURL](http://web.informatik.uni-mannheim.de/AnyBURL/), the script [preprocess_rule_list.py](https://github.com/liu-yushan/PoLo/blob/main/MARS/data/preprocessing_scripts/preprocess_rule_list.py) can be used to preprocess the rules into the format that is needed for PoLo.
 
-Finally, two vocab files are needed, one for the entities and one for the relations. These can be created by using the [```create_vocab.py``` file](mycode/data/preprocessing_scripts/create_vocab.py).
+Finally, two vocab files are needed, one for the entities and one for the relations. These can be created by using the [```create_vocab.py``` file](MARS/data/preprocessing_scripts/create_vocab.py).

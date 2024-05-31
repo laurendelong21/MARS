@@ -21,7 +21,7 @@ located.
 
 ```--seed```*: int. Random seed for reproducibility.
 
-```--batch_size```*: int. Size of the sampled batch by the [RelationEntityBatcher](../mycode/data/feed_data.py).
+```--batch_size```*: int. Size of the sampled batch by the [RelationEntityBatcher](../MARS/data/feed_data.py).
 
 ```--num_rollouts```*: int. Number of rollouts for each query during training.
 
@@ -29,7 +29,7 @@ located.
 
 ```--path_length```*: int. Length of the extracted path.
 
-```--max_num_actions```*: int. Maximum branching factor for the knowledge graph created by the [RelationEntityGrapher](../mycode/data/grapher.py). This limits the maximum number of actions available to the agents at each step.
+```--max_num_actions```*: int. Maximum branching factor for the knowledge graph created by the [RelationEntityGrapher](../MARS/data/grapher.py). This limits the maximum number of actions available to the agents at each step.
 
 ```--hidden_size```*: int. Influences the size of the hidden layers in the LSTM and MLP.
 
