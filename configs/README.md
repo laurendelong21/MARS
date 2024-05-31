@@ -43,11 +43,11 @@ located.
 
 ```--gamma```*: float. Discount factor for REINFORCE.
 
-```--Lambda```*: float. Discount factor for the baseline. This is lambda in the reward function.
+```--Lambda```*: float. Discount factor for the baseline. This is NOT lambda in the reward function.
 
 ```--grad_clip_norm```*: int. Clipping ratio for the gradient.
 
-```--rule_base_reward```*: int. The base reward that is used to calculate the reward when a rule is applied.
+```--rule_base_reward```*: int. The base reward that is used to calculate the reward when a rule is applied. THIS is the Lambda in the reward function.
 
 ```--positive_reward```*: float. Positive reward if the end entity is correct.
 
