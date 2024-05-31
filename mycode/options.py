@@ -37,7 +37,7 @@ def read_options():
     parser.add_argument('--train_relation_embeddings', default=1, type=int)
     parser.add_argument('--update_confs', default=0, type=int, nargs='+')
     parser.add_argument('--alpha', default=0.1, type=float, nargs='+')
-    parser.add_argument('--sg_penalty', default=0, type=float, nargs='+')
+    parser.add_argument('--mixing_ratio', default=0.5, type=float, nargs='+')
 
     try:
         parsed = vars(parser.parse_args())

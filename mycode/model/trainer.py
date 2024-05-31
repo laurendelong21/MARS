@@ -45,15 +45,12 @@ class Trainer(object):
         self.rule_list_dir = self.input_dir + self.rule_file
         with open(self.rule_list_dir, 'r') as file:
             self.rule_list = json.load(file)
-        # load in the biological pathway subgraphs for the penalty
-        self.subgraphs_dir = self.input_dir + self.subgraphs_file
-        with open(self.subgraphs_dir, 'r') as file:
-            self.subgraphs = [set(v) for v in json.load(file).values()]  # just get the proteins for now.
         self.baseline = ReactiveBaseline(self.Lambda)
         self.optimizer = tf.compat.v1.train.AdamOptimizer(self.learning_rate)
         self.best_metric = -1
         self.early_stopping = False
         self.current_patience = self.patience
+        self.ratios = []
 
     def set_random_seeds(self, seed):
         if seed is not None:
@@ -114,7 +111,6 @@ class Trainer(object):
 
         # calculate the final loss, including rewards
         self.loss_op = self.calc_reinforce_loss()
-        # TODO: no idea what this is
         self.train_op = self.bp(self.loss_op)
 
         # Building the test graph
@@ -519,11 +515,13 @@ class Trainer(object):
             # positive or negative reward values per starting node
             rewards = episode.get_rewards()
             # Here, they modify the rewards to take into account whether it fits rules.
-            rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
+            rewards, rule_count, rule_count_body, self.rule_list, ratios = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
                                                                             obj_string, self.rule_base_reward, rewards,
                                                                             self.only_body, self.update_confs, self.alpha,
-                                                                            self.sg_penalty, self.subgraphs)
-
+                                                                            self.batch_size, self.num_rollouts, self.mixing_ratio)
+            
+            self.ratios.extend(ratios)
+            
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
             # Backpropagation
@@ -554,6 +552,8 @@ class Trainer(object):
             if self.batch_counter % self.eval_every == 0:  ## validation / dev set testing
                 with open(self.output_dir + 'scores.txt', 'a') as score_file:
                     score_file.write('Scores for iteration ' + str(self.batch_counter) + '\n')
+                with open(self.output_dir + f'confidences_{self.batch_counter}.txt', 'w') as rule_fl:
+                    json.dump(self.rule_list, rule_fl, indent=2)
                 paths_log_dir = self.output_dir + str(self.batch_counter) + '/'
                 os.makedirs(paths_log_dir)
                 self.paths_log = paths_log_dir + 'paths'
@@ -565,10 +565,20 @@ class Trainer(object):
             if self.early_stopping:
                 with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
                     json.dump(self.rule_list, rule_fl, indent=2)
+                # output the ratios before adjustment:
+                with open(self.output_dir + 'ratios.txt', 'w') as file:
+                # Write each element of the list to a new line in the file
+                    for item in self.ratios:
+                        file.write(str(item) + '\n')
                 break
             if self.batch_counter >= self.total_iterations:
                 with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
                     json.dump(self.rule_list, rule_fl, indent=2)
+                # output the ratios before adjustment:
+                with open(self.output_dir + 'ratios.txt', 'w') as file:
+                # Write each element of the list to a new line in the file
+                    for item in self.ratios:
+                        file.write(str(item) + '\n')
                 break
 
     def test(self, sess, print_paths=False, save_model=True, beam=True):
@@ -731,8 +741,7 @@ def create_output_and_model_dir(params, mode):
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
                                '_A' + str(params['max_num_actions']) + \
-                               '_LR' + str(params['learning_rate']) + \
-                                '_pen' + str(params['sg_penalty'])  + '/'
+                               '_LR' + str(params['learning_rate']) + '/'
         os.makedirs(params['output_dir'])
     else:
         params['output_dir'] = params['base_output_dir'] + str(current_time) + \
@@ -742,8 +751,7 @@ def create_output_and_model_dir(params, mode):
                                '_b' + str(params['beta']) + \
                                '_Lb' + str(params['Lambda']) + \
                                '_A' + str(params['max_num_actions']) + \
-                               '_LR' + str(params['learning_rate']) + \
-                                '_pen' + str(params['sg_penalty'])  + '/'
+                               '_LR' + str(params['learning_rate']) + '/'
         params['model_dir'] = params['output_dir'] + 'model/'
         os.makedirs(params['output_dir'])
         os.makedirs(params['model_dir'])

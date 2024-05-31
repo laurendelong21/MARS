@@ -43,11 +43,11 @@ located.
 
 ```--gamma```*: float. Discount factor for REINFORCE.
 
-```--Lambda```*: float. Discount factor for the baseline. This is lambda in the reward function.
+```--Lambda```*: float. Discount factor for the baseline. This is NOT lambda in the reward function.
 
 ```--grad_clip_norm```*: int. Clipping ratio for the gradient.
 
-```--rule_base_reward```*: int. The base reward that is used to calculate the reward when a rule is applied.
+```--rule_base_reward```*: int. The base reward that is used to calculate the reward when a rule is applied. THIS is the Lambda in the reward function.
 
 ```--positive_reward```*: float. Positive reward if the end entity is correct.
 
@@ -65,7 +65,9 @@ This is b in the reward function; 0 means we set it equal to the first term, and
 
 ```--train_relation_embeddings```*: int. Either 0 or 1. Flag to check whether the relation embeddings should be trained  after initialization.
 
-```--update_confs```: int. Either 0, 1, or 2. Option to determine whether the confidence values should be updated. 0 means no updates, 1 means frequency-based updates, and 2 means 2-hop joint probabilities.
+```--update_confs```: int. Either 0, 1, or 2. Option to determine whether and how the confidence values should be updated. 0 means no updates, 1 means frequency-based (naive) updates, 2 means 2-hop joint probabilities (P2H), and 3 means a mix between the two confidence update methods.
+
+```--mixing_ratio```*: float. This only does something when update_confs == 3. This is the ratio of the confidence update which is composed of the frequency-based update. IOW, a mixing_ratio > 0.5 means that the frequency-based update will be taken into account more than the P2H update. 0.5 means equal mixing. Default is 0.5.
 
 ```--alpha```*: float. Some number between 0-1 indicating how strongly or dramatically the confidence updates should be made. 0 would be the equivalent of choosing update_confs of 0. 
 
