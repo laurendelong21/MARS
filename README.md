@@ -1,11 +1,11 @@
-# Neural Multi-Hop Reasoning With Logical Rules on Biomedical Knowledge Graphs
+# Mechanism-of-Action Retrieval System (MARS)
 
-Tensorflow implementation of the method PoLo from this [paper](https://arxiv.org/abs/2103.10367).
+This is the code corresponding to MARS, the mechanism-of-action retrieval system for drug discovery.
 
 
 <h2> Credits</h2>
 
-This implementation is based on [Shehzaad Dhuliawala's repository](https://github.com/shehzaadzd/MINERVA), which contains the code for the paper [Go for a Walk and Arrive at the Answer - Reasoning over Paths in Knowledge Bases using Reinforcement Learning](https://arxiv.org/abs/1711.05851).
+This implementation is based on [PoLo (Neural Multi-Hop Reasoning With Logical Rules on Biomedical Knowledge Graphs)](https://arxiv.org/abs/2103.10367), which is also based upon [MINERVA](https://github.com/shehzaadzd/MINERVA) from the paper [Go for a Walk and Arrive at the Answer - Reasoning over Paths in Knowledge Bases using Reinforcement Learning](https://arxiv.org/abs/1711.05851).
 
 <h2> How To Run </h2>
 
@@ -26,49 +26,37 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-If you're having operating system conflicts (typically due to `pracmln` installation), use the Docker image:
-
-```
-docker build -t laurendelong21/internship:0 - < Dockerfile
-
-docker run -it --workdir /work --volume $HOME_DIR$/PoLo:/work --name polo_cont laurendelong21/internship:0 
-/bin/bash
-
-```
-
 <h3>  Hyperparameter Configurations: </h3>
 
-To run PoLo, use one of the config files or create your own. For an explanation of each hyperparameter, refer to the [README file in the configs folder](configs/README.md).
+To run MARS, use one of the config files or create your own. For an explanation of each hyperparameter, refer to the [README file in the configs folder](configs/README.md).
 
 <h3>  Large Files: </h3>
 
-**Note**: Both the Hetionet and MOA-net graphs are split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
+**Note**: MOA-net graphs are split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
+
 These two files **need to be combined into one file** (with the name ```graph.txt```) before running the code.
 
 To do this, you have to create a file called ```graph.txt```, as explained above:
-```
-cat datasets/Hetionet/graph_triples.txt datasets/Hetionet/graph_inverses.txt > datasets/Hetionet/graph.txt
-```
-
-or, for MOA-net:
 
 ```
 cat datasets/MOA-net/graph_triples.txt datasets/MOA-net/graph_inverses.txt > datasets/MOA-net/graph.txt
 ```
 
-The permissions for the ```run.sh``` file are typically editable for all, but in case they aren't, run:
-```
-chmod a+x ./run.sh
-```
 
-<h3> Run PoLo: </h3>
 
-Once you're ready to run PoLo, use the `run.sh` bash script, followed by the proper configuration file:
+<h3> Run MARS: </h3>
+
+Once you're ready to run MARS, use the `run.sh` bash script, followed by the proper configuration file:
 
 ```
 cd PoLo
 
 ./run.sh configs/${config_file}.sh
+```
+
+The permissions for the ```run.sh``` file are typically editable for all, but in case they aren't, run:
+```
+chmod a+x ./run.sh
 ```
 
 If you want to run replicates of the same configuration, you can use the replicates bash script, with the first argument being the configuration file, and the second being the number of replicates:
@@ -82,11 +70,15 @@ cd PoLo
 
 <h2> Data Format </h2>
 
-<h5> Triple format </h5>
+<h3> MoA-Net </h3>
 
-KG triples need to be written in the format ```subject predicate object```, with tabs as separators. Furthermore, PoLo uses inverse relations, so it is important to add the inverse triple for each fact in the KG. The prefix  ```_``` is used before a predicate to signal the inverse relation, e.g., the inverse triple for ```Germany hasCapital Berlin``` is ```Berlin _hasCapital Germany```.
+The creation of MoA-Net is within another repository.
 
-<h5> File format </h5>
+<h3> Triple format </h3>
+
+KG triples need to be written in the format ```subject predicate object```, with tabs as separators. Furthermore, MARS uses inverse relations, so it is important to add the inverse triple for each fact in the KG. The prefix  ```_``` is used before a predicate to signal the inverse relation, e.g., the inverse triple for ```Drug induces Biological Process``` is ```Drug _induces Biological Process```.
+
+<h3> File format </h3>
 
 Datasets should have the following files:
 ```
@@ -112,6 +104,6 @@ Where:
 
 For Hetionet, the complete graph is split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
 
-For rules learned by the method [AnyBURL](http://web.informatik.uni-mannheim.de/AnyBURL/), the script [preprocess_rule_list.py](https://github.com/liu-yushan/PoLo/blob/main/MARS/data/preprocessing_scripts/preprocess_rule_list.py) can be used to preprocess the rules into the format that is needed for PoLo.
+For rules learned by the method [AnyBURL](http://web.informatik.uni-mannheim.de/AnyBURL/), the script [preprocess_rule_list.py](https://github.com/liu-yushan/PoLo/blob/main/MARS/data/preprocessing_scripts/preprocess_rule_list.py) can be used to preprocess the rules into the format that is needed for MARS.
 
 Finally, two vocab files are needed, one for the entities and one for the relations. These can be created by using the [```create_vocab.py``` file](MARS/data/preprocessing_scripts/create_vocab.py).
