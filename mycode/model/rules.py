@@ -216,14 +216,14 @@ def init_empirical_nums(rule_dict):
     return empirical_nums
 
 
-def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base_reward, 
+def modify_rewards(rule_list, arguments, query_rel_string, obj_string, Lambda, 
                    rewards, only_body, update_confs, alpha, batch_size, rollouts, mixing_ratio):
     """Modifies the rewards according to whether the metapath corresponds to a rule
     :param rule_list: 2D array containing rules and corresponding confidences 
     :param arguments: a string which is like a list, alternating between the next possible relation and entity
     :param query_rel_string: all possible rule heads (relations) from each entity
     :param obj_string: all possible sink entities from each sourch entity
-    :param rule_base_reward: the reward value assigned for getting a matching path
+    :param Lambda: the reward value assigned for getting a matching path
     :param rewards: array containing rewards for each entity
     :param only_body: Either 0 or 1. Flag to check whether the extracted paths should only be compared against
         the body of the rules, or if the correctness of the end entity should also be taken into account.
@@ -274,7 +274,7 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, rule_base
             for j in range(len(rel_rules)):  # for each rule body corresponding to that rule head:
                 if check_rule(body, obj, obj_string[k], rel_rules[j], only_body):
                     # additional reward for matching rule body
-                    add_reward = rule_base_reward * float(rel_rules[j][0])  # the 0th element is the confidence
+                    add_reward = Lambda * float(rel_rules[j][0])  # the 0th element is the confidence
                     rewards[k] += add_reward
                     break
 

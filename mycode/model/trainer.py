@@ -45,7 +45,7 @@ class Trainer(object):
         self.rule_list_dir = self.input_dir + self.rule_file
         with open(self.rule_list_dir, 'r') as file:
             self.rule_list = json.load(file)
-        self.baseline = ReactiveBaseline(self.Lambda)
+        self.baseline = ReactiveBaseline(self.gamma_baseline)
         self.optimizer = tf.compat.v1.train.AdamOptimizer(self.learning_rate)
         self.best_metric = -1
         self.early_stopping = False
@@ -516,7 +516,7 @@ class Trainer(object):
             rewards = episode.get_rewards()
             # Here, they modify the rewards to take into account whether it fits rules.
             rewards, rule_count, rule_count_body, self.rule_list, ratios = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
-                                                                            obj_string, self.rule_base_reward, rewards,
+                                                                            obj_string, self.Lambda, rewards,
                                                                             self.only_body, self.update_confs, self.alpha,
                                                                             self.batch_size, self.num_rollouts, self.mixing_ratio)
             
@@ -735,21 +735,21 @@ def create_output_and_model_dir(params, mode):
     current_time = current_time.strftime('%d%b%y_%H%M%S')
     if mode == 'test':
         params['output_dir'] = params['base_output_dir'] + str(current_time) + '_TEST' + \
-                               '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
+                               '_p' + str(params['path_length']) + '_Lb' + str(params['Lambda']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
-                               '_Lb' + str(params['Lambda']) + \
+                               '_gb' + str(params['gamma_baseline']) + \
                                '_A' + str(params['max_num_actions']) + \
                                '_LR' + str(params['learning_rate']) + '/'
         os.makedirs(params['output_dir'])
     else:
         params['output_dir'] = params['base_output_dir'] + str(current_time) + \
-                               '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
+                               '_p' + str(params['path_length']) + '_Lb' + str(params['Lambda']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
-                               '_Lb' + str(params['Lambda']) + \
+                               '_gb' + str(params['gamma_baseline']) + \
                                '_A' + str(params['max_num_actions']) + \
                                '_LR' + str(params['learning_rate']) + '/'
         params['model_dir'] = params['output_dir'] + 'model/'

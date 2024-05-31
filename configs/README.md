@@ -43,19 +43,19 @@ located.
 
 ```--gamma```*: float. Discount factor for REINFORCE.
 
-```--Lambda```*: float. Discount factor for the baseline. This is NOT lambda in the reward function.
+```--gamma_baseline```*: float. Discount factor for the baseline.
 
 ```--grad_clip_norm```*: int. Clipping ratio for the gradient.
 
-```--rule_base_reward```*: int. The base reward that is used to calculate the reward when a rule is applied. THIS is the Lambda in the reward function.
+```--Lambda```*: int. The base reward that is used to calculate the reward when a rule is applied.
 
 ```--positive_reward```*: float. Positive reward if the end entity is correct.
 
 ```--negative_reward```*: float. Negative reward if the end entity is incorrect.
 
-```--only_body```*: int. Either 0 or 1. Flag to check whether the extracted paths should only be compared against the body of the rules, or if the correctness of the end entity should also be taken into account. 
+```--only_body```*: int. (b in the paper equation) Pass 0 or 1. Flag to check whether the extracted paths should only be compared against the body of the rules, or if the correctness of the end entity should also be taken into account. 
 
-This is b in the reward function; 0 means we set it equal to the first term, and 1 means we set it equal to 1.
+This is b in the reward function; 0 means we set it equal to the first summand, and 1 means we set it equal to 1.
 
 ```--pool```*: str. ```max``` or ```sum```. Pooling operation for evaluation.
 
