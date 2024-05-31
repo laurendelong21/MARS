@@ -5,4 +5,9 @@ __pycache__/
 output/
 datasets/Hetionet/graph.txt
 datasets/MOA-net/graph.txt
+.viscode/
 
+# ENVIRONMENTS
+env/
+
+confidence_eval.ipynb
