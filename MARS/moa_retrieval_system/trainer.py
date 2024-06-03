@@ -752,7 +752,7 @@ def create_output_and_model_dir(params, mode):
                                '_gb' + str(params['gamma_baseline']) + \
                                '_A' + str(params['max_num_actions']) + \
                                '_LR' + str(params['learning_rate']) + '/'
-        params['model_dir'] = params['output_dir'] + 'model/'
+        params['model_dir'] = params['output_dir'] + 'moa_retrieval_system/'
         os.makedirs(params['output_dir'])
         os.makedirs(params['model_dir'])
     return params
@@ -847,7 +847,7 @@ if __name__ == '__main__':
         logfile.setFormatter(fmt)
         logger.addHandler(logfile)
         trainer = Trainer(best_permutation)
-        model_path = best_permutation['old_output_dir'] + 'model/model.ckpt'
+        model_path = best_permutation['old_output_dir'] + 'moa_retrieval_system/model.ckpt'
         output_dir = best_permutation['output_dir']
 
         with tf.compat.v1.Session(config=config) as sess:

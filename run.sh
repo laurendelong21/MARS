@@ -10,7 +10,7 @@ while IFS= read -r line || [ -n "$line" ]; do
 done <"$file_path"
 export PYTHONPATH="."
 gpu_id=1
-cmd="python MARS/model/trainer.py $params"
+cmd="python MARS/moa_retrieval_system/trainer.py $params"
 
 echo "Executing $cmd"
 
