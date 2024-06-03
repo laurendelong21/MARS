@@ -14,8 +14,7 @@ class RelationEntityGrapher(object):
             :param triple_store: the file location of the KG triples
             :param entity_vocab: the file location of the ID mappings for entities
             :param relation_vocab: the file location of the ID mappings for relations
-            :param max_num_actions: the max number of outgoing edges from a given entity- why?
-                I don't know, maybe to mimimize the graph size. 
+            :param max_num_actions: the max number of outgoing edges from any given source node 
         """
         self.ePAD = entity_vocab['PAD']  # the ID of the PAD token for entities
         self.rPAD = relation_vocab['PAD']  # the ID of the PAD token for relations
@@ -51,23 +50,30 @@ class RelationEntityGrapher(object):
                 e2 = self.entity_vocab[line[2]]
                 # store each connection from the starting node
                 self.store[e1].append((r, e2))
+            
+            # prune by the branching factor
+            self.prune_graph()
 
-        for e1 in self.store:  # (for every key in the dict)
-            self.array_store[e1, 0, 1] = self.relation_vocab['NO_OP']
-            self.array_store[e1, 0, 0] = e1
+
+    def prune_graph(self):
+        """Prunes the graph to the specified branching factor"""
+        for e1 in self.store:  # for every source node / dict key
+            # first, give the agent the option to remain at every source node:
+            self.array_store[e1, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
+            self.array_store[e1, 0, 0] = e1  # self-connection / stay where you are
             num_actions = 1
-            for r, e2 in self.store[e1]:
+            for r, e2 in self.store[e1]:  # for each connection from each source node,
                 # if we reached the max number of actions, stop
-                # is the below the ONLY reason we are storing num actions?
                 if num_actions == self.array_store.shape[1]:
                     break
-                # store the number of the current outgoing edge- but why?
+                # store the number of the current outgoing edge as an index
                 self.array_store[e1, num_actions, 0] = e2
                 self.array_store[e1, num_actions, 1] = r
                 num_actions += 1
         # delete self.store because it contains redundant info
         del self.store
         self.store = None
+
 
     def return_next_actions(self, current_entities, start_entities, query_relations, answers, all_correct_answers,
                             is_last_step, rollouts):
