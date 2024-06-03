@@ -14,11 +14,11 @@ from collections import defaultdict
 from copy import deepcopy
 from scipy.special import logsumexp as lse
 from sklearn.model_selection import ParameterGrid
-from mycode.options import read_options
-from mycode.model.agent import Agent
-from mycode.model.environment import Env
-from mycode.model.baseline import ReactiveBaseline
-from mycode.model.rules import prepare_argument, check_rule, modify_rewards
+from MARS.options import read_options
+from MARS.moa_retrieval_system.agent import Agent
+from MARS.moa_retrieval_system.environment import Env
+from MARS.moa_retrieval_system.baseline import ReactiveBaseline
+from MARS.moa_retrieval_system.rules import prepare_argument, check_rule, modify_rewards
 
 import multiprocessing
 
@@ -45,7 +45,7 @@ class Trainer(object):
         self.rule_list_dir = self.input_dir + self.rule_file
         with open(self.rule_list_dir, 'r') as file:
             self.rule_list = json.load(file)
-        self.baseline = ReactiveBaseline(self.Lambda)
+        self.baseline = ReactiveBaseline(self.gamma_baseline)
         self.optimizer = tf.compat.v1.train.AdamOptimizer(self.learning_rate)
         self.best_metric = -1
         self.early_stopping = False
@@ -516,7 +516,7 @@ class Trainer(object):
             rewards = episode.get_rewards()
             # Here, they modify the rewards to take into account whether it fits rules.
             rewards, rule_count, rule_count_body, self.rule_list, ratios = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
-                                                                            obj_string, self.rule_base_reward, rewards,
+                                                                            obj_string, self.Lambda, rewards,
                                                                             self.only_body, self.update_confs, self.alpha,
                                                                             self.batch_size, self.num_rollouts, self.mixing_ratio)
             
@@ -549,7 +549,7 @@ class Trainer(object):
                 rule_count, self.batch_size * self.num_rollouts,
                 rule_count / (self.batch_size * self.num_rollouts)))
 
-            if self.batch_counter % self.eval_every == 0:
+            if self.batch_counter % self.eval_every == 0:  ## validation / dev set testing
                 with open(self.output_dir + 'scores.txt', 'a') as score_file:
                     score_file.write('Scores for iteration ' + str(self.batch_counter) + '\n')
                 with open(self.output_dir + f'confidences_{self.batch_counter}.txt', 'w') as rule_fl:
@@ -726,30 +726,33 @@ class Trainer(object):
         for i in range(len(metrics_rule)):
             logger.info(metrics_rule[i] + ': {0:7.4f}'.format(final_metrics_rule[i]))
 
+        with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
+            json.dump(self.rule_list, rule_fl, indent=2)
+
 
 def create_output_and_model_dir(params, mode):
     current_time = datetime.datetime.now()
     current_time = current_time.strftime('%d%b%y_%H%M%S')
     if mode == 'test':
         params['output_dir'] = params['base_output_dir'] + str(current_time) + '_TEST' + \
-                               '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
+                               '_p' + str(params['path_length']) + '_Lb' + str(params['Lambda']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
-                               '_Lb' + str(params['Lambda']) + \
+                               '_gb' + str(params['gamma_baseline']) + \
                                '_A' + str(params['max_num_actions']) + \
                                '_LR' + str(params['learning_rate']) + '/'
         os.makedirs(params['output_dir'])
     else:
         params['output_dir'] = params['base_output_dir'] + str(current_time) + \
-                               '_p' + str(params['path_length']) + '_r' + str(params['rule_base_reward']) + \
+                               '_p' + str(params['path_length']) + '_Lb' + str(params['Lambda']) + \
                                '_e' + str(params['embedding_size']) + '_h' + str(params['hidden_size']) + \
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
-                               '_Lb' + str(params['Lambda']) + \
+                               '_gb' + str(params['gamma_baseline']) + \
                                '_A' + str(params['max_num_actions']) + \
                                '_LR' + str(params['learning_rate']) + '/'
-        params['model_dir'] = params['output_dir'] + 'model/'
+        params['model_dir'] = params['output_dir'] + 'moa_retrieval_system/'
         os.makedirs(params['output_dir'])
         os.makedirs(params['model_dir'])
     return params
@@ -834,7 +837,6 @@ if __name__ == '__main__':
                 best_permutation = permutation
             tf.compat.v1.reset_default_graph()
 
-
         print(f"Best permutation: {best_permutation}")
 
         # Testing on test set with best model
@@ -845,7 +847,7 @@ if __name__ == '__main__':
         logfile.setFormatter(fmt)
         logger.addHandler(logfile)
         trainer = Trainer(best_permutation)
-        model_path = best_permutation['old_output_dir'] + 'model/model.ckpt'
+        model_path = best_permutation['old_output_dir'] + 'moa_retrieval_system/model.ckpt'
         output_dir = best_permutation['output_dir']
 
         with tf.compat.v1.Session(config=config) as sess:

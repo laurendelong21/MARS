@@ -1,6 +1,6 @@
 import numpy as np
-from mycode.data.grapher import RelationEntityGrapher
-from mycode.data.feed_data import RelationEntityBatcher
+from MARS.data.grapher import RelationEntityGrapher
+from MARS.data.feed_data import RelationEntityBatcher
 
 """Script which defines an Episode which retains information about the state of the search"""
 
