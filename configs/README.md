@@ -29,7 +29,7 @@ located.
 
 ```--path_length```*: int. Length of the extracted path.
 
-```--max_num_actions```*: int. Maximum branching factor for the knowledge graph created by the [RelationEntityGrapher](../MARS/data/grapher.py). This limits the maximum number of actions available to the agents at each step.
+```--max_branching```*: int. Maximum branching factor for the knowledge graph created by the [RelationEntityGrapher](../MARS/data/grapher.py). This limits the maximum number of actions available to the agents at each step.
 
 ```--hidden_size```*: int. Influences the size of the hidden layers in the LSTM and MLP.
 

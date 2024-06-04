@@ -89,15 +89,15 @@ class Trainer(object):
         self.cum_discounted_rewards = tf.compat.v1.placeholder(tf.float32, [None, self.path_length],
                                                                name='cumulative_discounted_rewards')
 
-        # NOTE: params like path_length and max_num_actions come from the user-specified configs
+        # NOTE: params like path_length and max_branching come from the user-specified configs
         for t in range(self.path_length):
             # here, we create lists of lengths self.path_length which include tensors storing next actions, 
                 # and the entities which the agent traversed
 
             # here, we make tensors which are capped at the max branching factor
-            next_possible_relations = tf.compat.v1.placeholder(tf.int32, [None, self.max_num_actions],
+            next_possible_relations = tf.compat.v1.placeholder(tf.int32, [None, self.max_branching],
                                                                name='next_relations_{}'.format(t))
-            next_possible_entities = tf.compat.v1.placeholder(tf.int32, [None, self.max_num_actions],
+            next_possible_entities = tf.compat.v1.placeholder(tf.int32, [None, self.max_branching],
                                                               name='next_entities_{}'.format(t))
             start_entities = tf.compat.v1.placeholder(tf.int32, [None, ])
             self.candidate_relation_sequence.append(next_possible_relations)
@@ -119,8 +119,8 @@ class Trainer(object):
         self.query_embeddings = tf.compat.v1.nn.embedding_lookup(params=self.agent.relation_lookup_table, ids=self.query_relations)
         layer_states = tf.unstack(self.prev_states, self.LSTM_layers)
         formatted_states = [tf.unstack(s, 2) for s in layer_states]
-        self.next_relations = tf.compat.v1.placeholder(tf.int32, shape=[None, self.max_num_actions])
-        self.next_entities = tf.compat.v1.placeholder(tf.int32, shape=[None, self.max_num_actions])
+        self.next_relations = tf.compat.v1.placeholder(tf.int32, shape=[None, self.max_branching])
+        self.next_entities = tf.compat.v1.placeholder(tf.int32, shape=[None, self.max_branching])
         self.current_entities = tf.compat.v1.placeholder(tf.int32, shape=[None, ])
 
         with tf.compat.v1.variable_scope('policy_steps_unroll') as scope:
@@ -205,8 +205,8 @@ class Trainer(object):
         else:
             best_idx = self.top_k(new_scores, k)
 
-        y = best_idx // self.max_num_actions
-        x = best_idx % self.max_num_actions
+        y = best_idx // self.max_branching
+        x = best_idx % self.max_branching
         y += np.repeat([b * k for b in range(temp_batch_size)], k)
         states['current_entities'] = states['current_entities'][y]
         states['next_relations'] = states['next_relations'][y]
@@ -218,7 +218,7 @@ class Trainer(object):
         return chosen_relations, test_actions_idx, states, agent_mem, beam_probs, y
 
     def top_k(self, scores, k):
-        scores = scores.reshape(-1, k * self.max_num_actions)  # [B, k * max_num_actions]
+        scores = scores.reshape(-1, k * self.max_branching)  # [B, k * max_branching]
         best_idx = np.argsort(scores)
         best_idx = best_idx[:, -k:]
         return best_idx.reshape(-1)
@@ -740,7 +740,7 @@ def create_output_and_model_dir(params, mode):
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
                                '_gb' + str(params['gamma_baseline']) + \
-                               '_A' + str(params['max_num_actions']) + \
+                               '_A' + str(params['max_branching']) + \
                                '_LR' + str(params['learning_rate']) + '/'
         os.makedirs(params['output_dir'])
     else:
@@ -750,7 +750,7 @@ def create_output_and_model_dir(params, mode):
                                '_a' + str(params['alpha']) + \
                                '_b' + str(params['beta']) + \
                                '_gb' + str(params['gamma_baseline']) + \
-                               '_A' + str(params['max_num_actions']) + \
+                               '_A' + str(params['max_branching']) + \
                                '_LR' + str(params['learning_rate']) + '/'
         params['model_dir'] = params['output_dir'] + 'moa_retrieval_system/'
         os.makedirs(params['output_dir'])

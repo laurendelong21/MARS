@@ -10,12 +10,12 @@ but for each step, ensures to mask the connections representing the true answers
 
 
 class RelationEntityGrapher(object):
-    def __init__(self, triple_store, entity_vocab, relation_vocab, max_num_actions):
+    def __init__(self, triple_store, entity_vocab, relation_vocab, max_branching):
         """Initializes the creation of the graph.
             :param triple_store: the file location of the KG triples
             :param entity_vocab: the file location of the ID mappings for entities
             :param relation_vocab: the file location of the ID mappings for relations
-            :param max_num_actions: the max number of outgoing edges from any given source node 
+            :param max_branching: the max number of outgoing edges from any given source node 
         """
         self.ePAD = entity_vocab['PAD']  # the ID of the PAD token for entities
         self.rPAD = relation_vocab['PAD']  # the ID of the PAD token for relations
@@ -26,7 +26,7 @@ class RelationEntityGrapher(object):
         self.store = defaultdict(dict)
         # self.array_store is a 3D array initialized with the PAD values
         # it contains a 2D matrix for entities and relations each
-        self.array_store = np.ones((len(entity_vocab), max_num_actions, 2), dtype=np.dtype('int32'))
+        self.array_store = np.ones((len(entity_vocab), max_branching, 2), dtype=np.dtype('int32'))
         self.array_store[:, :, 0] *= self.ePAD
         self.array_store[:, :, 1] *= self.rPAD
         self.masked_array_store = None

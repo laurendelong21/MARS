@@ -18,7 +18,7 @@ def read_options():
     parser.add_argument('--num_rollouts', default=20, type=int, nargs='+')
     parser.add_argument('--test_rollouts', default=100, type=int, nargs='+')
     parser.add_argument('--path_length', default=3, type=int, nargs='+')
-    parser.add_argument('--max_num_actions', default=200, type=int, nargs='+')
+    parser.add_argument('--max_branching', default=200, type=int, nargs='+')
     parser.add_argument('--hidden_size', default=50, type=int, nargs='+')
     parser.add_argument('--embedding_size', default=50, type=int, nargs='+')
     parser.add_argument('--LSTM_layers', default=1, type=int, nargs='+')
