@@ -58,17 +58,15 @@ class RelationEntityGrapher(object):
 
     def prune_graph(self):
         """Prunes the graph to the specified branching factor"""
-        # shuffle the keys so the order is not determined by the input file
-        source_nodes = list(self.store.keys())
-        random.shuffle(source_nodes)
-        for e1 in source_nodes:  # for every source node / dict key
+        for e1 in self.store.keys():  # for every source node / dict key
             # first, give the agent the option to remain at every source node:
             self.array_store[e1, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
             self.array_store[e1, 0, 0] = e1  # self-connection / stay where you are
             num_actions = 1
-            # BELOW: if the number of outgoing edges is more than maxnumactions, then prune
-            # but check this first. If true, 
-            for e2 in self.store[e1].keys():  # for each connection from each source node,
+            # shuffle the keys so the order is not determined by the input file
+            target_nodes = list(self.store[e1].keys())
+            random.shuffle(target_nodes)
+            for e2 in target_nodes:  # for each connecting node,
                 # if we reached the max number of actions, stop
                 if num_actions == self.array_store.shape[1]:
                     break
