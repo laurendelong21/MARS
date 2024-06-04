@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 from collections import defaultdict
+import random
 
 
 """The script responsible for generating the graph structure and next steps, 
@@ -22,7 +23,7 @@ class RelationEntityGrapher(object):
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
         # self.store is a dictionary storing all the connections from a node
-        self.store = defaultdict(list)
+        self.store = defaultdict(dict)
         # self.array_store is a 3D array initialized with the PAD values
         # it contains a 2D matrix for entities and relations each
         self.array_store = np.ones((len(entity_vocab), max_num_actions, 2), dtype=np.dtype('int32'))
@@ -49,7 +50,7 @@ class RelationEntityGrapher(object):
                 r = self.relation_vocab[line[1]]
                 e2 = self.entity_vocab[line[2]]
                 # store each connection from the starting node
-                self.store[e1].append((r, e2))
+                self.store[e1][e2] = r
             
             # prune by the branching factor
             self.prune_graph()
@@ -57,18 +58,23 @@ class RelationEntityGrapher(object):
 
     def prune_graph(self):
         """Prunes the graph to the specified branching factor"""
-        for e1 in self.store:  # for every source node / dict key
+        # shuffle the keys so the order is not determined by the input file
+        source_nodes = list(self.store.keys())
+        random.shuffle(source_nodes)
+        for e1 in source_nodes:  # for every source node / dict key
             # first, give the agent the option to remain at every source node:
             self.array_store[e1, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
             self.array_store[e1, 0, 0] = e1  # self-connection / stay where you are
             num_actions = 1
-            for r, e2 in self.store[e1]:  # for each connection from each source node,
+            # BELOW: if the number of outgoing edges is more than maxnumactions, then prune
+            # but check this first. If true, 
+            for e2 in self.store[e1].keys():  # for each connection from each source node,
                 # if we reached the max number of actions, stop
                 if num_actions == self.array_store.shape[1]:
                     break
                 # store the number of the current outgoing edge as an index
                 self.array_store[e1, num_actions, 0] = e2
-                self.array_store[e1, num_actions, 1] = r
+                self.array_store[e1, num_actions, 1] = self.store[e1][e2]
                 num_actions += 1
         # delete self.store because it contains redundant info
         del self.store
