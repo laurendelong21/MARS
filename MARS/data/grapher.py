@@ -94,14 +94,14 @@ class RelationEntityGrapher(object):
         self.store = None
 
 
-    def return_next_actions(self, current_entities, start_entities, query_relations, answers, all_correct_answers,
+    def return_next_actions(self, current_entities, start_entities, query_relations, end_entities, all_correct_answers,
                             is_last_step, rollouts):
         """Using the matrices in self.array_store, return the actions that could be taken
             by the agent from a given node. Mask the source nodes from the true labels in the dataset.
         :param current_entities: a list of the entities which the agent is currently considering
         :param start_entities: an array containing all the source nodes within the data batch triples
         :param query_relations: an array containing all relations within the data batch triples
-        :param answers: an array containing all the sink nodes within the data batch triples
+        :param end_entities: an array containing all the target nodes within the data batch triples
         :param all_correct_answers: a mapping from sink nodes (keys) to tuples of source nodes and relations from which they are reachable
         :param is_last_step: boolean indicating whether it's the max path length
 
@@ -114,19 +114,19 @@ class RelationEntityGrapher(object):
             # if we still have any beginning nodes:
             if current_entities[i] == start_entities[i]:
                 # get the entities and relations which are accessible from that entity in the KG
-                entities = ret[i, :, 0]  # vector of sink nodes connected to i
+                entities = ret[i, :, 0]  # vector of target nodes connected to i
                 relations = ret[i, :, 1]  # vector of relations connected to i
                 # identify the connections in the batch and mask them 
                 # mask is a vector of boolean indications, where if True, the mask 
-                mask = np.logical_and(relations == query_relations[i], entities == answers[i])
+                mask = np.logical_and(relations == query_relations[i], entities == end_entities[i])
                 ret[i, :, 0][mask] = self.ePAD
                 ret[i, :, 1][mask] = self.rPAD
             if is_last_step:
-                entities = ret[i, :, 0]  # vector of sink nodes connected to source node at i
-                correct_e2 = answers[i]  # the sink node in triple index i
+                entities = ret[i, :, 0]  # vector of target nodes connected to source node at i
+                correct_e2 = end_entities[i]  # the sink node in triple index i
                 # for each of the sink nodes connected to source nodes i,
                 for j in range(entities.shape[0]):
-                    # if the entities connected to those sink nodes are AND 
+                    # here we hide correct answers which are not in the current set - no cheating
                     if entities[j] in all_correct_answers[i // rollouts] and entities[j] != correct_e2:
                         ret[i, :, 0][j] = self.ePAD
                         ret[i, :, 1][j] = self.rPAD
