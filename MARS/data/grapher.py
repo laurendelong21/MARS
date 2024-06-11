@@ -77,7 +77,7 @@ class RelationEntityGrapher(object):
             # take a random sample of the hub nodes at that proportion
             sample_size = len(self.hubs) * proportion
             target_hubs = set(target_nodes) & self.hubs
-            if target_hubs > sample_size:
+            if len(target_hubs) > sample_size:
                 target_hubs = random.sample(target_hubs, int(sample_size))
             target_nodes = (set(target_nodes) - self.hubs) | target_hubs
 
