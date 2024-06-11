@@ -24,13 +24,13 @@ class RelationEntityGrapher(object):
         self.relation_vocab = relation_vocab
         # self.store is a dictionary storing all the connections from a node
         self.store = defaultdict(dict)
+        self.hubs = set()
         # self.array_store is a 3D array initialized with the PAD values
         # it contains a 2D matrix for entities and relations each
         self.array_store = np.ones((len(entity_vocab), max_branching, 2), dtype=np.dtype('int32'))
         self.array_store[:, :, 0] *= self.ePAD
         self.array_store[:, :, 1] *= self.rPAD
         self.masked_array_store = None
-
         self.rev_entity_vocab = dict([(v, k) for k, v in entity_vocab.items()])
         self.rev_relation_vocab = dict([(v, k) for k, v in relation_vocab.items()])
         self.create_graph()
@@ -52,6 +52,9 @@ class RelationEntityGrapher(object):
                 # store each connection from the starting node
                 self.store[e1][e2] = r
             
+            # locate hub proteins (those with > max branching factor)
+            self.hubs = {prot for prot in self.store.keys() if len(self.store[prot]) > self.array_store.shape[1]} 
+
             # prune by the branching factor
             self.prune_graph()
 
@@ -63,9 +66,21 @@ class RelationEntityGrapher(object):
             self.array_store[e1, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
             self.array_store[e1, 0, 0] = e1  # self-connection / stay where you are
             num_actions = 1
+
             # shuffle the keys so the order is not determined by the input file
             target_nodes = list(self.store[e1].keys())
             random.shuffle(target_nodes)
+
+            # what proportion are we pruning to?
+            proportion = max((self.array_store.shape[1] / len(target_nodes)), 1)
+
+            # take a random sample of the hub nodes at that proportion
+            sample_size = len(self.hubs) * proportion
+            target_hubs = set(target_nodes) & self.hubs
+            if target_hubs > sample_size:
+                target_hubs = random.sample(target_hubs, int(sample_size))
+            target_nodes = (set(target_nodes) - self.hubs) | target_hubs
+
             for e2 in target_nodes:  # for each connecting node,
                 # if we reached the max number of actions, stop
                 if num_actions == self.array_store.shape[1]:
