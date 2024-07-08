@@ -72,14 +72,14 @@ class RelationEntityGrapher(object):
             random.shuffle(target_nodes)
 
             # what proportion are we pruning to?
-            proportion = max((self.array_store.shape[1] / len(target_nodes)), 1)
+            #proportion = max((self.array_store.shape[1] / len(target_nodes)), 1)
 
             # take a random sample of the hub nodes at that proportion
-            sample_size = len(self.hubs) * proportion
-            target_hubs = set(target_nodes) & self.hubs
-            if len(target_hubs) > sample_size:
-                target_hubs = random.sample(target_hubs, int(sample_size))
-            target_nodes = (set(target_nodes) - self.hubs) | target_hubs
+            #sample_size = len(self.hubs) * proportion
+            #target_hubs = set(target_nodes) & self.hubs
+            #if len(target_hubs) > sample_size:
+            #    target_hubs = random.sample(target_hubs, int(sample_size))
+           # target_nodes = (set(target_nodes) - self.hubs) | target_hubs
 
             for e2 in target_nodes:  # for each connecting node,
                 # if we reached the max number of actions, stop
