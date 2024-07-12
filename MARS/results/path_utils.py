@@ -122,7 +122,7 @@ def plot_pattern_breakdown(pattern_counter, output_path):
     plt.close()
 
 
-def process_polo_paths(results_dir, node_mapping, relation_mapping=None, correct_only=True):
+def process_mars_paths(results_dir, node_mapping, relation_mapping=None, correct_only=True):
     """Wrapper function for all above functions
 
     Goes through all runs of the experiment and outputs collective results in directory.

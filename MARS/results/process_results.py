@@ -1,5 +1,5 @@
-from MARS.results.path_utils import process_polo_paths
-from MARS.results.metrics_utils import process_polo_metrics
+from MARS.results.path_utils import process_mars_paths
+from MARS.results.metrics_utils import process_mars_metrics
 from MARS.options import read_options
 import os
 import json
@@ -28,8 +28,8 @@ def get_filepaths():
 
 def main():
     node_mapping, relation_mapping, results_dir = get_filepaths()
-    process_polo_metrics(results_dir)
-    process_polo_paths(results_dir, node_mapping, relation_mapping)
+    process_mars_metrics(results_dir)
+    process_mars_paths(results_dir, node_mapping, relation_mapping)
 
 
 if __name__ == '__main__':

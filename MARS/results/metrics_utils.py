@@ -57,7 +57,7 @@ def get_metrics_dict(experiment_dir):
     return scores
 
 
-def process_polo_metrics(results_dir):
+def process_mars_metrics(results_dir):
     """Gets and formats the metrics from MARS into a table. Simply pass a directory with multiple experiments in it,
     and this will compute the average and stdev
     """
