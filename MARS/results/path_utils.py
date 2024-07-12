@@ -120,28 +120,29 @@ def plot_pattern_breakdown(pattern_counter, output_path):
     plt.close()
 
 
-def process_mars_paths(results_dir, meta_mapping, correct_only=True):
+def process_mars_paths(experiment_dir, meta_mapping, correct_only=True):
     """Wrapper function for all above functions
 
     Goes through all runs of the experiment and outputs collective results in directory.
     """
-    paths_path = osp.join(results_dir, "paths.json")
-    patterns_path = osp.join(results_dir, "pattern_counts.json")
-    patterns_hist_path = osp.join(results_dir, "pattern_counts.png")
-    #moa_matches_path = osp.join(results_dir, "moa_matches.json")
+    paths_path = osp.join(experiment_dir, "paths.json")
+    patterns_path = osp.join(experiment_dir, "pattern_counts.json")
+    patterns_hist_path = osp.join(experiment_dir, "pattern_counts.png")
+    #moa_matches_path = osp.join(experiment_dir, "moa_matches.json")
 
     paths = dict()
     patterns = Counter()
     #matches = dict()
 
     # all experimental runs
-    runs = os.listdir(results_dir)
+    runs = os.listdir(experiment_dir)
 
     for run in runs:
-        if not osp.isdir(osp.join(results_dir, run)):
+        current_run = osp.join(experiment_dir, run)
+        if not osp.isdir(current_run) or 'TEST' not in current_run:
             continue
         # for each run in an experiment dir, get the paths dir
-        fpath = osp.join(results_dir, f"{run}/test_beam/paths_CtBP")
+        fpath = osp.join(experiment_dir, f"{run}/test_beam/paths_CtBP")
 
         # get all of the paths per pair
         pred_paths = get_paths(file_path=fpath, correct_only=correct_only)

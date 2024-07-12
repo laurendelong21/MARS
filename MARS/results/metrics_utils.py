@@ -53,6 +53,11 @@ def get_metrics_dict(experiment_dir):
     }
 
     scores = {f"{exp_name}": hits_values, f"{exp_name} (pruned)": pruned_values}
+    scores_df = pd.DataFrame(scores)
+
+    # Write the rounded DataFrame to a TSV file
+    output_file = osp.join(experiment_dir, "experiment_metrics.tsv")
+    scores_df.to_csv(output_file, sep="\t", index=True)
 
     return scores
 
@@ -68,7 +73,7 @@ def process_mars_metrics(results_dir):
 
     for exp in experiments:
         exp_path = osp.join(results_dir, exp)
-        if not osp.isdir(exp_path):
+        if not osp.isdir(exp_path) or 'TEST' not in exp_path:
             continue
         # for each experiment dir, get the metrics dict
         metrics_dict = get_metrics_dict(exp_path)
