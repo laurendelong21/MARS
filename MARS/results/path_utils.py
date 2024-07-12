@@ -17,16 +17,14 @@ def write_json(filepath, data_dict):
         json.dump(data_dict, json_file, indent=4)
 
 
-def get_rel_mapping(item_to_map, node_mapping, relation_mapping=None):
+def get_rel_mapping(item_to_map, meta_mapping=None):
     """Gets the relation mapping for the KG."""
-    predicate = re.findall('[a-z]+', item_to_map)
-    if relation_mapping:
-        predicate = re.findall('[a-z]+', item_to_map)[0]
-        mapped_item = relation_mapping[predicate]
-    else:
-        capital_groups = re.findall('[A-Z]+', item_to_map)
-        capital_groups = [node_mapping[i] for i in capital_groups]
-        mapped_item = f"-{predicate[0]}-".join(capital_groups)
+    capital_groups = re.findall('[A-Z]+', item_to_map)
+    predicate = re.findall('[a-z]+', item_to_map)[0]
+    if meta_mapping:
+        capital_groups = [meta_mapping[i] for i in capital_groups]
+        predicate = meta_mapping[predicate]
+    mapped_item = f"-{predicate[0]}-".join(capital_groups)
     if "_" in item_to_map:
         mapped_item += "*"
     return mapped_item
@@ -76,7 +74,7 @@ def get_paths(file_path, correct_only=True):
     return pred_paths
 
 
-def get_pattern_breakdown(pred_paths, node_mapping, relation_mapping=None, key=None):
+def get_pattern_breakdown(pred_paths, meta_mapping=None, key=None):
     """Gets a counter of all the path patterns found.
 
     If key is passed, returns the counter only for that particular test pair.
@@ -92,7 +90,7 @@ def get_pattern_breakdown(pred_paths, node_mapping, relation_mapping=None, key=N
     patterns_traversed = [
         [rel for rel in i if rel != "NO_OP"] for i in patterns_traversed
     ]
-    patterns_traversed = [[get_rel_mapping(rel, node_mapping, relation_mapping) for rel in i] for i in patterns_traversed]
+    patterns_traversed = [[get_rel_mapping(rel, meta_mapping) for rel in i] for i in patterns_traversed]
     patterns_traversed = [" -> ".join(i) for i in patterns_traversed]
     return Counter(patterns_traversed)
 
@@ -122,7 +120,7 @@ def plot_pattern_breakdown(pattern_counter, output_path):
     plt.close()
 
 
-def process_mars_paths(results_dir, node_mapping, relation_mapping=None, correct_only=True):
+def process_mars_paths(results_dir, meta_mapping, correct_only=True):
     """Wrapper function for all above functions
 
     Goes through all runs of the experiment and outputs collective results in directory.
@@ -156,8 +154,7 @@ def process_mars_paths(results_dir, node_mapping, relation_mapping=None, correct
 
         # get the pattern counts
         patterns_traversed = get_pattern_breakdown(pred_paths,
-                                                   node_mapping=node_mapping,
-                                                   relation_mapping=relation_mapping)
+                                                   meta_mapping)
         patterns = patterns + patterns_traversed
 
         # get the matches against the DrugMechDB

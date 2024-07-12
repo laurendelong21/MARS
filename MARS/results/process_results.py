@@ -15,21 +15,17 @@ def get_filepaths():
     options = read_options()
     results_dir = options['base_output_dir']
     vocab_dir = options['input_dir'] + 'vocab/'
-    if os.path.exists(vocab_dir + 'node_mapping.json'):
-        node_mapping = json.load(open(vocab_dir + 'node_mapping.json'))
+    if os.path.exists(vocab_dir + 'meta_mapping.json'):
+        meta_mapping = json.load(open(vocab_dir + 'meta_mapping.json'))
     else:
-        node_mapping = None
-    if os.path.exists(vocab_dir + 'relation_mapping.json'):
-        relation_mapping = json.load(open(vocab_dir + 'relation_mapping.json'))
-    else:
-        relation_mapping = None
-    return node_mapping, relation_mapping, results_dir
+        meta_mapping = None
+    return meta_mapping, results_dir
 
 
 def main():
-    node_mapping, relation_mapping, results_dir = get_filepaths()
+    meta_mapping, results_dir = get_filepaths()
     process_mars_metrics(results_dir)
-    process_mars_paths(results_dir, node_mapping, relation_mapping)
+    process_mars_paths(results_dir, meta_mapping)
 
 
 if __name__ == '__main__':
