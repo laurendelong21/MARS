@@ -9,9 +9,8 @@ while IFS= read -r line || [ -n "$line" ]; do
   params="$params $name $val"
 done <"$file_path"
 export PYTHONPATH="."
-gpu_id=1
 cmd="python MARS/results/process_results.py $params"
 
 echo "Executing $cmd"
 
-CUDA_VISIBLE_DEVICES=$gpu_id $cmd
+$cmd
