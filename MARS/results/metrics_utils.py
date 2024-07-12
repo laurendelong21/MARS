@@ -24,7 +24,8 @@ def get_metrics_dict(experiment_dir):
     }
 
     for run in runs:
-        if not osp.isdir(osp.join(experiment_dir, run)):
+        run_dir = osp.join(experiment_dir, run)
+        if not osp.isdir(run_dir) or "TEST" not in run_dir:
             continue
         # for each run in an experiment dir, get the paths dir
         fpath = osp.join(experiment_dir, f"{run}/scores.txt")
