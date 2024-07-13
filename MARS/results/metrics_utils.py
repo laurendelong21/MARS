@@ -53,7 +53,7 @@ def get_metrics_dict(experiment_dir):
         for key, val in pruned_values.items()
     }
 
-    scores = {f"{exp_name}": hits_values, f"{exp_name} (pruned)": pruned_values}
+    scores = {f"{exp_name} metrics": hits_values, f"{exp_name} metrics (pruned)": pruned_values}
     scores_df = pd.DataFrame(scores)
 
     # Write the rounded DataFrame to a TSV file
