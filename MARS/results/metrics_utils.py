@@ -2,6 +2,7 @@ import os.path as osp
 import statistics
 import os
 import pandas as pd
+import networkx as nx
 
 
 def get_metrics_dict(experiment_dir):
@@ -63,6 +64,50 @@ def get_metrics_dict(experiment_dir):
     print(scores_df)
 
     return scores
+
+
+def get_shortest_path_lengths(kg_file, test_edges, max_path_length):
+    """Gets a dictionary mapping of the shortest path lengths between the test edges"""
+    G = get_nx_graph(kg_file)
+    test_edges = pd.read_csv(test_edges, sep="\t", header=None)
+
+    unmatched_pairs = set()
+
+    path_lengths = dict()
+
+    for i, row in test_edges.iterrows():
+        if not nx.has_path(G, row[0], row[2]):
+            unmatched_pairs.add(i)
+            continue
+        if nx.shortest_path_length(G, row[0], row[2]) > max_path_length:
+            unmatched_pairs.add(i)
+        path_lengths[f"{(row[0], row[2])}"] = nx.shortest_path_length(G, row[0], row[2])
+
+    print(f'WARNING: {len(unmatched_pairs)} test pairs could not be matched with a path of length <= {max_path_length}')
+
+    print(path_lengths)
+
+    return path_lengths
+
+
+def get_nx_graph(kg_file):
+    """Breaks down the KG into a networkx graph"""
+    kg = pd.read_csv(kg_file, sep="\t", header=None)
+
+    G = nx.DiGraph()
+
+    for i, row in kg.iterrows():
+        src_id = row[0]
+        trgt_id = row[2]
+        if src_id not in G.nodes:
+            G.add_node(src_id)
+        if trgt_id not in G.nodes:
+            G.add_node(trgt_id)
+        G.add_edge(src_id, trgt_id, type=row[1])
+        G.add_edge(trgt_id, src_id, type=f"_{row[1]}")
+
+    return G
+
 
 
 def process_mars_metrics(results_dir):
