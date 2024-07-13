@@ -24,8 +24,10 @@ def get_filepaths():
 
 def main():
     meta_mapping, experiment_dir = get_filepaths()
-    get_metrics_dict(experiment_dir)
+    scores = get_metrics_dict(experiment_dir)
     process_mars_paths(experiment_dir, meta_mapping)
+
+    print(scores)
 
 
 if __name__ == '__main__':
