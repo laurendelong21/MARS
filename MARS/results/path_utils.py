@@ -159,7 +159,7 @@ def process_mars_paths(experiment_dir, meta_mapping, validation_paths, correct_o
 
     paths = dict()
     patterns = Counter()
-    #matches = dict()
+    matches = dict()
 
     # all experimental runs
     runs = os.listdir(experiment_dir)
