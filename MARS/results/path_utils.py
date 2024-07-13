@@ -24,7 +24,7 @@ def get_rel_mapping(item_to_map, meta_mapping=None):
     if meta_mapping:
         capital_groups = [meta_mapping[i] for i in capital_groups]
         predicate = meta_mapping[predicate]
-    mapped_item = f"-{predicate[0]}-".join(capital_groups)
+    mapped_item = f"-{predicate}-".join(capital_groups)
     if "_" in item_to_map:
         mapped_item += "*"
     return mapped_item
