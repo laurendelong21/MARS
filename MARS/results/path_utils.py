@@ -120,7 +120,34 @@ def plot_pattern_breakdown(pattern_counter, output_path):
     plt.close()
 
 
-def process_mars_paths(experiment_dir, meta_mapping, correct_only=True):
+def moa_comparison(pred_paths, validation_paths):
+    """Compares the MOAS between the results and the DrugMechDB
+
+    :param pred_paths: the dictionary of predicted paths from the first function
+    :param validation_paths: the dictionary of validation paths from the DrugMechDB, which should be included in this repo.
+    """
+    found_keys = set(pred_paths.keys()) & validation_paths.keys()
+    real_moas = {
+        key: val["nodes"] for key, val in validation_paths.items() if key in found_keys
+    }
+    pred_moas = {
+        key: val["nodes"] for key, val in pred_paths.items() if key in found_keys
+    }
+
+    matches = dict()
+    for key in found_keys:
+        true_prots = {i for i in real_moas[key] if i.startswith("ncbigene:")}
+        matches[key] = []
+        for pred in pred_moas[key]:
+            pred_prots = {i for i in pred if i.startswith("ncbigene:")}
+            matches[key].append(
+                len(true_prots.intersection(pred_prots)) / len(true_prots)
+            )
+
+    return matches
+
+
+def process_mars_paths(experiment_dir, meta_mapping, validation_paths, correct_only=True):
     """Wrapper function for all above functions
 
     Goes through all runs of the experiment and outputs collective results in directory.
@@ -128,7 +155,7 @@ def process_mars_paths(experiment_dir, meta_mapping, correct_only=True):
     paths_path = osp.join(experiment_dir, "paths.json")
     patterns_path = osp.join(experiment_dir, "pattern_counts.json")
     patterns_hist_path = osp.join(experiment_dir, "pattern_counts.png")
-    #moa_matches_path = osp.join(experiment_dir, "moa_matches.json")
+    moa_matches_path = osp.join(experiment_dir, "moa_matches.json")
 
     paths = dict()
     patterns = Counter()
@@ -158,19 +185,20 @@ def process_mars_paths(experiment_dir, meta_mapping, correct_only=True):
                                                    meta_mapping)
         patterns = patterns + patterns_traversed
 
-        # get the matches against the DrugMechDB
-        #moa_matches = moa_comparison(pred_paths, validation_paths)
-        #for key, val in moa_matches.items():
-        #    if key not in matches:
-        #        matches[key] = val
-        #    else:
-        #        matches[key].extend(val)
+        if validation_paths:
+            # get the matches against the DrugMechDB
+            moa_matches = moa_comparison(pred_paths, validation_paths)
+            for key, val in moa_matches.items():
+                if key not in matches:
+                    matches[key] = val
+                else:
+                    matches[key].extend(val)
+            matches = {str(key): val for key, val in matches.items()}
+            write_json(moa_matches_path, matches)
 
-    # write everything to files
+    # write paths to files
     paths = {str(key): val for key, val in paths.items()}
-    #matches = {str(key): val for key, val in matches.items()}
 
     write_json(paths_path, paths)
     write_json(patterns_path, patterns)
     plot_pattern_breakdown(patterns, patterns_hist_path)
-    #write_json(moa_matches_path, matches)

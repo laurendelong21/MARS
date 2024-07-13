@@ -5,6 +5,7 @@ import os
 import json
 import logging
 import sys
+import ast
 
 
 logger = logging.getLogger(__name__)
@@ -19,14 +20,19 @@ def get_filepaths():
         meta_mapping = json.load(open(vocab_dir + 'meta_mapping.json'))
     else:
         meta_mapping = None
-    return meta_mapping, experiment_dir
+    if os.path.exists(options['input_dir'] + 'validation_paths.json'):
+        validation_paths = json.load(open(options['input_dir'] + 'validation_paths.json'))
+        validation_paths = {ast.literal_eval(key): val for key, val in validation_paths.items()}
+    else:
+        validation_paths = None
+    return experiment_dir, meta_mapping, validation_paths
 
 
 def main():
-    meta_mapping, experiment_dir = get_filepaths()
-    process_mars_paths(experiment_dir, meta_mapping)
+    experiment_dir, meta_mapping, validation_paths = get_filepaths()
+    process_mars_paths(experiment_dir, meta_mapping, validation_paths)
     get_metrics_dict(experiment_dir)
-    
+
 
 if __name__ == '__main__':
     main()
