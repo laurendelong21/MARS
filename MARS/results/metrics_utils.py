@@ -60,6 +60,8 @@ def get_metrics_dict(experiment_dir):
     output_file = osp.join(experiment_dir, "experiment_metrics.tsv")
     scores_df.to_csv(output_file, sep="\t", index=True)
 
+    print(scores_df)
+
     return scores
 
 
