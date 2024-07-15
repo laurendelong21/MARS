@@ -55,23 +55,26 @@ def get_paths(file_path, correct_only=True):
         startpoint = brk + 1
 
     pred_paths = dict()
+    answer_positions = dict()
 
     for chunk in chunks:
         srt = 0
         current_pair = tuple(chunk[0].split())
         pred_paths[current_pair] = {"nodes": [], "relations": []}
-        chunk = chunk[2::]
+        answer_position = int(chunk[2].strip().split(':')[1])
+        answer_positions[current_pair] = answer_position
+        chunk = chunk[3::]
         breakpoints = [i for i, line in enumerate(chunk) if line.startswith("___")]
         for brk in breakpoints:
             entry = chunk[srt:brk]
-            if entry[2].strip() == "1":
+            if (not correct_only) or (correct_only and entry[2].strip() == "1"):
                 pred_paths[current_pair]["nodes"].append(entry[0].strip().split("\t"))
                 pred_paths[current_pair]["relations"].append(
                     entry[1].strip().split("\t")
                 )
             srt = brk + 1
 
-    return pred_paths
+    return pred_paths, answer_positions
 
 
 def get_pattern_breakdown(pred_paths, meta_mapping=None, key=None):
@@ -172,7 +175,7 @@ def process_mars_paths(experiment_dir, meta_mapping, validation_paths, correct_o
         fpath = osp.join(experiment_dir, f"{run}/test_beam/paths_CtBP")
 
         # get all of the paths per pair
-        pred_paths = get_paths(file_path=fpath, correct_only=correct_only)
+        pred_paths, answer_positions = get_paths(file_path=fpath, correct_only=correct_only)
         for key, val in pred_paths.items():
             if key not in paths:
                 paths[key] = val
@@ -202,3 +205,5 @@ def process_mars_paths(experiment_dir, meta_mapping, validation_paths, correct_o
     write_json(paths_path, paths)
     write_json(patterns_path, patterns)
     plot_pattern_breakdown(patterns, patterns_hist_path)
+
+    return paths
