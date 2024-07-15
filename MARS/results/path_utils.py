@@ -241,6 +241,8 @@ def process_mars_paths(experiment_dir, meta_mapping, validation_paths, correct_o
             matches = {str(key): val for key, val in matches.items()}
             write_json(moa_matches_path, matches)
 
+        print(answer_positions)
+
     # write paths to files
     paths = {str(key): val for key, val in paths.items()}
 

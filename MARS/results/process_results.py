@@ -1,11 +1,13 @@
 from MARS.results.path_utils import process_mars_paths
-from MARS.results.metrics_utils import get_metrics_dict, get_shortest_path_lengths
+from MARS.results.metrics_utils import get_metrics_dict
+from MARS.moa_retrieval_system.trainer import calculate_query_metrics
 from MARS.options import read_options
 import os
 import json
 import logging
 import sys
 import ast
+import numpy as np
 
 
 logger = logging.getLogger(__name__)
@@ -34,10 +36,13 @@ def get_filepaths():
 
 
 def main():
+    query_metrics = np.zeros(6)
+    # get the file paths from the input configs
     experiment_dir, path_length, kg_file, test_edges, meta_mapping, validation_paths = get_filepaths()
-    process_mars_paths(experiment_dir, meta_mapping, validation_paths)
+    paths = process_mars_paths(experiment_dir, meta_mapping, validation_paths)
+    # get summary metrics across multiple runs in the output folder
     get_metrics_dict(experiment_dir)
-    get_shortest_path_lengths(kg_file, test_edges, path_length)
+    #get_shortest_path_lengths(kg_file, test_edges, path_length)
 
 
 if __name__ == '__main__':
