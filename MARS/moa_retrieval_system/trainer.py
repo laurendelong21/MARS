@@ -364,7 +364,7 @@ class Trainer(object):
     def add_paths(self, b, sorted_idx, qr, start_e, se, ce, end_e, answer_pos, answers, rewards):
         self.paths[str(qr)].append(str(start_e) + '\t' + str(end_e) + '\n')
         self.paths[str(qr)].append('Reward:' + str(1 if (answer_pos is not None) and (answer_pos < 10) else 0) + '\n')
-        self.paths[str(qr)].append('Answer position:' + answer_pos + '\n')
+        self.paths[str(qr)].append('Answer position:' + str(answer_pos) + '\n')
         for r in sorted_idx[b]:
             rev = -1
             idx = b * self.test_rollouts + r
