@@ -92,11 +92,9 @@ def get_shortest_path_lengths(kg_file, test_edges, max_path_length):
             continue
         if nx.shortest_path_length(G, row[0], row[2]) > max_path_length:
             unmatched_pairs.add(i)
-        path_lengths[nx.shortest_path_length(G, row[0], row[2])].add(f"{(row[0], row[2])}")
+        path_lengths[nx.shortest_path_length(G, row[0], row[2])].add((row[0], row[2]))
 
     print(f'WARNING: {len(unmatched_pairs)} test pairs could not be matched with a path of length <= {max_path_length}')
-
-    print(path_lengths)
 
     return path_lengths
 
