@@ -2,22 +2,35 @@ import os.path as osp
 import statistics
 import os
 import pandas as pd
+import numpy as np
 
 
 def calculate_query_metrics(query_metrics, answer_pos):
-        if answer_pos is not None:
-            query_metrics[5] += 1.0 / (answer_pos + 1)  # MRR
-            if answer_pos < 20:
-                query_metrics[4] += 1  # Hits@20
-                if answer_pos < 10:
-                    query_metrics[3] += 1  # Hits@10
-                    if answer_pos < 5:
-                        query_metrics[2] += 1  # Hits@5
-                        if answer_pos < 3:
-                            query_metrics[1] += 1  # Hits@3
-                            if answer_pos < 1:
-                                query_metrics[0] += 1  # Hits@1
-        return query_metrics
+    if answer_pos is not None:
+        query_metrics[5] += 1.0 / (answer_pos + 1)  # MRR
+        if answer_pos < 20:
+            query_metrics[4] += 1  # Hits@20
+            if answer_pos < 10:
+                query_metrics[3] += 1  # Hits@10
+                if answer_pos < 5:
+                    query_metrics[2] += 1  # Hits@5
+                    if answer_pos < 3:
+                        query_metrics[1] += 1  # Hits@3
+                        if answer_pos < 1:
+                            query_metrics[0] += 1  # Hits@1
+    return query_metrics
+
+
+def get_metrics_by_length(answer_positions, path_lengths):
+    """Gets the query metrics per path length"""
+    metrics_by_len = dict()
+
+    for length, pairs in path_lengths.items():
+        metrics_by_len[length] = np.zeros(6)
+        for pair in pairs:
+            metrics_by_len[length] = calculate_query_metrics(metrics_by_len[length], answer_positions[pair])
+
+    return metrics_by_len
 
 
 def get_metrics_dict(experiment_dir):

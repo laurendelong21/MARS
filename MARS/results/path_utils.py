@@ -6,6 +6,7 @@ import networkx as nx
 import re
 import matplotlib.pyplot as plt
 import pandas as pd
+from collections import defaultdict
 
 """Processes the results into a more human-readable format"""
 
@@ -83,7 +84,7 @@ def get_shortest_path_lengths(kg_file, test_edges, max_path_length):
 
     unmatched_pairs = set()
 
-    path_lengths = dict()
+    path_lengths = defaultdict(set)
 
     for i, row in test_edges.iterrows():
         if not nx.has_path(G, row[0], row[2]):
@@ -91,7 +92,7 @@ def get_shortest_path_lengths(kg_file, test_edges, max_path_length):
             continue
         if nx.shortest_path_length(G, row[0], row[2]) > max_path_length:
             unmatched_pairs.add(i)
-        path_lengths[f"{(row[0], row[2])}"] = nx.shortest_path_length(G, row[0], row[2])
+        path_lengths[nx.shortest_path_length(G, row[0], row[2])].add(f"{(row[0], row[2])}")
 
     print(f'WARNING: {len(unmatched_pairs)} test pairs could not be matched with a path of length <= {max_path_length}')
 
