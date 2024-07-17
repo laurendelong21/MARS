@@ -1,4 +1,4 @@
-from MARS.results.path_utils import process_mars_paths
+from MARS.results.path_utils import process_mars_paths, get_shortest_path_lengths
 from MARS.results.metrics_utils import calculate_query_metrics, get_metrics_dict
 from MARS.options import read_options
 import os
@@ -41,7 +41,7 @@ def main():
     paths = process_mars_paths(experiment_dir, meta_mapping, validation_paths)
     # get summary metrics across multiple runs in the output folder
     get_metrics_dict(experiment_dir)
-    #get_shortest_path_lengths(kg_file, test_edges, path_length)
+    get_shortest_path_lengths(kg_file, test_edges, path_length)
 
 
 if __name__ == '__main__':
