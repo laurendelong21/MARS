@@ -16,7 +16,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 def get_filepaths():
 
     options = read_options()
-    path_length = int(options['path_length'])
+    path_length = int(options['path_length'][0])
     experiment_dir = options['base_output_dir']
     vocab_dir = options['input_dir'] + 'vocab/'
 
