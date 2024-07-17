@@ -94,7 +94,8 @@ def get_shortest_path_lengths(kg_file, test_edges, max_path_length):
             unmatched_pairs.add(i)
         path_lengths[nx.shortest_path_length(G, row[0], row[2])].add((row[0], row[2]))
 
-    print(f'WARNING: {len(unmatched_pairs)} test pairs could not be matched with a path of length <= {max_path_length}')
+    if len(unmatched_pairs) > 0:
+        print(f'WARNING: {len(unmatched_pairs)} test pairs could not be matched with a path of length <= {max_path_length}')
 
     return path_lengths
 
@@ -240,8 +241,6 @@ def process_mars_paths(experiment_dir, meta_mapping, validation_paths, correct_o
             matches = {str(key): val for key, val in matches.items()}
             write_json(moa_matches_path, matches)
 
-        print(answer_positions)
-
     # write paths to files
     paths = {str(key): val for key, val in paths.items()}
 
@@ -249,4 +248,4 @@ def process_mars_paths(experiment_dir, meta_mapping, validation_paths, correct_o
     write_json(patterns_path, patterns)
     plot_pattern_breakdown(patterns, patterns_hist_path)
 
-    return paths
+    return paths, answer_positions
