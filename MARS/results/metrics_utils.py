@@ -5,20 +5,22 @@ import pandas as pd
 import numpy as np
 
 
-def calculate_query_metrics(query_metrics, answer_pos):
+def calculate_query_metrics(metrics_dict, answer_pos, rule=False):
+    """Calculates the query metrics"""
+    ext = '_rule' if rule else ''
     if answer_pos is not None:
-        query_metrics[5] += 1.0 / (answer_pos + 1)  # MRR
+        metrics_dict[f'MRR{ext}'] += 1.0 / (answer_pos + 1)  # MRR
         if answer_pos < 20:
-            query_metrics[4] += 1  # Hits@20
+            metrics_dict[f'Hits@20{ext}'] += 1  # Hits@20
             if answer_pos < 10:
-                query_metrics[3] += 1  # Hits@10
+                metrics_dict[f'Hits@10{ext}'] += 1  # Hits@10
                 if answer_pos < 5:
-                    query_metrics[2] += 1  # Hits@5
+                    metrics_dict[f'Hits@5{ext}'] += 1  # Hits@5
                     if answer_pos < 3:
-                        query_metrics[1] += 1  # Hits@3
+                        metrics_dict[f'Hits@3{ext}'] += 1  # Hits@3
                         if answer_pos < 1:
-                            query_metrics[0] += 1  # Hits@1
-    return query_metrics
+                            metrics_dict[f'Hits@1{ext}'] += 1  # Hits@1
+    return metrics_dict
 
 
 def get_metrics_by_length(answer_positions, path_lengths):
@@ -33,6 +35,13 @@ def get_metrics_by_length(answer_positions, path_lengths):
     return metrics_by_len
 
 
+def initialize_metrics_dict(rule=False):
+    """Initializes the metrics dictionary"""
+    hits_dict = {"Hits@1": [], "Hits@3": [], "Hits@5": [], "Hits@10": [], "Hits@20": [], "MRR": []}
+    if rule:
+        hits_dict = {f"{key}_rule": [] for key in hits_dict.keys()}
+    return hits_dict
+
 def get_metrics_dict(experiment_dir):
     """Pass the path of a directory for a single experiment (which might contain multiple runs/replicates)
 
@@ -44,13 +53,8 @@ def get_metrics_dict(experiment_dir):
     # all experimental runs
     runs = os.listdir(experiment_dir)
 
-    hits_values = {"Hits@1": [], "Hits@3": [], "Hits@10": [], "MRR": []}
-    pruned_values = {
-        "Hits@1_rule": [],
-        "Hits@3_rule": [],
-        "Hits@10_rule": [],
-        "MRR_rule": [],
-    }
+    hits_values = initialize_metrics_dict()
+    pruned_values = initialize_metrics_dict(rule=True)
 
     for run in runs:
         run_dir = osp.join(experiment_dir, run)
