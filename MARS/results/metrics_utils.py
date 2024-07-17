@@ -28,7 +28,7 @@ def get_metrics_by_length(answer_positions, path_lengths):
     metrics_by_len = dict()
 
     for length, pairs in path_lengths.items():
-        metrics_by_len[length] = np.zeros(6)
+        metrics_by_len[length] = initialize_metrics_dict()
         for pair in pairs:
             metrics_by_len[length] = calculate_query_metrics(metrics_by_len[length], answer_positions[pair])
 
@@ -41,6 +41,7 @@ def initialize_metrics_dict(rule=False):
     if rule:
         hits_dict = {f"{key}_rule": [] for key in hits_dict.keys()}
     return hits_dict
+
 
 def get_metrics_dict(experiment_dir):
     """Pass the path of a directory for a single experiment (which might contain multiple runs/replicates)
