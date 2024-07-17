@@ -1,6 +1,5 @@
 from MARS.results.path_utils import process_mars_paths
-from MARS.results.metrics_utils import get_metrics_dict
-from MARS.moa_retrieval_system.trainer import calculate_query_metrics
+from MARS.results.metrics_utils import calculate_query_metrics, get_metrics_dict
 from MARS.options import read_options
 import os
 import json

@@ -4,6 +4,22 @@ import os
 import pandas as pd
 
 
+def calculate_query_metrics(query_metrics, answer_pos):
+        if answer_pos is not None:
+            query_metrics[5] += 1.0 / (answer_pos + 1)  # MRR
+            if answer_pos < 20:
+                query_metrics[4] += 1  # Hits@20
+                if answer_pos < 10:
+                    query_metrics[3] += 1  # Hits@10
+                    if answer_pos < 5:
+                        query_metrics[2] += 1  # Hits@5
+                        if answer_pos < 3:
+                            query_metrics[1] += 1  # Hits@3
+                            if answer_pos < 1:
+                                query_metrics[0] += 1  # Hits@1
+        return query_metrics
+
+
 def get_metrics_dict(experiment_dir):
     """Pass the path of a directory for a single experiment (which might contain multiple runs/replicates)
 
