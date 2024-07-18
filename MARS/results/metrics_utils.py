@@ -32,6 +32,7 @@ def get_metrics_by_length(answer_positions, path_lengths, rule=False):
         for length, pairs in path_lengths.items():
             # make a temporary dictionary storing the metrics for this experiment
             experiment_dict = {key: 0 for key in metrics_by_len[length].keys()}
+            print(experiment)
             for pair in set(experiment.keys()) | set(pairs): # if the pair has the current path length,
                 experiment_dict = calculate_query_metrics(experiment_dict, experiment[pair], rule=rule)
 
