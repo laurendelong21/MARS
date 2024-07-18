@@ -203,6 +203,7 @@ def process_mars_paths(experiment_dir, meta_mapping, validation_paths, correct_o
     moa_matches_path = osp.join(experiment_dir, "moa_matches.json")
 
     paths = dict()
+    answer_positions = list()
     patterns = Counter()
     matches = dict()
 
@@ -217,7 +218,9 @@ def process_mars_paths(experiment_dir, meta_mapping, validation_paths, correct_o
         fpath = osp.join(experiment_dir, f"{run}/test_beam/paths_CtBP")
 
         # get all of the paths per pair
-        pred_paths, answer_positions = get_paths(file_path=fpath, correct_only=correct_only)
+        pred_paths, experiment_rankings = get_paths(file_path=fpath, correct_only=correct_only)
+        # save the rankings
+        answer_positions.append(experiment_rankings)
         for key, val in pred_paths.items():
             if key not in paths:
                 paths[key] = val

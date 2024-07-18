@@ -23,14 +23,26 @@ def calculate_query_metrics(metrics_dict, answer_pos, rule=False):
     return metrics_dict
 
 
-def get_metrics_by_length(answer_positions, path_lengths):
+def get_metrics_by_length(answer_positions, path_lengths, rule=False):
     """Gets the query metrics per path length"""
-    metrics_by_len = dict()
 
-    for length, pairs in path_lengths.items():
-        metrics_by_len[length] = initialize_metrics_dict()
-        for pair in pairs:
-            metrics_by_len[length] = calculate_query_metrics(metrics_by_len[length], answer_positions[pair])
+    metrics_by_len = {length: initialize_metrics_dict() for length in path_lengths.keys()}
+
+    for experiment in answer_positions:
+        for length, pairs in path_lengths.items():
+            # make a temporary dictionary storing the metrics for this experiment
+            experiment_dict = {key: 0 for key in metrics_by_len[length].keys()}
+            for pair in set(experiment.keys()) | set(pairs): # if the pair has the current path length,
+                experiment_dict = calculate_query_metrics(experiment_dict, experiment[pair], rule=rule)
+
+            # divide all of the metric values by the total with that path length (pairs)
+            experiment_dict = {key: val / len(pairs) for key, val in experiment_dict.items()}
+
+            # and append the values to the list of metrics for this path length
+            metrics_by_len[length] = {key: val.append(experiment_dict[key]) for key, val in metrics_by_len[length].items()}
+
+    # now get the summary metrics
+    metrics_by_len = {length: get_avg_stdev(metrics_dict) for length, metrics_dict in metrics_by_len.items()}
 
     print(metrics_by_len)
 
