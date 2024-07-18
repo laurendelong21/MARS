@@ -1,5 +1,5 @@
 from MARS.results.path_utils import process_mars_paths, get_shortest_path_lengths
-from MARS.results.metrics_utils import calculate_query_metrics, get_metrics_dict
+from MARS.results.metrics_utils import get_metrics_by_length, get_metrics_dict
 from MARS.options import read_options
 import os
 import json
@@ -38,10 +38,12 @@ def main():
     query_metrics = np.zeros(6)
     # get the file paths from the input configs
     experiment_dir, path_length, kg_file, test_edges, meta_mapping, validation_paths = get_filepaths()
-    paths = process_mars_paths(experiment_dir, meta_mapping, validation_paths)
+    paths, answer_positions = process_mars_paths(experiment_dir, meta_mapping, validation_paths)
     # get summary metrics across multiple runs in the output folder
     get_metrics_dict(experiment_dir)
-    get_shortest_path_lengths(kg_file, test_edges, path_length)
+    spath_lengths = get_shortest_path_lengths(kg_file, test_edges, path_length)
+    #TODO make something which takes spath_lengths and answer positions and computes metrics by length
+    get_metrics_by_length(answer_positions, spath_lengths)
 
 
 if __name__ == '__main__':

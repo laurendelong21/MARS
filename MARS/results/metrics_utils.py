@@ -32,6 +32,8 @@ def get_metrics_by_length(answer_positions, path_lengths):
         for pair in pairs:
             metrics_by_len[length] = calculate_query_metrics(metrics_by_len[length], answer_positions[pair])
 
+    print(metrics_by_len)
+
     return metrics_by_len
 
 
