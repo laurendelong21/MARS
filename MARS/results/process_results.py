@@ -35,15 +35,20 @@ def get_filepaths():
 
 
 def main():
-    query_metrics = np.zeros(6)
     # get the file paths from the input configs
     experiment_dir, path_length, kg_file, test_edges, meta_mapping, validation_paths = get_filepaths()
-    paths, answer_positions = process_mars_paths(experiment_dir, meta_mapping, validation_paths)
+    _, answer_positions = process_mars_paths(experiment_dir, meta_mapping, validation_paths)
     # get summary metrics across multiple runs in the output folder
-    get_metrics_dict(experiment_dir)
+    _, metrics_df = get_metrics_dict(experiment_dir)
     spath_lengths = get_shortest_path_lengths(kg_file, test_edges, path_length)
-    #TODO make something which takes spath_lengths and answer positions and computes metrics by length
-    get_metrics_by_length(answer_positions, spath_lengths)
+    metrics_by_len = get_metrics_by_length(answer_positions, spath_lengths)
+
+    print('+++++++++  OVERALL METRICS:  +++++++++')
+    print(metrics_df)
+
+    print('\n')
+    print('+++++++++  METRICS BY PATH LENGTH:  +++++++++')
+    print(metrics_by_len)
 
 
 if __name__ == '__main__':

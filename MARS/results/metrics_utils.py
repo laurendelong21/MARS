@@ -45,7 +45,7 @@ def get_metrics_by_length(answer_positions, path_lengths, rule=False):
     # now get the summary metrics
     metrics_by_len = {length: get_avg_stdev(metrics_dict) for length, metrics_dict in metrics_by_len.items()}
 
-    print(metrics_by_len)
+    metrics_by_len = pd.DataFrame(metrics_by_len).transpose().sort_index()
 
     return metrics_by_len
 
@@ -111,9 +111,7 @@ def get_metrics_dict(experiment_dir):
     output_file = osp.join(experiment_dir, "experiment_metrics.tsv")
     scores_df.to_csv(output_file, sep="\t", index=True)
 
-    print(scores_df)
-
-    return scores
+    return scores, scores_df
 
 
 def process_mars_metrics(results_dir):
@@ -130,7 +128,7 @@ def process_mars_metrics(results_dir):
         if not osp.isdir(exp_path) or 'TEST' not in exp_path:
             continue
         # for each experiment dir, get the metrics dict
-        metrics_dict = get_metrics_dict(exp_path)
+        metrics_dict, _ = get_metrics_dict(exp_path)
         for key, val in metrics_dict.items():
             final_metrics[key] = val
 
