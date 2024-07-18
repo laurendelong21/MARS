@@ -45,7 +45,7 @@ def get_metrics_by_length(answer_positions, path_lengths, rule=False):
     # now get the summary metrics
     metrics_by_len = {length: get_avg_stdev(metrics_dict) for length, metrics_dict in metrics_by_len.items()}
 
-    metrics_by_len = pd.DataFrame(metrics_by_len).transpose().sort_index()
+    metrics_by_len = pd.DataFrame(metrics_by_len).transpose().sort_index().transpose()
 
     return metrics_by_len
 
