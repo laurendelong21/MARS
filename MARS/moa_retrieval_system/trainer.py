@@ -364,6 +364,7 @@ class Trainer(object):
     def add_paths(self, b, sorted_idx, qr, start_e, se, ce, end_e, answer_pos, answers, rewards):
         self.paths[str(qr)].append(str(start_e) + '\t' + str(end_e) + '\n')
         self.paths[str(qr)].append('Reward:' + str(1 if (answer_pos is not None) and (answer_pos < 10) else 0) + '\n')
+        self.paths[str(qr)].append('Answer position:' + str(answer_pos) + '\n')
         for r in sorted_idx[b]:
             rev = -1
             idx = b * self.test_rollouts + r
@@ -381,10 +382,10 @@ class Trainer(object):
     def write_paths_file(self, answers):
         for q in self.paths:
             j = q.replace('/', '-')
-            with codecs.open(self.paths_log + '_' + j, 'a', 'utf-8') as pos_file:
+            with codecs.open(self.paths_log + '_' + j, 'a', 'utf-8') as pos_file:  # gets paths_CtBP
                 for p in self.paths[q]:
                     pos_file.write(p)
-        with open(self.paths_log + 'answers', 'w') as answer_file:
+        with open(self.paths_log + 'answers', 'w') as answer_file:  # gets pathsanswers
             for a in answers:
                 answer_file.write(a)
 
