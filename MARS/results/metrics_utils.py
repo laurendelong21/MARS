@@ -43,6 +43,17 @@ def initialize_metrics_dict(rule=False):
     return hits_dict
 
 
+def get_avg_stdev(metrics_dict, rule=False):
+    """Takes a dictionary of metrics, returns a dictionary of the avg and stdev as value tuples"""
+    if rule:
+        metrics_dict = {key.split("_rule")[0]: val for key, val in metrics_dict.items()}
+    new_dict = {
+        key: (round(sum(val) / len(val), 3), round(statistics.stdev(val), 3))
+        for key, val in metrics_dict.items()
+    }
+    return new_dict
+
+
 def get_metrics_dict(experiment_dir):
     """Pass the path of a directory for a single experiment (which might contain multiple runs/replicates)
 
@@ -75,17 +86,8 @@ def get_metrics_dict(experiment_dir):
                 elif split_line[0] in set(pruned_values.keys()):
                     pruned_values[split_line[0]].append(float(split_line[1].strip()))
 
-    hits_values = {
-        key: (round(sum(val) / len(val), 3), round(statistics.stdev(val), 3))
-        for key, val in hits_values.items()
-    }
-    pruned_values = {
-        key.split("_rule")[0]: (
-            round(sum(val) / len(val), 3),
-            round(statistics.stdev(val), 3),
-        )
-        for key, val in pruned_values.items()
-    }
+    hits_values = get_avg_stdev(hits_values)
+    pruned_values = get_avg_stdev(pruned_values, rule=True)
 
     scores = {f"{exp_name} metrics": hits_values, f"{exp_name} metrics (pruned)": pruned_values}
     scores_df = pd.DataFrame(scores)
