@@ -64,12 +64,22 @@ class RelationEntityGrapher(object):
         self.prune_graph()
 
 
+    def get_edge_counter(self):
+        """Gets a counter dictionary of the edge types in the graph"""
+        edge_types = list()
+        for edge in self.G.edges(data=True):
+            edge_type = edge[2]['type']
+            if '_' not in edge_type:
+                edge_types.append(edge_type)
+        edge_types = dict(Counter(edge_types))
+        return edge_types
+
+
     def reduce_graph(self):
         """
         If class_threshhold is passed, this will reduce the graph by removing edges of any classes above the threshhold.
         """
-        edge_types = [data['type'] for _, _, data in self.G.edges(data=True) if '_' not in data['type']]
-        edge_types = dict(Counter(edge_types))
+        edge_types = self.get_edge_counter()
         count = 0
 
         for edge_type in edge_types.keys():
