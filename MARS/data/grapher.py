@@ -55,8 +55,8 @@ class RelationEntityGrapher(object):
                     self.G.add_node(e2)
                 self.G.add_edge(e1, e2, type=r)
 
-            # prune by the branching factor
-            self.prune_graph()
+        # prune by the branching factor
+        self.prune_graph()
 
 
     def reduce_graph(self, class_threshhold):
