@@ -2,6 +2,7 @@ import csv
 import numpy as np
 from collections import defaultdict
 import random
+import networkx as nx
 
 
 """The script responsible for generating the graph structure and next steps, 
@@ -22,8 +23,9 @@ class RelationEntityGrapher(object):
         self.triple_store = triple_store
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
+        self.G = nx.DiGraph()
         # self.store is a dictionary storing all the connections from a node
-        self.store = defaultdict(dict)
+        self.store = None
         self.hubs = set()
         # self.array_store is a 3D array initialized with the PAD values
         # it contains a 2D matrix for entities and relations each
@@ -37,10 +39,7 @@ class RelationEntityGrapher(object):
         print("KG constructed.")
 
     def create_graph(self):
-        """Stores all of the KG triples in self.array_store so that the matrix values
-            are either the receiving node or the relation, and
-            the relation connecting the two nodes is in the same position in its
-            respective matrix as the entity toward which the edge is going
+        """Stores all of the KG triples in a networkx graph
         """
         with open(self.triple_store) as triple_file_raw:
             triple_file = csv.reader(triple_file_raw, delimiter='\t')
@@ -49,49 +48,45 @@ class RelationEntityGrapher(object):
                 e1 = self.entity_vocab[line[0]]
                 r = self.relation_vocab[line[1]]
                 e2 = self.entity_vocab[line[2]]
-                # store each connection from the starting node
-                self.store[e1][e2] = r
-            
-            # locate hub proteins (those with > max branching factor)
-            self.hubs = {prot for prot in self.store.keys() if len(self.store[prot]) > self.array_store.shape[1]} 
+
+                if e1 not in self.G.nodes:
+                    self.G.add_node(e1)
+                if e2 not in self.G.nodes:
+                    self.G.add_node(e2)
+                self.G.add_edge(e1, e2, type=r)
 
             # prune by the branching factor
             self.prune_graph()
 
 
+    def reduce_graph(self, class_threshhold):
+        """
+        If class_threshhold is passed, this will reduce the graph by removing edges of any classes above the threshhold.
+        """
+        pass
+
+
     def prune_graph(self):
         """Prunes the graph to the specified branching factor"""
-        for e1 in self.store.keys():  # for every source node / dict key
+        source_nodes = [node for node in self.G.nodes() if self.G.out_degree(node) > 0]
+        for source_node in source_nodes :  # for every source node / dict key
             # first, give the agent the option to remain at every source node:
-            self.array_store[e1, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
-            self.array_store[e1, 0, 0] = e1  # self-connection / stay where you are
+            self.array_store[source_node, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
+            self.array_store[source_node, 0, 0] = source_node  # self-connection / stay where you are
             num_actions = 1
 
             # shuffle the keys so the order is not determined by the input file
-            target_nodes = list(self.store[e1].keys())
+            target_nodes = list(nx.neighbors(self.G, source_node))
             random.shuffle(target_nodes)
 
-            # what proportion are we pruning to?
-            #proportion = max((self.array_store.shape[1] / len(target_nodes)), 1)
-
-            # take a random sample of the hub nodes at that proportion
-            #sample_size = len(self.hubs) * proportion
-            #target_hubs = set(target_nodes) & self.hubs
-            #if len(target_hubs) > sample_size:
-            #    target_hubs = random.sample(target_hubs, int(sample_size))
-           # target_nodes = (set(target_nodes) - self.hubs) | target_hubs
-
-            for e2 in target_nodes:  # for each connecting node,
+            for target_node in target_nodes:  # for each connecting node,
                 # if we reached the max number of actions, stop
                 if num_actions == self.array_store.shape[1]:
                     break
                 # store the number of the current outgoing edge as an index
-                self.array_store[e1, num_actions, 0] = e2
-                self.array_store[e1, num_actions, 1] = self.store[e1][e2]
+                self.array_store[source_node, num_actions, 0] = target_node
+                self.array_store[source_node, num_actions, 1] = self.G[source_node][target_node]['type']
                 num_actions += 1
-        # delete self.store because it contains redundant info
-        del self.store
-        self.store = None
 
 
     def return_next_actions(self, current_entities, start_entities, query_relations, end_entities, all_correct_answers,
