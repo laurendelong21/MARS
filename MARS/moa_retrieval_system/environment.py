@@ -114,7 +114,8 @@ class Env(object):
         self.grapher = RelationEntityGrapher(triple_store=triple_store,
                                              entity_vocab=params['entity_vocab'],
                                              relation_vocab=params['relation_vocab'],
-                                             max_branching=params['max_branching'])
+                                             max_branching=params['max_branching'],
+                                             class_threshhold=params['class_threshhold'])
 
     def get_episodes(self):
         params = self.batch_size, self.path_len, self.num_rollouts, self.test_rollouts, self.positive_reward, \

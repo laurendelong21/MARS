@@ -11,12 +11,13 @@ but for each step, ensures to mask the connections representing the true answers
 
 
 class RelationEntityGrapher(object):
-    def __init__(self, triple_store, entity_vocab, relation_vocab, max_branching):
+    def __init__(self, triple_store, entity_vocab, relation_vocab, max_branching, class_threshhold=None):
         """Initializes the creation of the graph.
             :param triple_store: the file location of the KG triples
             :param entity_vocab: the file location of the ID mappings for entities
             :param relation_vocab: the file location of the ID mappings for relations
-            :param max_branching: the max number of outgoing edges from any given source node 
+            :param max_branching: the max number of outgoing edges from any given source node
+            :param class_threshhold: (optional) the max number of edges of any class to keep in the graph
         """
         self.ePAD = entity_vocab['PAD']  # the ID of the PAD token for entities
         self.rPAD = relation_vocab['PAD']  # the ID of the PAD token for relations
@@ -24,6 +25,7 @@ class RelationEntityGrapher(object):
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
         self.G = nx.DiGraph()
+        self.class_threshhold = class_threshhold
         # self.store is a dictionary storing all the connections from a node
         self.store = None
         self.hubs = set()
@@ -55,11 +57,14 @@ class RelationEntityGrapher(object):
                     self.G.add_node(e2)
                 self.G.add_edge(e1, e2, type=r)
 
+        if self.class_threshhold:
+            self.reduce_graph()
+
         # prune by the branching factor
         self.prune_graph()
 
 
-    def reduce_graph(self, class_threshhold):
+    def reduce_graph(self):
         """
         If class_threshhold is passed, this will reduce the graph by removing edges of any classes above the threshhold.
         """
@@ -68,14 +73,14 @@ class RelationEntityGrapher(object):
         count = 0
 
         for edge_type in edge_types.keys():
-            if edge_types[edge_type] <= class_threshhold:
+            if edge_types[edge_type] <= self.class_threshhold:
                 continue
 
             edges_of_type = {(s, t, data['type']) for s, t, data in self.G.edges(data=True) if data['type'] == edge_type}
             source_nodes = {s for s, _, _ in edges_of_type}
             target_nodes = {t for _, t, _ in edges_of_type}
 
-            while edge_types[edge_type] > class_threshhold:
+            while edge_types[edge_type] > self.class_threshhold:
                 
                 node_with_highest_degree = max(source_nodes, key=lambda n: self.G.out_degree(n))
                 # Find the neighbor of node_with_highest_degree with the largest degree
