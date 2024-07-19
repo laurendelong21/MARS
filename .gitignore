@@ -3,8 +3,7 @@ __pycache__/
 *.pyc
 .idea/
 output/
-datasets/Hetionet/graph.txt
-datasets/MOA-net/graph.txt
+datasets/*/graph.txt
 .viscode/
 
 # ENVIRONMENTS
