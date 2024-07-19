@@ -1,6 +1,6 @@
 import csv
 import numpy as np
-from collections import defaultdict
+from collections import Counter
 import random
 import networkx as nx
 
@@ -63,7 +63,32 @@ class RelationEntityGrapher(object):
         """
         If class_threshhold is passed, this will reduce the graph by removing edges of any classes above the threshhold.
         """
-        pass
+        edge_types = [data['type'] for _, _, data in self.G.edges(data=True) if '_' not in data['type']]
+        edge_types = dict(Counter(edge_types))
+        count = 0
+
+        for edge_type in edge_types.keys():
+            if edge_types[edge_type] <= class_threshhold:
+                continue
+
+            edges_of_type = {(s, t, data['type']) for s, t, data in self.G.edges(data=True) if data['type'] == edge_type}
+            source_nodes = {s for s, _, _ in edges_of_type}
+            target_nodes = {t for _, t, _ in edges_of_type}
+
+            while edge_types[edge_type] > class_threshhold:
+                
+                node_with_highest_degree = max(source_nodes, key=lambda n: self.G.out_degree(n))
+                # Find the neighbor of node_with_highest_degree with the largest degree
+                neighbor_of_highest_degree = max([node for node in nx.neighbors(self.G, node_with_highest_degree) 
+                                                  if node in target_nodes],
+                                                key=lambda n: self.G.out_degree(n))
+                # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
+                self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree, type=edge_type)
+                self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree, type=f'_{edge_type}')
+                edge_types[edge_type] -= 1
+                count += 1
+                if count % 1000 == 0:
+                    print(count, self.G.number_of_edges())
 
 
     def prune_graph(self):
