@@ -109,7 +109,7 @@ class RelationEntityGrapher(object):
                 
                 node_with_highest_degree = max(source_nodes, key=lambda n: self.G.out_degree(n))
                 # Find the neighbor of node_with_highest_degree with the largest degree
-                neighbors = [node for node in nx.neighbors(self.G, node_with_highest_degree) if node in target_nodes]
+                neighbors = [node for node in self.G.neighbors(node_with_highest_degree) if node in target_nodes]
                 neighbor_of_highest_degree = max(neighbors, key=lambda n: self.G.out_degree(n))
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
                 self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree, key=edge_type)
