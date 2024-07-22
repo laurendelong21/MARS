@@ -112,10 +112,10 @@ class RelationEntityGrapher(object):
                 neighbors = [node for node in self.G.neighbors(node_with_highest_degree) if node in target_nodes]
                 neighbor_of_highest_degree = max(neighbors, key=lambda n: self.G.out_degree(n))
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
-                self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree, key=edge_type)
+                self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
                 edge_types[edge_type] -= 1
                 if reverse_edge_type:
-                    self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree, key=reverse_edge_type)
+                    self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
                     edge_types[reverse_edge_type] -= 1
                 count += 1
                 if count % 1000 == 0:
