@@ -165,7 +165,7 @@ class RelationEntityGrapher(object):
                     break
                 # store the number of the current outgoing edge as an index
                 self.array_store[source_node, num_actions, 0] = target_node
-                self.array_store[source_node, num_actions, 1] = self.G[source_node][target_node]['type']
+                self.array_store[source_node, num_actions, 1] = self.G.get_edge_data(source_node, target_node)['type']
                 num_actions += 1
 
 
