@@ -133,7 +133,6 @@ class RelationEntityGrapher(object):
                 edge_types[edge_type] -= 1
                 if reverse_edge_type:
                     self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
-                    source_nodes[neighbor_of_highest_degree] -= 1
                     edge_types[reverse_edge_type] -= 1
                 count += 1
                 if count % 1000 == 0:
