@@ -24,7 +24,7 @@ class RelationEntityGrapher(object):
         self.triple_store = triple_store
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
-        self.G = nx.DiGraph()
+        self.G = nx.MultiDiGraph()
         self.class_threshhold = class_threshhold
         # self.store is a dictionary storing all the connections from a node
         self.store = None
