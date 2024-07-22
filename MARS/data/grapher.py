@@ -9,6 +9,17 @@ import networkx as nx
 but for each step, ensures to mask the connections representing the true answers so there is no cheating
 """
 
+def sum_dicts(dict1, dict2):
+    """Gets the sum of the values in the two dicts"""
+    new_dict = dict()
+    for key in set(dict1.keys()) & set(dict2.keys()):
+        new_dict[key] = dict1[key] + dict2[key]
+    for key in set(dict1.keys()) - set(dict2.keys()):
+        new_dict[key] = dict1[key]
+    for key in set(dict2.keys()) - set(dict1.keys()):
+        new_dict[key] = dict2[key]
+    return new_dict
+
 
 class RelationEntityGrapher(object):
     def __init__(self, triple_store, entity_vocab, relation_vocab, max_branching, class_threshhold=None):
@@ -86,7 +97,7 @@ class RelationEntityGrapher(object):
         edges_of_type = {(s, t, k) for s, t, k in self.G.edges(keys=True) if k == edge_type}
         source_nodes = {s for s, _, _ in edges_of_type}
         target_nodes = {t for _, t, _ in edges_of_type}
-        return edges_of_type, source_nodes, target_nodes
+        return dict(Counter(source_nodes)), dict(Counter(target_nodes))
 
 
     def reduce_graph(self):
@@ -103,16 +114,22 @@ class RelationEntityGrapher(object):
             # get the reverse edge type:
             reverse_edge_type = self.paired_relation_vocab[edge_type] if edge_type in self.paired_relation_vocab else None
 
-            _, source_nodes, target_nodes = self.get_edges_of_type(edge_type)
+            source_nodes, target_nodes = self.get_edges_of_type(edge_type)
+            if reverse_edge_type:
+                reverse_source_nodes, reverse_target_nodes = self.get_edges_of_type(reverse_edge_type)
+                source_nodes = sum_dicts(source_nodes, reverse_source_nodes)
+                target_nodes = sum_dicts(target_nodes, reverse_target_nodes)
+            
 
             while edge_types[edge_type] > self.class_threshhold:
                 
-                node_with_highest_degree = max(source_nodes, key=lambda n: self.G.out_degree(n))
+                node_with_highest_degree = max(source_nodes, key=source_nodes.get)  # get the node with the most participating edges of this type
                 # Find the neighbor of node_with_highest_degree with the largest degree
-                neighbors = [node for node in self.G.neighbors(node_with_highest_degree) if node in target_nodes]
+                neighbors = [node for node in self.G.neighbors(node_with_highest_degree) if node in target_nodes.keys()]
                 neighbor_of_highest_degree = max(neighbors, key=lambda n: self.G.out_degree(n))
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
                 self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
+                source_nodes[node_with_highest_degree] -= 1
                 edge_types[edge_type] -= 1
                 if reverse_edge_type:
                     self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
