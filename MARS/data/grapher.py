@@ -74,7 +74,7 @@ class RelationEntityGrapher(object):
                     self.G.add_node(e1)
                 if e2 not in self.G.nodes:
                     self.G.add_node(e2)
-                self.G.add_edge(e1, e2, key=r)
+                self.G.add_edge(e1, e2, type=r)
 
         if self.class_threshhold:
             self.reduce_graph()
@@ -86,22 +86,24 @@ class RelationEntityGrapher(object):
     def get_edge_counter(self):
         """Gets a counter dictionary of the edge types in the graph"""
         edge_types = list()
-        for edge in self.G.edges(keys=True):
-            edge_type = edge[2]
+        for edge in self.G.edges(data=True):
+            edge_type = edge[2]['type']
             edge_types.append(edge_type)
         edge_types = dict(Counter(edge_types))
         return edge_types
     
 
-    def get_edges_of_type(self, edge_type):
-        source_nodes = list()
-        targets = defaultdict(set)
-        for edge in self.G.edges(keys=True):
-            if edge[2] != edge_type:
-                continue
-            source_nodes.append(edge[0])
-            targets[edge[0]].add(edge[1])
-        return dict(Counter(source_nodes)), targets
+    def get_subgraph(self, edge_type):
+        G_sub = nx.MultiDiGraph()
+        for edge in self.G.edges(data=True):
+            if edge[2]['type'] == edge_type:
+                if edge[0] not in G_sub.nodes:
+                    G_sub.add_node(edge[0])
+                if edge[1] not in G_sub.nodes:
+                    G_sub.add_node(edge[1])
+                G_sub.add_edge(edge[0], edge[1], type=edge[2]['type'])
+                
+        return G_sub
 
 
     def reduce_graph(self):
@@ -115,32 +117,23 @@ class RelationEntityGrapher(object):
             if edge_types[edge_type] <= self.class_threshhold:
                 continue
 
-            # get the reverse edge type:
-            reverse_edge_type = self.paired_relation_vocab[edge_type] if edge_type in self.paired_relation_vocab else None
-
-            source_nodes, targets = self.get_edges_of_type(edge_type)
-            #if reverse_edge_type:
-               # reverse_source_nodes, reverse_target_nodes = self.get_edges_of_type(reverse_edge_type)
-               # source_nodes = sum_dicts(source_nodes, reverse_source_nodes)
-                #target_nodes = sum_dicts(target_nodes, reverse_target_nodes)
-            
+            G_sub = self.get_subgraph(edge_type)
+            sub_nodes = list(G_sub)
 
             while edge_types[edge_type] > self.class_threshhold:
                 
-                node_with_highest_degree = max(source_nodes, key=source_nodes.get)  # get the node with the most participating edges of this type
-                print(f'Working on a node with {source_nodes[node_with_highest_degree]} outgoing connections')
+                node_with_highest_degree = max(sub_nodes, key=lambda n: G_sub.out_degree(n))  # get the node with the most participating edges of this type
+                print(f'Working on a node with {G_sub.out_degree(node_with_highest_degree)} outgoing connections')
                 # Find the neighbor of node_with_highest_degree with the largest degree
-                neighbors = {node: source_nodes[node] for node in targets[node_with_highest_degree] if node in source_nodes.keys()}
+                neighbors = [node for node in nx.neighbors(G_sub, node_with_highest_degree)]
                 print(f'This node has {len(neighbors)} neighbors which also engage in edges of this type')
-                neighbor_of_highest_degree = max(neighbors, key=neighbors.get)
+                neighbor_of_highest_degree = max(neighbors, key=lambda n: G_sub.out_degree(n))
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
+                G_sub.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
                 self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
-                source_nodes[node_with_highest_degree] -= 1
                 edge_types[edge_type] -= 1
-                if reverse_edge_type:
+                if edge_type in self.paired_relation_vocab:
                     self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
-                    # source_nodes[node_with_highest_degree] -= 1
-                    edge_types[reverse_edge_type] -= 1
                 count += 1
                 if count % 1000 == 0:
                     print(count, self.G.number_of_edges())
