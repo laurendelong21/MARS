@@ -115,17 +115,17 @@ class RelationEntityGrapher(object):
             reverse_edge_type = self.paired_relation_vocab[edge_type] if edge_type in self.paired_relation_vocab else None
 
             source_nodes, target_nodes = self.get_edges_of_type(edge_type)
-            if reverse_edge_type:
-                reverse_source_nodes, reverse_target_nodes = self.get_edges_of_type(reverse_edge_type)
-                source_nodes = sum_dicts(source_nodes, reverse_source_nodes)
-                target_nodes = sum_dicts(target_nodes, reverse_target_nodes)
+            #if reverse_edge_type:
+               # reverse_source_nodes, reverse_target_nodes = self.get_edges_of_type(reverse_edge_type)
+               # source_nodes = sum_dicts(source_nodes, reverse_source_nodes)
+                #target_nodes = sum_dicts(target_nodes, reverse_target_nodes)
             
 
             while edge_types[edge_type] > self.class_threshhold:
                 
                 node_with_highest_degree = max(source_nodes, key=source_nodes.get)  # get the node with the most participating edges of this type
                 # Find the neighbor of node_with_highest_degree with the largest degree
-                neighbors = [node for node in self.G.neighbors(node_with_highest_degree)]
+                neighbors = [node for node in self.G.neighbors(node_with_highest_degree) if node in target_nodes.keys()]
                 neighbor_of_highest_degree = max(neighbors, key=lambda n: source_nodes[n] if n in source_nodes else 0)
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
                 self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
@@ -133,6 +133,7 @@ class RelationEntityGrapher(object):
                 edge_types[edge_type] -= 1
                 if reverse_edge_type:
                     self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
+                    # source_nodes[node_with_highest_degree] -= 1
                     edge_types[reverse_edge_type] -= 1
                 count += 1
                 if count % 1000 == 0:
