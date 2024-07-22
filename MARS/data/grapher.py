@@ -63,7 +63,7 @@ class RelationEntityGrapher(object):
                     self.G.add_node(e1)
                 if e2 not in self.G.nodes:
                     self.G.add_node(e2)
-                self.G.add_edge(e1, e2, type=r, key=r)
+                self.G.add_edge(e1, e2, key=r)
 
         if self.class_threshhold:
             self.reduce_graph()
@@ -75,15 +75,15 @@ class RelationEntityGrapher(object):
     def get_edge_counter(self):
         """Gets a counter dictionary of the edge types in the graph"""
         edge_types = list()
-        for edge in self.G.edges(data=True):
-            edge_type = edge[2]['type']
+        for edge in self.G.edges(keys=True):
+            edge_type = edge[2]
             edge_types.append(edge_type)
         edge_types = dict(Counter(edge_types))
         return edge_types
     
 
     def get_edges_of_type(self, edge_type):
-        edges_of_type = {(s, t, data['type']) for s, t, data in self.G.edges(data=True) if data['type'] == edge_type}
+        edges_of_type = {(s, t, k) for s, t, k in self.G.edges(keys=True) if k == edge_type}
         source_nodes = {s for s, _, _ in edges_of_type}
         target_nodes = {t for _, t, _ in edges_of_type}
         return edges_of_type, source_nodes, target_nodes
@@ -109,9 +109,8 @@ class RelationEntityGrapher(object):
                 
                 node_with_highest_degree = max(source_nodes, key=lambda n: self.G.out_degree(n))
                 # Find the neighbor of node_with_highest_degree with the largest degree
-                neighbor_of_highest_degree = max([node for node in nx.neighbors(self.G, node_with_highest_degree) 
-                                                  if node in target_nodes],
-                                                key=lambda n: self.G.out_degree(n))
+                neighbors = [node for node in nx.neighbors(self.G, node_with_highest_degree) if node in target_nodes]
+                neighbor_of_highest_degree = max(neighbors, key=lambda n: self.G.out_degree(n))
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
                 self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree, key=edge_type)
                 edge_types[edge_type] -= 1
