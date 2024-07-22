@@ -63,7 +63,7 @@ class RelationEntityGrapher(object):
                     self.G.add_node(e1)
                 if e2 not in self.G.nodes:
                     self.G.add_node(e2)
-                self.G.add_edge(e1, e2, type=r)
+                self.G.add_edge(e1, e2, type=r, key=r)
 
         if self.class_threshhold:
             self.reduce_graph()
@@ -113,10 +113,10 @@ class RelationEntityGrapher(object):
                                                   if node in target_nodes],
                                                 key=lambda n: self.G.out_degree(n))
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
-                self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree, type=edge_type)
+                self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree, key=edge_type)
                 edge_types[edge_type] -= 1
                 if reverse_edge_type:
-                    self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree, type=reverse_edge_type)
+                    self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree, key=reverse_edge_type)
                     edge_types[reverse_edge_type] -= 1
                 count += 1
                 if count % 1000 == 0:
