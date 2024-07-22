@@ -37,6 +37,14 @@ class RelationEntityGrapher(object):
         self.masked_array_store = None
         self.rev_entity_vocab = dict([(v, k) for k, v in entity_vocab.items()])
         self.rev_relation_vocab = dict([(v, k) for k, v in relation_vocab.items()])
+        self.paired_relation_vocab = dict()
+        for k, v in relation_vocab.items():
+            if '_' in k:
+                k_pair = k.strip('_')
+            else:
+                k_pair = f'_{k}'
+            if k_pair in self.relation_vocab.keys():
+                self.paired_relation_vocab[v] = self.relation_vocab[k_pair]
         self.create_graph()
         print("KG constructed.")
 
@@ -69,10 +77,16 @@ class RelationEntityGrapher(object):
         edge_types = list()
         for edge in self.G.edges(data=True):
             edge_type = edge[2]['type']
-            if '_' not in edge_type:
-                edge_types.append(edge_type)
+            edge_types.append(edge_type)
         edge_types = dict(Counter(edge_types))
         return edge_types
+    
+
+    def get_edges_of_type(self, edge_type):
+        edges_of_type = {(s, t, data['type']) for s, t, data in self.G.edges(data=True) if data['type'] == edge_type}
+        source_nodes = {s for s, _, _ in edges_of_type}
+        target_nodes = {t for _, t, _ in edges_of_type}
+        return edges_of_type, source_nodes, target_nodes
 
 
     def reduce_graph(self):
@@ -86,9 +100,10 @@ class RelationEntityGrapher(object):
             if edge_types[edge_type] <= self.class_threshhold:
                 continue
 
-            edges_of_type = {(s, t, data['type']) for s, t, data in self.G.edges(data=True) if data['type'] == edge_type}
-            source_nodes = {s for s, _, _ in edges_of_type}
-            target_nodes = {t for _, t, _ in edges_of_type}
+            # get the reverse edge type:
+            reverse_edge_type = self.paired_relation_vocab[edge_type] if edge_type in self.paired_relation_vocab else None
+
+            _, source_nodes, target_nodes = self.get_edges_of_type(edge_type)
 
             while edge_types[edge_type] > self.class_threshhold:
                 
@@ -99,8 +114,10 @@ class RelationEntityGrapher(object):
                                                 key=lambda n: self.G.out_degree(n))
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
                 self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree, type=edge_type)
-                self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree, type=f'_{edge_type}')
                 edge_types[edge_type] -= 1
+                if reverse_edge_type:
+                    self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree, type=reverse_edge_type)
+                    edge_types[reverse_edge_type] -= 1
                 count += 1
                 if count % 1000 == 0:
                     print(count, self.G.number_of_edges())
