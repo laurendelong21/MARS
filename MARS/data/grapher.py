@@ -104,6 +104,12 @@ class RelationEntityGrapher(object):
                 G_sub.add_edge(edge[0], edge[1], type=edge[2]['type'])
 
         return G_sub
+    
+
+    def remove_isolated_nodes(self):
+        # remove isolated nodes
+        isolated_nodes = list(nx.isolates(self.G))
+        self.G.remove_nodes_from(isolated_nodes)
 
 
     def reduce_graph(self):
@@ -123,7 +129,7 @@ class RelationEntityGrapher(object):
             while G_sub.number_of_edges() > self.class_threshhold:
                 
                 node_with_highest_degree = max(sub_nodes, key=lambda n: G_sub.out_degree(n))  # get the node with the most participating edges of this type
-                print(f'Working on node {node_with_highest_degree} with {G_sub.out_degree(node_with_highest_degree)} outgoing connections')
+                #print(f'Working on node {node_with_highest_degree} with {G_sub.out_degree(node_with_highest_degree)} outgoing connections')
                 # Find the neighbor of node_with_highest_degree with the largest degree
                 neighbors = [node for node in nx.neighbors(G_sub, node_with_highest_degree)]
                 neighbor_of_highest_degree = max(neighbors, key=lambda n: G_sub.out_degree(n))
@@ -136,6 +142,8 @@ class RelationEntityGrapher(object):
                 count += 1
                 if count % 1000 == 0:
                     print(count, self.G.number_of_edges())
+
+        self.remove_isolated_nodes()
 
 
     def prune_graph(self):
