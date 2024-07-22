@@ -1,6 +1,6 @@
 import csv
 import numpy as np
-from collections import Counter
+from collections import Counter, defaultdict
 import random
 import networkx as nx
 
@@ -95,13 +95,13 @@ class RelationEntityGrapher(object):
 
     def get_edges_of_type(self, edge_type):
         source_nodes = list()
-        target_nodes = list()
+        targets = defaultdict(set)
         for edge in self.G.edges(keys=True):
             if edge[2] != edge_type:
                 continue
             source_nodes.append(edge[0])
-            target_nodes.append(edge[1])
-        return dict(Counter(source_nodes)), dict(Counter(target_nodes))
+            targets[edge[0]].add(edge[1])
+        return dict(Counter(source_nodes)), targets
 
 
     def reduce_graph(self):
@@ -118,7 +118,7 @@ class RelationEntityGrapher(object):
             # get the reverse edge type:
             reverse_edge_type = self.paired_relation_vocab[edge_type] if edge_type in self.paired_relation_vocab else None
 
-            source_nodes, target_nodes = self.get_edges_of_type(edge_type)
+            source_nodes, targets = self.get_edges_of_type(edge_type)
             #if reverse_edge_type:
                # reverse_source_nodes, reverse_target_nodes = self.get_edges_of_type(reverse_edge_type)
                # source_nodes = sum_dicts(source_nodes, reverse_source_nodes)
@@ -130,8 +130,8 @@ class RelationEntityGrapher(object):
                 node_with_highest_degree = max(source_nodes, key=source_nodes.get)  # get the node with the most participating edges of this type
                 print(f'Working on a node with {source_nodes[node_with_highest_degree]} outgoing connections')
                 # Find the neighbor of node_with_highest_degree with the largest degree
-                neighbors = {node: source_nodes[node] for node in self.G.neighbors(node_with_highest_degree) if node in source_nodes.keys()}
-                print(f'This node has {neighbors} neighbors which also engage in edges of this type')
+                neighbors = {node: source_nodes[node] for node in targets[node_with_highest_degree] if node in source_nodes.keys()}
+                print(f'This node has {len(neighbors)} neighbors which also engage in edges of this type')
                 neighbor_of_highest_degree = max(neighbors, key=neighbors.get)
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
                 self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
