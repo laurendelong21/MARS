@@ -128,8 +128,10 @@ class RelationEntityGrapher(object):
             while edge_types[edge_type] > self.class_threshhold:
                 
                 node_with_highest_degree = max(source_nodes, key=source_nodes.get)  # get the node with the most participating edges of this type
+                print(f'Working on a node with {source_nodes[node_with_highest_degree]} outgoing connections')
                 # Find the neighbor of node_with_highest_degree with the largest degree
                 neighbors = {node: source_nodes[node] for node in self.G.neighbors(node_with_highest_degree) if node in source_nodes.keys()}
+                print(f'This node has {neighbors} neighbors which also engage in edges of this type')
                 neighbor_of_highest_degree = max(neighbors, key=neighbors.get)
                 # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
                 self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
