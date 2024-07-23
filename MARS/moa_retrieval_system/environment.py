@@ -98,27 +98,24 @@ class Env(object):
         triple_store = input_dir + 'graph.txt'
         nx_output = output_dir + 'nx_graph.graphml'
 
-        if mode == 'train':
-            self.batcher = RelationEntityBatcher(input_dir=input_dir,
-                                                 batch_size=params['batch_size'],
-                                                 entity_vocab=params['entity_vocab'],
-                                                 relation_vocab=params['relation_vocab'])
-        else:
-            self.batcher = RelationEntityBatcher(input_dir=input_dir,
-                                                 batch_size=params['batch_size'],
-                                                 entity_vocab=params['entity_vocab'],
-                                                 relation_vocab=params['relation_vocab'],
-                                                 mode=mode)
-            # if we are in validation or test mode, get the length of the batcher's attribute 'store' (total triples in dataset)
-            # TODO: write a method that returns this instead
-            self.total_no_examples = self.batcher.store.shape[0]
-
+        # create the KG
         self.grapher = RelationEntityGrapher(triple_store=triple_store,
                                              entity_vocab=params['entity_vocab'],
                                              relation_vocab=params['relation_vocab'],
                                              max_branching=params['max_branching'],
                                              graph_output_file=nx_output,
                                              class_threshhold=params['class_threshhold'])
+        
+        self.batcher = RelationEntityBatcher(input_dir=input_dir,
+                                                batch_size=params['batch_size'],
+                                                entity_vocab=params['entity_vocab'],
+                                                relation_vocab=params['relation_vocab'],
+                                                nx_graph=self.grapher.return_graph(),
+                                                mode=mode)
+        
+        if mode != 'train':       
+            self.total_no_examples = self.batcher.store.shape[0]
+
 
     def get_episodes(self):
         params = self.batch_size, self.path_len, self.num_rollouts, self.test_rollouts, self.positive_reward, \

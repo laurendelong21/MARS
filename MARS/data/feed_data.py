@@ -1,5 +1,5 @@
 import csv
-import random
+import networkx as nx
 import numpy as np
 from collections import defaultdict
 
@@ -8,12 +8,13 @@ from collections import defaultdict
 
 
 class RelationEntityBatcher(object):
-    def __init__(self, input_dir, batch_size, entity_vocab, relation_vocab, mode="train"):
+    def __init__(self, input_dir, batch_size, entity_vocab, relation_vocab, nx_graph, mode="train"):
         """Creates the training or test dataset
         :param input_dir: the input directory where the data files are
         :param batch_size: the size of the sampled batch (specified by user in configs)
         :param entity_vocab: dictionary mapping the entities to their unique IDs
         :param relation_vocab: dictionary mapping the relations to their unique IDs
+        :param nx_graph = the networkx graph object representing the whole KG
         :param mode: whether it should be for the training set or the test set
         """
         self.input_dir = input_dir
@@ -23,6 +24,7 @@ class RelationEntityBatcher(object):
         print('Reading vocab...')
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
+        self.KG = nx_graph
         self.mode = mode
         self.create_triple_store(self.input_file)
         print("Batcher loaded.")
@@ -51,9 +53,10 @@ class RelationEntityBatcher(object):
                     e1 = self.entity_vocab[line[0]]
                     r = self.relation_vocab[line[1]]
                     e2 = self.entity_vocab[line[2]]
-                    self.store.append([e1, r, e2])
-                    # this line is unique to the training set- we only want the labels in the training set so no leakage
-                    self.store_all_correct[(e1, r)].add(e2)
+                    if nx.has_path(self.KG, e1, e2):
+                        self.store.append([e1, r, e2])
+                        # this line is unique to the training set- we only want the labels in the training set so no leakage
+                        self.store_all_correct[(e1, r)].add(e2)
                 self.store = np.array(self.store)
             else:
                 for line in csv_file:
@@ -64,7 +67,8 @@ class RelationEntityBatcher(object):
                         e1 = self.entity_vocab[e1]
                         r = self.relation_vocab[r]
                         e2 = self.entity_vocab[e2]
-                        self.store.append([e1, r, e2])
+                        if nx.has_path(self.KG, e1, e2):
+                            self.store.append([e1, r, e2])
                 self.store = np.array(self.store)
 
                 # all files which store triples of some form
@@ -80,8 +84,9 @@ class RelationEntityBatcher(object):
                                 e1 = self.entity_vocab[e1]
                                 r = self.relation_vocab[r]
                                 e2 = self.entity_vocab[e2]
-                                # here, we now store ALL possible labels 
-                                self.store_all_correct[(e1, r)].add(e2)
+                                if nx.has_path(self.KG, e1, e2):
+                                    # here, we now store ALL possible labels 
+                                    self.store_all_correct[(e1, r)].add(e2)
 
     def yield_next_batch_train(self):
         """Generates the next batch of training data as unique IDs:

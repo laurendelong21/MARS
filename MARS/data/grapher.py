@@ -89,6 +89,10 @@ class RelationEntityGrapher(object):
         nx.write_graphml(self.G, self.nx_output)
 
 
+    def return_graph(self):
+        return self.G
+
+
     def get_edge_counter(self):
         """Gets a counter dictionary of the edge types in the graph"""
         edge_types = list()
