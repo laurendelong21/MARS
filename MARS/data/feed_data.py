@@ -47,6 +47,7 @@ class RelationEntityBatcher(object):
         self.store = []
         with open(input_file) as raw_input_file:
             csv_file = csv.reader(raw_input_file, delimiter='\t')
+            no_path = 0
             if self.mode == 'train':
                 for line in csv_file:
                     # read in each triple and map it to its unique ID
@@ -57,6 +58,8 @@ class RelationEntityBatcher(object):
                         self.store.append([e1, r, e2])
                         # this line is unique to the training set- we only want the labels in the training set so no leakage
                         self.store_all_correct[(e1, r)].add(e2)
+                    else:
+                        no_path += 1
                 self.store = np.array(self.store)
             else:
                 for line in csv_file:
@@ -69,6 +72,8 @@ class RelationEntityBatcher(object):
                         e2 = self.entity_vocab[e2]
                         if nx.has_path(self.KG, e1, e2):
                             self.store.append([e1, r, e2])
+                        else:
+                            no_path += 1
                 self.store = np.array(self.store)
 
                 # all files which store triples of some form
@@ -87,6 +92,10 @@ class RelationEntityBatcher(object):
                                 if nx.has_path(self.KG, e1, e2):
                                     # here, we now store ALL possible labels 
                                     self.store_all_correct[(e1, r)].add(e2)
+
+            if no_path > 0:
+                print(f'WARNING: {no_path} triples in the {self.mode} are disconnected and were ommitted.')
+                
 
     def yield_next_batch_train(self):
         """Generates the next batch of training data as unique IDs:
