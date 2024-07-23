@@ -22,12 +22,14 @@ def sum_dicts(dict1, dict2):
 
 
 class RelationEntityGrapher(object):
-    def __init__(self, triple_store, entity_vocab, relation_vocab, max_branching, class_threshhold=None):
+    def __init__(self, triple_store, entity_vocab, relation_vocab, 
+                 max_branching, graph_output_file, class_threshhold=None):
         """Initializes the creation of the graph.
             :param triple_store: the file location of the KG triples
             :param entity_vocab: the file location of the ID mappings for entities
             :param relation_vocab: the file location of the ID mappings for relations
             :param max_branching: the max number of outgoing edges from any given source node
+            :param graph_output_file: the output file to which the networkx graph should be written.
             :param class_threshhold: (optional) the max number of edges of any class to keep in the graph
         """
         self.ePAD = entity_vocab['PAD']  # the ID of the PAD token for entities
@@ -36,6 +38,7 @@ class RelationEntityGrapher(object):
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
         self.G = nx.MultiDiGraph()
+        self.nx_output = graph_output_file
         self.class_threshhold = class_threshhold
         # self.store is a dictionary storing all the connections from a node
         self.store = None
@@ -81,6 +84,9 @@ class RelationEntityGrapher(object):
 
         # prune by the branching factor
         self.prune_graph()
+
+        # write graph to file
+        nx.write_graphml(self.G, self.nx_output)
 
 
     def get_edge_counter(self):

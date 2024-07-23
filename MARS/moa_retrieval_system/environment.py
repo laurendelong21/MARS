@@ -94,7 +94,9 @@ class Env(object):
         self.mode = mode
         self.path_len = params['path_length']
         input_dir = params['input_dir']
+        output_dir = params['base_output_dir']
         triple_store = input_dir + 'graph.txt'
+        nx_output = output_dir + 'nx_graph.graphml'
 
         if mode == 'train':
             self.batcher = RelationEntityBatcher(input_dir=input_dir,
@@ -115,6 +117,7 @@ class Env(object):
                                              entity_vocab=params['entity_vocab'],
                                              relation_vocab=params['relation_vocab'],
                                              max_branching=params['max_branching'],
+                                             graph_output_file=nx_output,
                                              class_threshhold=params['class_threshhold'])
 
     def get_episodes(self):
