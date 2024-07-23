@@ -129,7 +129,6 @@ class RelationEntityGrapher(object):
             while G_sub.number_of_edges() > self.class_threshhold:
                 
                 node_with_highest_degree = max(sub_nodes, key=lambda n: G_sub.out_degree(n))  # get the node with the most participating edges of this type
-                #print(f'Working on node {node_with_highest_degree} with {G_sub.out_degree(node_with_highest_degree)} outgoing connections')
                 # Find the neighbor of node_with_highest_degree with the largest degree
                 neighbors = [node for node in nx.neighbors(G_sub, node_with_highest_degree)]
                 neighbor_of_highest_degree = max(neighbors, key=lambda n: G_sub.out_degree(n))
@@ -138,7 +137,6 @@ class RelationEntityGrapher(object):
                 self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
                 if edge_type in self.paired_relation_vocab:
                     self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
-                    # todo remove reverse edge type
                 count += 1
                 if count % 1000 == 0:
                     print(count, self.G.number_of_edges())
