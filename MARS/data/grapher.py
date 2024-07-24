@@ -23,7 +23,7 @@ def sum_dicts(dict1, dict2):
 
 class RelationEntityGrapher(object):
     def __init__(self, triple_store, entity_vocab, relation_vocab, 
-                 max_branching, graph_output_file, class_threshhold=None):
+                 max_branching, graph_output_file, class_threshhold=None, nx_graph_obj=None):
         """Initializes the creation of the graph.
             :param triple_store: the file location of the KG triples
             :param entity_vocab: the file location of the ID mappings for entities
@@ -31,15 +31,13 @@ class RelationEntityGrapher(object):
             :param max_branching: the max number of outgoing edges from any given source node
             :param graph_output_file: the output file to which the networkx graph should be written.
             :param class_threshhold: (optional) the max number of edges of any class to keep in the graph
+            :param nx_graph_obj: a networkx graph object to be used instead of creating a new one
         """
         self.ePAD = entity_vocab['PAD']  # the ID of the PAD token for entities
         self.rPAD = relation_vocab['PAD']  # the ID of the PAD token for relations
         self.triple_store = triple_store
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
-        self.G = nx.MultiDiGraph()
-        self.nx_output = graph_output_file
-        self.class_threshhold = class_threshhold
         # self.store is a dictionary storing all the connections from a node
         self.store = None
         self.hubs = set()
@@ -59,8 +57,15 @@ class RelationEntityGrapher(object):
                 k_pair = f'_{k}'
             if k_pair in self.relation_vocab.keys():
                 self.paired_relation_vocab[v] = self.relation_vocab[k_pair]
-        self.create_graph()
-        print("KG constructed.")
+        if nx_graph_obj:
+            self.G = nx_graph_obj
+            print("KG loaded.")
+        else:
+            self.G = nx.MultiDiGraph()
+            self.nx_output = graph_output_file
+            self.class_threshhold = class_threshhold
+            self.create_graph()
+            print("KG constructed.")
 
     def create_graph(self):
         """Stores all of the KG triples in a networkx graph
