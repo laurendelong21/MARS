@@ -1,4 +1,5 @@
 import numpy as np
+import networkx as nx
 from MARS.data.grapher import RelationEntityGrapher
 from MARS.data.feed_data import RelationEntityBatcher
 
@@ -99,12 +100,16 @@ class Env(object):
         nx_output = output_dir + 'nx_graph.graphml'
 
         # create the KG
-        self.grapher = RelationEntityGrapher(triple_store=triple_store,
-                                             entity_vocab=params['entity_vocab'],
-                                             relation_vocab=params['relation_vocab'],
-                                             max_branching=params['max_branching'],
-                                             graph_output_file=nx_output,
-                                             class_threshhold=params['class_threshhold'])
+        if mode == 'train':
+            self.grapher = RelationEntityGrapher(triple_store=triple_store,
+                                                entity_vocab=params['entity_vocab'],
+                                                relation_vocab=params['relation_vocab'],
+                                                max_branching=params['max_branching'],
+                                                graph_output_file=nx_output,
+                                                class_threshhold=params['class_threshhold'])
+        else:
+            self.grapher = nx.read_graphml(nx_output)
+
         
         self.batcher = RelationEntityBatcher(input_dir=input_dir,
                                                 batch_size=params['batch_size'],
