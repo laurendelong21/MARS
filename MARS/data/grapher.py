@@ -45,7 +45,7 @@ class RelationEntityGrapher(object):
         self.store = None
         # self.array_store is a 3D array initialized with the PAD values
         # it contains a 2D matrix for entities and relations each
-        if np_graph_array:
+        if np_graph_array is not None:
             self.array_store = np_graph_array
         else:
             self.array_store = np.ones((len(entity_vocab), max_branching, 2), dtype=np.dtype('int32'))
