@@ -107,8 +107,13 @@ class Env(object):
                                                 max_branching=params['max_branching'],
                                                 graph_output_file=nx_output,
                                                 class_threshhold=params['class_threshhold'])
+            
         else:
-            self.grapher = nx.read_graphml(nx_output)
+            self.grapher = RelationEntityGrapher(triple_store=triple_store,
+                                                entity_vocab=params['entity_vocab'],
+                                                relation_vocab=params['relation_vocab'],
+                                                max_branching=params['max_branching'],
+                                                nx_graph_obj=nx.read_graphml(nx_output))
 
         
         self.batcher = RelationEntityBatcher(input_dir=input_dir,

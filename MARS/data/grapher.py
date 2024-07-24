@@ -23,7 +23,7 @@ def sum_dicts(dict1, dict2):
 
 class RelationEntityGrapher(object):
     def __init__(self, triple_store, entity_vocab, relation_vocab, 
-                 max_branching, graph_output_file, class_threshhold=None, nx_graph_obj=None):
+                 max_branching, graph_output_file=None, class_threshhold=None, nx_graph_obj=None):
         """Initializes the creation of the graph.
             :param triple_store: the file location of the KG triples
             :param entity_vocab: the file location of the ID mappings for entities
