@@ -47,7 +47,7 @@ class RelationEntityBatcher(object):
         self.store = []
         with open(input_file) as raw_input_file:
             csv_file = csv.reader(raw_input_file, delimiter='\t')
-            no_path = 0
+            no_path = 10
             if self.mode == 'train':
                 for line in csv_file:
                     # read in each triple and map it to its unique ID
