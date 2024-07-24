@@ -113,7 +113,10 @@ class Env(object):
                                                 entity_vocab=params['entity_vocab'],
                                                 relation_vocab=params['relation_vocab'],
                                                 max_branching=params['max_branching'],
-                                                nx_graph_obj=nx.read_graphml(nx_output))
+                                                nx_graph_obj=nx.read_graphml(nx_output,
+                                                                             node_type=int,
+                                                                             edge_key_type=int,
+                                                                             force_multigraph=True))
 
         
         self.batcher = RelationEntityBatcher(input_dir=input_dir,
