@@ -25,7 +25,6 @@ class RelationEntityBatcher(object):
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
         self.KG = nx_graph
-        print(self.KG.nodes)
         self.mode = mode
         self.create_triple_store(self.input_file)
         print("Batcher loaded.")
@@ -48,7 +47,7 @@ class RelationEntityBatcher(object):
         self.store = []
         with open(input_file) as raw_input_file:
             csv_file = csv.reader(raw_input_file, delimiter='\t')
-            no_path = 10
+            no_path = 0
             if self.mode == 'train':
                 for line in csv_file:
                     # read in each triple and map it to its unique ID

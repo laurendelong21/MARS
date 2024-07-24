@@ -22,8 +22,9 @@ def sum_dicts(dict1, dict2):
 
 
 class RelationEntityGrapher(object):
-    def __init__(self, triple_store, entity_vocab, relation_vocab, 
-                 max_branching, graph_output_file=None, class_threshhold=None, nx_graph_obj=None):
+    def __init__(self, triple_store, entity_vocab, relation_vocab, max_branching, 
+                 graph_output_file=None, class_threshhold=None, nx_graph_obj=None, 
+                 np_graph_file=None, np_graph_array=None):
         """Initializes the creation of the graph.
             :param triple_store: the file location of the KG triples
             :param entity_vocab: the file location of the ID mappings for entities
@@ -32,6 +33,8 @@ class RelationEntityGrapher(object):
             :param graph_output_file: the output file to which the networkx graph should be written.
             :param class_threshhold: (optional) the max number of edges of any class to keep in the graph
             :param nx_graph_obj: a networkx graph object to be used instead of creating a new one
+            :param np_graph_file: the output file to which the numpy array should be written
+            :param np_graph_array: a numpy array to be used instead of creating a new one
         """
         self.ePAD = entity_vocab['PAD']  # the ID of the PAD token for entities
         self.rPAD = relation_vocab['PAD']  # the ID of the PAD token for relations
@@ -40,12 +43,15 @@ class RelationEntityGrapher(object):
         self.relation_vocab = relation_vocab
         # self.store is a dictionary storing all the connections from a node
         self.store = None
-        self.hubs = set()
         # self.array_store is a 3D array initialized with the PAD values
         # it contains a 2D matrix for entities and relations each
-        self.array_store = np.ones((len(entity_vocab), max_branching, 2), dtype=np.dtype('int32'))
-        self.array_store[:, :, 0] *= self.ePAD
-        self.array_store[:, :, 1] *= self.rPAD
+        if np_graph_array:
+            self.array_store = np_graph_array
+        else:
+            self.array_store = np.ones((len(entity_vocab), max_branching, 2), dtype=np.dtype('int32'))
+            self.array_store[:, :, 0] *= self.ePAD
+            self.array_store[:, :, 1] *= self.rPAD
+            self.np_output = np_graph_file
         self.masked_array_store = None
         self.rev_entity_vocab = dict([(v, k) for k, v in entity_vocab.items()])
         self.rev_relation_vocab = dict([(v, k) for k, v in relation_vocab.items()])
@@ -59,7 +65,7 @@ class RelationEntityGrapher(object):
                 self.paired_relation_vocab[v] = self.relation_vocab[k_pair]
         if nx_graph_obj:
             self.G = nx_graph_obj
-            print("KG loaded.")
+            print("KG re-loaded.")
         else:
             self.G = nx.MultiDiGraph()
             self.nx_output = graph_output_file
@@ -96,7 +102,9 @@ class RelationEntityGrapher(object):
 
     def return_graph(self):
         return self.G
-
+    
+    def return_array_store(self):
+        return self.array_store
 
     def get_edge_counter(self):
         """Gets a counter dictionary of the edge types in the graph"""
@@ -180,6 +188,8 @@ class RelationEntityGrapher(object):
                 self.array_store[source_node, num_actions, 0] = target_node
                 self.array_store[source_node, num_actions, 1] = self.G.get_edge_data(source_node, target_node)[0]['type']
                 num_actions += 1
+
+        np.save(self.np_output, self.array_store)
 
 
     def return_next_actions(self, current_entities, start_entities, query_relations, end_entities, all_correct_answers,
