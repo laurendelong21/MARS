@@ -54,7 +54,7 @@ class RelationEntityBatcher(object):
                     e1 = self.entity_vocab[line[0]]
                     r = self.relation_vocab[line[1]]
                     e2 = self.entity_vocab[line[2]]
-                    if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2):
+                    if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2) and nx.shortest_path_length(self.KG, e1, e2) < 4:
                         self.store.append([e1, r, e2])
                         # this line is unique to the training set- we only want the labels in the training set so no leakage
                         self.store_all_correct[(e1, r)].add(e2)
@@ -70,7 +70,7 @@ class RelationEntityBatcher(object):
                         e1 = self.entity_vocab[e1]
                         r = self.relation_vocab[r]
                         e2 = self.entity_vocab[e2]
-                        if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2):
+                        if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2) and nx.shortest_path_length(self.KG, e1, e2) < 4:
                             self.store.append([e1, r, e2])
                         else:
                             no_path += 1
@@ -89,7 +89,7 @@ class RelationEntityBatcher(object):
                                 e1 = self.entity_vocab[e1]
                                 r = self.relation_vocab[r]
                                 e2 = self.entity_vocab[e2]
-                                if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2):
+                                if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2) and nx.shortest_path_length(self.KG, e1, e2) < 4:
                                     # here, we now store ALL possible labels 
                                     self.store_all_correct[(e1, r)].add(e2)
 
