@@ -176,7 +176,6 @@ class RelationEntityGrapher(object):
             # first, give the agent the option to remain at every source node:
             self.array_store[source_node, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
             self.array_store[source_node, 0, 0] = source_node  # self-connection / stay where you are
-            pruned_G.add_edge(source_node, source_node, type=self.relation_vocab['NO_OP'])
             num_actions = 1
 
             # shuffle the keys so the order is not determined by the input file
