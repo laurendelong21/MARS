@@ -169,11 +169,14 @@ class RelationEntityGrapher(object):
 
     def prune_graph(self):
         """Prunes the graph to the specified branching factor"""
+        pruned_G = nx.MultiDiGraph()
         source_nodes = [node for node in self.G.nodes() if self.G.out_degree(node) > 0]
         for source_node in source_nodes :  # for every source node / dict key
+            pruned_G.add_node(source_node)
             # first, give the agent the option to remain at every source node:
             self.array_store[source_node, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
             self.array_store[source_node, 0, 0] = source_node  # self-connection / stay where you are
+            pruned_G.add_edge(source_node, source_node, type=self.relation_vocab['NO_OP'])
             num_actions = 1
 
             # shuffle the keys so the order is not determined by the input file
@@ -184,12 +187,16 @@ class RelationEntityGrapher(object):
                 # if we reached the max number of actions, stop
                 if num_actions == self.array_store.shape[1]:
                     break
+                pruned_G.add_node(target_node)
                 # store the number of the current outgoing edge as an index
                 self.array_store[source_node, num_actions, 0] = target_node
-                self.array_store[source_node, num_actions, 1] = self.G.get_edge_data(source_node, target_node)[0]['type']
+                edge_type = self.G.get_edge_data(source_node, target_node)[0]['type']
+                self.array_store[source_node, num_actions, 1] = edge_type
+                pruned_G.add_edge(source_node, target_node, type=edge_type)
                 num_actions += 1
 
         np.save(self.np_output, self.array_store)
+        self.G = pruned_G
 
 
     def return_next_actions(self, current_entities, start_entities, query_relations, end_entities, all_correct_answers,
