@@ -24,6 +24,7 @@ def sum_dicts(dict1, dict2):
 class RelationEntityGrapher(object):
     def __init__(self, triple_store, entity_vocab, relation_vocab, max_branching, 
                  graph_output_file=None, class_threshhold=None, nx_graph_obj=None, 
+                 pruned_output_file=None, pruned_graph_obj=None,
                  np_graph_file=None, np_graph_array=None):
         """Initializes the creation of the graph.
             :param triple_store: the file location of the KG triples
@@ -65,10 +66,13 @@ class RelationEntityGrapher(object):
                 self.paired_relation_vocab[v] = self.relation_vocab[k_pair]
         if nx_graph_obj:
             self.G = nx_graph_obj
+            self.pruned_G = pruned_graph_obj
             print("KG re-loaded.")
         else:
             self.G = nx.MultiDiGraph()
+            self.pruned_G = nx.MultiDiGraph()
             self.nx_output = graph_output_file
+            self.pruned_nx_output = pruned_output_file
             self.class_threshhold = class_threshhold
             self.create_graph()
             print("KG constructed.")
@@ -98,6 +102,7 @@ class RelationEntityGrapher(object):
 
         # write graph to file
         nx.write_graphml(self.G, self.nx_output)
+        nx.write_graphml(self.pruned_G, self.pruned_nx_output)
 
 
     def return_graph(self):
@@ -202,7 +207,7 @@ class RelationEntityGrapher(object):
                 num_actions += 1
 
         np.save(self.np_output, self.array_store)
-        self.G = pruned_G
+        self.pruned_G = pruned_G
 
 
     def return_next_actions(self, current_entities, start_entities, query_relations, end_entities, all_correct_answers,

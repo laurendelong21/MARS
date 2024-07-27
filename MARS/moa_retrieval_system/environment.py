@@ -98,6 +98,7 @@ class Env(object):
         output_dir = params['base_output_dir']
         triple_store = input_dir + 'graph.txt'
         nx_output = output_dir + 'nx_graph.graphml'
+        pruned_output = output_dir + 'pruned_graph.graphml'
         np_output = output_dir + 'np_graph.npy'
 
         # create the KG
@@ -107,6 +108,7 @@ class Env(object):
                                                 relation_vocab=params['relation_vocab'],
                                                 max_branching=params['max_branching'],
                                                 graph_output_file=nx_output,
+                                                pruned_output_file=pruned_output,
                                                 np_graph_file=np_output,
                                                 class_threshhold=params['class_threshhold'])
             
@@ -116,6 +118,10 @@ class Env(object):
                                                 relation_vocab=params['relation_vocab'],
                                                 max_branching=params['max_branching'],
                                                 nx_graph_obj=nx.read_graphml(nx_output,
+                                                                             node_type=int,
+                                                                             edge_key_type=int,
+                                                                             force_multigraph=True),
+                                                pruned_graph_obj=nx.read_graphml(pruned_output,
                                                                              node_type=int,
                                                                              edge_key_type=int,
                                                                              force_multigraph=True),
