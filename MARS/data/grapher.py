@@ -111,8 +111,14 @@ class RelationEntityGrapher(object):
     def return_directed_graph(self):
         desired_edge_types = {'CdG', 'GpBP', 'CtBP', 'CuG', 'GiG', '_GiG'}
         desired_edge_types = {self.relation_vocab[i] for i in desired_edge_types}
-        filtered_edges = {u: {v: {key: {'type': data['type']}}} for u, v, key, data in self.G.edges(data=True, keys=True)}
-        dir_G = nx.MultiDiGraph(filtered_edges, multigraph_input=True)
+        dir_G = nx.MultiDiGraph()
+        for edge in self.G.edges(data=True):
+            if edge[2]['type'] in desired_edge_types:
+                if edge[0] not in dir_G.nodes:
+                    dir_G.add_node(edge[0])
+                if edge[1] not in dir_G.nodes:
+                    dir_G.add_node(edge[1])
+                dir_G.add_edge(edge[0], edge[1], type=edge[2]['type'])
         return dir_G
 
     def return_array_store(self):
