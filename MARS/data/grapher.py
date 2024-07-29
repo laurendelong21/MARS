@@ -157,7 +157,7 @@ class RelationEntityGrapher(object):
             if edge_types[edge_type] <= self.class_threshhold:
                 continue
 
-            G_sub = self.get_subgraph(set(edge_type))
+            G_sub = self.get_subgraph({edge_type})
             sub_nodes = list(G_sub)
 
             while G_sub.number_of_edges() > self.class_threshhold:
