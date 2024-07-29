@@ -111,14 +111,7 @@ class RelationEntityGrapher(object):
     def return_directed_graph(self):
         desired_edge_types = {'CdG', 'GpBP', 'CtBP', 'CuG', 'GiG'}
         desired_edge_types = {self.relation_vocab[i] for i in desired_edge_types}
-        dir_G = nx.MultiDiGraph()
-        for edge in self.G.edges(data=True):
-            if edge[2]['type'] in desired_edge_types:
-                if edge[0] not in dir_G.nodes:
-                    dir_G.add_node(edge[0])
-                if edge[1] not in dir_G.nodes:
-                    dir_G.add_node(edge[1])
-                dir_G.add_edge(edge[0], edge[1], type=edge[2]['type'])
+        dir_G = self.get_subgraph(desired_edge_types)
         return dir_G
 
     def return_array_store(self):
@@ -134,10 +127,11 @@ class RelationEntityGrapher(object):
         return edge_types
     
 
-    def get_subgraph(self, edge_type):
+    def get_subgraph(self, edge_types):
+        """Given a set of edge types, returns a subgraph of the KG containing only those edge types."""
         G_sub = nx.MultiDiGraph()
         for edge in self.G.edges(data=True):
-            if edge[2]['type'] == edge_type:
+            if edge[2]['type'] in edge_types:
                 if edge[0] not in G_sub.nodes:
                     G_sub.add_node(edge[0])
                 if edge[1] not in G_sub.nodes:
@@ -164,7 +158,7 @@ class RelationEntityGrapher(object):
             if edge_types[edge_type] <= self.class_threshhold:
                 continue
 
-            G_sub = self.get_subgraph(edge_type)
+            G_sub = self.get_subgraph(set(edge_type))
             sub_nodes = list(G_sub)
 
             while G_sub.number_of_edges() > self.class_threshhold:
