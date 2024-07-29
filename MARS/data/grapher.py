@@ -109,9 +109,8 @@ class RelationEntityGrapher(object):
         return self.G
     
     def return_directed_graph(self):
-        desired_edge_types = {'CdG', 'GpBP', 'CtBP', 'CuG', 'GiG'}
-        desired_edge_types = {self.relation_vocab[i] for i in desired_edge_types}
-        dir_G = self.get_subgraph(desired_edge_types)
+        forward_edge_types = {val for key, val in self.relation_vocab.items() if '_' not in key}
+        dir_G = self.get_subgraph(forward_edge_types)
         return dir_G
 
     def return_array_store(self):
