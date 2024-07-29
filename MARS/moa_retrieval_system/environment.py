@@ -132,6 +132,7 @@ class Env(object):
                                                 batch_size=params['batch_size'],
                                                 entity_vocab=params['entity_vocab'],
                                                 relation_vocab=params['relation_vocab'],
+                                                path_len=self.path_len,
                                                 nx_graph=self.grapher.return_directed_graph(),
                                                 mode=mode)
         

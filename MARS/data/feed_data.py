@@ -8,12 +8,14 @@ from collections import defaultdict
 
 
 class RelationEntityBatcher(object):
-    def __init__(self, input_dir, batch_size, entity_vocab, relation_vocab, nx_graph, mode="train"):
+    def __init__(self, input_dir, batch_size, entity_vocab, relation_vocab, 
+                 path_len, nx_graph, mode="train"):
         """Creates the training or test dataset
         :param input_dir: the input directory where the data files are
         :param batch_size: the size of the sampled batch (specified by user in configs)
         :param entity_vocab: dictionary mapping the entities to their unique IDs
         :param relation_vocab: dictionary mapping the relations to their unique IDs
+        :param path_len: the maximum path length to consider
         :param nx_graph = the networkx graph object representing the whole KG
         :param mode: whether it should be for the training set or the test set
         """
@@ -24,6 +26,7 @@ class RelationEntityBatcher(object):
         print('Reading vocab...')
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
+        self.path_len = path_len
         self.KG = nx_graph
         self.mode = mode
         self.create_triple_store(self.input_file)
@@ -54,7 +57,7 @@ class RelationEntityBatcher(object):
                     e1 = self.entity_vocab[line[0]]
                     r = self.relation_vocab[line[1]]
                     e2 = self.entity_vocab[line[2]]
-                    if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2) and nx.shortest_path_length(self.KG, e1, e2) <= 4:
+                    if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2) and nx.shortest_path_length(self.KG, e1, e2) <= self.path_len:
                         self.store.append([e1, r, e2])
                         # this line is unique to the training set- we only want the labels in the training set so no leakage
                         self.store_all_correct[(e1, r)].add(e2)
@@ -70,7 +73,7 @@ class RelationEntityBatcher(object):
                         e1 = self.entity_vocab[e1]
                         r = self.relation_vocab[r]
                         e2 = self.entity_vocab[e2]
-                        if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2) and nx.shortest_path_length(self.KG, e1, e2) <= 4:
+                        if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2) and nx.shortest_path_length(self.KG, e1, e2) <= self.path_len:
                             self.store.append([e1, r, e2])
                         else:
                             no_path += 1
@@ -89,7 +92,7 @@ class RelationEntityBatcher(object):
                                 e1 = self.entity_vocab[e1]
                                 r = self.relation_vocab[r]
                                 e2 = self.entity_vocab[e2]
-                                if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2) and nx.shortest_path_length(self.KG, e1, e2) <= 4:
+                                if e1 in self.KG and e2 in self.KG and nx.has_path(self.KG, e1, e2) and nx.shortest_path_length(self.KG, e1, e2) <= self.path_len:
                                     # here, we now store ALL possible labels 
                                     self.store_all_correct[(e1, r)].add(e2)
 
