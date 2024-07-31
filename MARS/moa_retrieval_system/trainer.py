@@ -838,8 +838,6 @@ if __name__ == '__main__':
                 best_permutation = permutation
             tf.compat.v1.reset_default_graph()
 
-        print(f"Best permutation: {best_permutation}")
-
         # Testing on test set with best model
         best_permutation['old_output_dir'] = best_permutation['output_dir']
         best_permutation = initialize_setting(best_permutation, relation_vocab, entity_vocab, mode='test')
