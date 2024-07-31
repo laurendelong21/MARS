@@ -30,7 +30,7 @@ class RelationEntityBatcher(object):
         self.KG = nx_graph
         self.mode = mode
         self.create_triple_store(self.input_file)
-        print("Batcher loaded.")
+        print(f"{self.mode} set batcher loaded.")
 
     def get_next_batch(self):
         """generator which yields the next batch of data"""
@@ -97,7 +97,7 @@ class RelationEntityBatcher(object):
                                     self.store_all_correct[(e1, r)].add(e2)
 
             if no_path > 0:
-                print(f'WARNING: {no_path} triples in the {self.mode} are disconnected and were ommitted.')
+                print(f'WARNING: {no_path} triples in the {self.mode} set have no path (length <= {self.path_len}) through the directed edges, and were omitted.')
                 
 
     def yield_next_batch_train(self):

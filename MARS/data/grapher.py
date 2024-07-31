@@ -160,6 +160,8 @@ class RelationEntityGrapher(object):
             G_sub = self.get_subgraph({edge_type})
             sub_nodes = list(G_sub)
 
+            print(f'Pruning edges of type {self.rev_relation_vocab[edge_type]} to <= {self.class_threshhold} edges...')
+
             while G_sub.number_of_edges() > self.class_threshhold:
                 
                 node_with_highest_degree = max(sub_nodes, key=lambda n: G_sub.out_degree(n))  # get the node with the most participating edges of this type
@@ -173,7 +175,9 @@ class RelationEntityGrapher(object):
                     self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
                 count += 1
                 if count % 1000 == 0:
-                    print(count, self.G.number_of_edges())
+                    print(f'Number of edges left in graph: {self.G.number_of_edges()}')
+
+            print(f'Finished with edge type: {self.rev_relation_vocab[edge_type]}.')
 
         self.remove_isolated_nodes()
 
