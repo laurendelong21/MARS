@@ -1,21 +1,41 @@
 import csv
 import numpy as np
-from collections import defaultdict
+from collections import Counter, defaultdict
 import random
+import networkx as nx
 
 
 """The script responsible for generating the graph structure and next steps, 
 but for each step, ensures to mask the connections representing the true answers so there is no cheating
 """
 
+def sum_dicts(dict1, dict2):
+    """Gets the sum of the values in the two dicts"""
+    new_dict = dict()
+    for key in set(dict1.keys()) & set(dict2.keys()):
+        new_dict[key] = dict1[key] + dict2[key]
+    for key in set(dict1.keys()) - set(dict2.keys()):
+        new_dict[key] = dict1[key]
+    for key in set(dict2.keys()) - set(dict1.keys()):
+        new_dict[key] = dict2[key]
+    return new_dict
+
 
 class RelationEntityGrapher(object):
-    def __init__(self, triple_store, entity_vocab, relation_vocab, max_branching):
+    def __init__(self, triple_store, entity_vocab, relation_vocab, max_branching, 
+                 graph_output_file=None, class_threshhold=None, nx_graph_obj=None, 
+                 pruned_output_file=None, pruned_graph_obj=None,
+                 np_graph_file=None, np_graph_array=None):
         """Initializes the creation of the graph.
             :param triple_store: the file location of the KG triples
             :param entity_vocab: the file location of the ID mappings for entities
             :param relation_vocab: the file location of the ID mappings for relations
-            :param max_branching: the max number of outgoing edges from any given source node 
+            :param max_branching: the max number of outgoing edges from any given source node
+            :param graph_output_file: the output file to which the networkx graph should be written.
+            :param class_threshhold: (optional) the max number of edges of any class to keep in the graph
+            :param nx_graph_obj: a networkx graph object to be used instead of creating a new one
+            :param np_graph_file: the output file to which the numpy array should be written
+            :param np_graph_array: a numpy array to be used instead of creating a new one
         """
         self.ePAD = entity_vocab['PAD']  # the ID of the PAD token for entities
         self.rPAD = relation_vocab['PAD']  # the ID of the PAD token for relations
@@ -23,24 +43,42 @@ class RelationEntityGrapher(object):
         self.entity_vocab = entity_vocab
         self.relation_vocab = relation_vocab
         # self.store is a dictionary storing all the connections from a node
-        self.store = defaultdict(dict)
-        self.hubs = set()
+        self.store = None
         # self.array_store is a 3D array initialized with the PAD values
         # it contains a 2D matrix for entities and relations each
-        self.array_store = np.ones((len(entity_vocab), max_branching, 2), dtype=np.dtype('int32'))
-        self.array_store[:, :, 0] *= self.ePAD
-        self.array_store[:, :, 1] *= self.rPAD
+        if np_graph_array is not None:
+            self.array_store = np_graph_array
+        else:
+            self.array_store = np.ones((len(entity_vocab), max_branching, 2), dtype=np.dtype('int32'))
+            self.array_store[:, :, 0] *= self.ePAD
+            self.array_store[:, :, 1] *= self.rPAD
+            self.np_output = np_graph_file
         self.masked_array_store = None
         self.rev_entity_vocab = dict([(v, k) for k, v in entity_vocab.items()])
         self.rev_relation_vocab = dict([(v, k) for k, v in relation_vocab.items()])
-        self.create_graph()
-        print("KG constructed.")
+        self.paired_relation_vocab = dict()
+        for k, v in relation_vocab.items():
+            if '_' in k:
+                k_pair = k.strip('_')
+            else:
+                k_pair = f'_{k}'
+            if k_pair in self.relation_vocab.keys():
+                self.paired_relation_vocab[v] = self.relation_vocab[k_pair]
+        if nx_graph_obj:
+            self.G = nx_graph_obj
+            self.pruned_G = pruned_graph_obj
+            print("KG re-loaded.")
+        else:
+            self.G = nx.MultiDiGraph()
+            self.pruned_G = nx.MultiDiGraph()
+            self.nx_output = graph_output_file
+            self.pruned_nx_output = pruned_output_file
+            self.class_threshhold = class_threshhold
+            self.create_graph()
+            print("KG constructed.")
 
     def create_graph(self):
-        """Stores all of the KG triples in self.array_store so that the matrix values
-            are either the receiving node or the relation, and
-            the relation connecting the two nodes is in the same position in its
-            respective matrix as the entity toward which the edge is going
+        """Stores all of the KG triples in a networkx graph
         """
         with open(self.triple_store) as triple_file_raw:
             triple_file = csv.reader(triple_file_raw, delimiter='\t')
@@ -49,49 +87,130 @@ class RelationEntityGrapher(object):
                 e1 = self.entity_vocab[line[0]]
                 r = self.relation_vocab[line[1]]
                 e2 = self.entity_vocab[line[2]]
-                # store each connection from the starting node
-                self.store[e1][e2] = r
-            
-            # locate hub proteins (those with > max branching factor)
-            self.hubs = {prot for prot in self.store.keys() if len(self.store[prot]) > self.array_store.shape[1]} 
 
-            # prune by the branching factor
-            self.prune_graph()
+                if e1 not in self.G.nodes:
+                    self.G.add_node(e1)
+                if e2 not in self.G.nodes:
+                    self.G.add_node(e2)
+                self.G.add_edge(e1, e2, type=r)
+
+        if self.class_threshhold:
+            self.reduce_graph()
+
+        # prune by the branching factor
+        self.prune_graph()
+
+        # write graph to file
+        nx.write_graphml(self.G, self.nx_output)
+        nx.write_graphml(self.pruned_G, self.pruned_nx_output)
+
+
+    def return_graph(self):
+        return self.G
+    
+    def return_directed_graph(self):
+        forward_edge_types = {val for key, val in self.relation_vocab.items() if '_' not in key}
+        dir_G = self.get_subgraph(forward_edge_types)
+        return dir_G
+
+    def return_array_store(self):
+        return self.array_store
+
+    def get_edge_counter(self):
+        """Gets a counter dictionary of the edge types in the graph"""
+        edge_types = list()
+        for edge in self.G.edges(data=True):
+            edge_type = edge[2]['type']
+            edge_types.append(edge_type)
+        edge_types = dict(Counter(edge_types))
+        return edge_types
+    
+
+    def get_subgraph(self, edge_types):
+        """Given a set of edge types, returns a subgraph of the KG containing only those edge types."""
+        G_sub = nx.MultiDiGraph()
+        for edge in self.G.edges(data=True):
+            if edge[2]['type'] in edge_types:
+                if edge[0] not in G_sub.nodes:
+                    G_sub.add_node(edge[0])
+                if edge[1] not in G_sub.nodes:
+                    G_sub.add_node(edge[1])
+                G_sub.add_edge(edge[0], edge[1], type=edge[2]['type'])
+
+        return G_sub
+    
+
+    def remove_isolated_nodes(self):
+        # remove isolated nodes
+        isolated_nodes = list(nx.isolates(self.G))
+        self.G.remove_nodes_from(isolated_nodes)
+
+
+    def reduce_graph(self):
+        """
+        If class_threshhold is passed, this will reduce the graph by removing edges of any classes above the threshhold.
+        """
+        edge_types = self.get_edge_counter()
+        count = 0
+
+        for edge_type in edge_types.keys():
+            if edge_types[edge_type] <= self.class_threshhold:
+                continue
+
+            G_sub = self.get_subgraph({edge_type})
+            sub_nodes = list(G_sub)
+
+            print(f'Pruning edges of type {self.rev_relation_vocab[edge_type]} to <= {self.class_threshhold} edges...')
+
+            while G_sub.number_of_edges() > self.class_threshhold:
+                
+                node_with_highest_degree = max(sub_nodes, key=lambda n: G_sub.out_degree(n))  # get the node with the most participating edges of this type
+                # Find the neighbor of node_with_highest_degree with the largest degree
+                neighbors = [node for node in nx.neighbors(G_sub, node_with_highest_degree)]
+                neighbor_of_highest_degree = max(neighbors, key=lambda n: G_sub.out_degree(n))
+                # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
+                G_sub.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
+                self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
+                if edge_type in self.paired_relation_vocab:
+                    self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
+                count += 1
+                if count % 1000 == 0:
+                    print(f'Number of edges left in graph: {self.G.number_of_edges()}')
+
+            print(f'Finished with edge type: {self.rev_relation_vocab[edge_type]}.')
+
+        self.remove_isolated_nodes()
 
 
     def prune_graph(self):
         """Prunes the graph to the specified branching factor"""
-        for e1 in self.store.keys():  # for every source node / dict key
+        pruned_G = nx.MultiDiGraph()
+        source_nodes = [node for node in self.G.nodes() if self.G.out_degree(node) > 0]
+        for source_node in source_nodes :  # for every source node / dict key
+            pruned_G.add_node(source_node)
             # first, give the agent the option to remain at every source node:
-            self.array_store[e1, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
-            self.array_store[e1, 0, 0] = e1  # self-connection / stay where you are
+            self.array_store[source_node, 0, 1] = self.relation_vocab['NO_OP']  # no operation / no movement
+            self.array_store[source_node, 0, 0] = source_node  # self-connection / stay where you are
             num_actions = 1
 
             # shuffle the keys so the order is not determined by the input file
-            target_nodes = list(self.store[e1].keys())
+            target_nodes = list(nx.neighbors(self.G, source_node))
             random.shuffle(target_nodes)
 
-            # what proportion are we pruning to?
-            #proportion = max((self.array_store.shape[1] / len(target_nodes)), 1)
-
-            # take a random sample of the hub nodes at that proportion
-            #sample_size = len(self.hubs) * proportion
-            #target_hubs = set(target_nodes) & self.hubs
-            #if len(target_hubs) > sample_size:
-            #    target_hubs = random.sample(target_hubs, int(sample_size))
-           # target_nodes = (set(target_nodes) - self.hubs) | target_hubs
-
-            for e2 in target_nodes:  # for each connecting node,
+            for target_node in target_nodes:  # for each connecting node,
                 # if we reached the max number of actions, stop
                 if num_actions == self.array_store.shape[1]:
                     break
+                pruned_G.add_node(target_node)
                 # store the number of the current outgoing edge as an index
-                self.array_store[e1, num_actions, 0] = e2
-                self.array_store[e1, num_actions, 1] = self.store[e1][e2]
+                self.array_store[source_node, num_actions, 0] = target_node
+                edge_type = self.G.get_edge_data(source_node, target_node)[0]['type']
+                self.array_store[source_node, num_actions, 1] = edge_type
+                pruned_G.add_edge(source_node, target_node, type=edge_type)
                 num_actions += 1
-        # delete self.store because it contains redundant info
-        del self.store
-        self.store = None
+
+        np.save(self.np_output, self.array_store)
+        self.pruned_G = pruned_G
 
 
     def return_next_actions(self, current_entities, start_entities, query_relations, end_entities, all_correct_answers,

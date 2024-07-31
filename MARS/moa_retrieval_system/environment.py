@@ -1,4 +1,5 @@
 import numpy as np
+import networkx as nx
 from MARS.data.grapher import RelationEntityGrapher
 from MARS.data.feed_data import RelationEntityBatcher
 
@@ -94,27 +95,50 @@ class Env(object):
         self.mode = mode
         self.path_len = params['path_length']
         input_dir = params['input_dir']
+        output_dir = params['base_output_dir']
         triple_store = input_dir + 'graph.txt'
+        nx_output = output_dir + 'nx_graph.graphml'
+        pruned_output = output_dir + 'pruned_graph.graphml'
+        np_output = output_dir + 'np_graph.npy'
 
+        # create the KG
         if mode == 'train':
-            self.batcher = RelationEntityBatcher(input_dir=input_dir,
-                                                 batch_size=params['batch_size'],
-                                                 entity_vocab=params['entity_vocab'],
-                                                 relation_vocab=params['relation_vocab'])
+            self.grapher = RelationEntityGrapher(triple_store=triple_store,
+                                                entity_vocab=params['entity_vocab'],
+                                                relation_vocab=params['relation_vocab'],
+                                                max_branching=params['max_branching'],
+                                                graph_output_file=nx_output,
+                                                pruned_output_file=pruned_output,
+                                                np_graph_file=np_output,
+                                                class_threshhold=params['class_threshhold'])
+            
         else:
-            self.batcher = RelationEntityBatcher(input_dir=input_dir,
-                                                 batch_size=params['batch_size'],
-                                                 entity_vocab=params['entity_vocab'],
-                                                 relation_vocab=params['relation_vocab'],
-                                                 mode=mode)
-            # if we are in validation or test mode, get the length of the batcher's attribute 'store' (total triples in dataset)
-            # TODO: write a method that returns this instead
+            self.grapher = RelationEntityGrapher(triple_store=triple_store,
+                                                entity_vocab=params['entity_vocab'],
+                                                relation_vocab=params['relation_vocab'],
+                                                max_branching=params['max_branching'],
+                                                nx_graph_obj=nx.read_graphml(nx_output,
+                                                                             node_type=int,
+                                                                             edge_key_type=int,
+                                                                             force_multigraph=True),
+                                                pruned_graph_obj=nx.read_graphml(pruned_output,
+                                                                             node_type=int,
+                                                                             edge_key_type=int,
+                                                                             force_multigraph=True),
+                                                np_graph_array=np.load(np_output))
+
+        
+        self.batcher = RelationEntityBatcher(input_dir=input_dir,
+                                                batch_size=params['batch_size'],
+                                                entity_vocab=params['entity_vocab'],
+                                                relation_vocab=params['relation_vocab'],
+                                                path_len=self.path_len,
+                                                nx_graph=self.grapher.return_directed_graph(),
+                                                mode=mode)
+        
+        if mode != 'train':       
             self.total_no_examples = self.batcher.store.shape[0]
 
-        self.grapher = RelationEntityGrapher(triple_store=triple_store,
-                                             entity_vocab=params['entity_vocab'],
-                                             relation_vocab=params['relation_vocab'],
-                                             max_branching=params['max_branching'])
 
     def get_episodes(self):
         params = self.batch_size, self.path_len, self.num_rollouts, self.test_rollouts, self.positive_reward, \

@@ -50,7 +50,6 @@ class Trainer(object):
         self.best_metric = -1
         self.early_stopping = False
         self.current_patience = self.patience
-        self.ratios = []
 
     def set_random_seeds(self, seed):
         if seed is not None:
@@ -516,12 +515,10 @@ class Trainer(object):
             # positive or negative reward values per starting node
             rewards = episode.get_rewards()
             # Here, they modify the rewards to take into account whether it fits rules.
-            rewards, rule_count, rule_count_body, self.rule_list, ratios = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
+            rewards, rule_count, rule_count_body, self.rule_list = modify_rewards(deepcopy(self.rule_list), arguments, query_rel_string,
                                                                             obj_string, self.Lambda, rewards,
                                                                             self.only_body, self.update_confs, self.alpha,
                                                                             self.batch_size, self.num_rollouts, self.mixing_ratio)
-            
-            self.ratios.extend(ratios)
             
             cum_discounted_rewards = self.calc_cum_discounted_rewards(rewards)
 
@@ -566,20 +563,10 @@ class Trainer(object):
             if self.early_stopping:
                 with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
                     json.dump(self.rule_list, rule_fl, indent=2)
-                # output the ratios before adjustment:
-                with open(self.output_dir + 'ratios.txt', 'w') as file:
-                # Write each element of the list to a new line in the file
-                    for item in self.ratios:
-                        file.write(str(item) + '\n')
                 break
             if self.batch_counter >= self.total_iterations:
                 with open(self.output_dir + 'confidences.txt', 'w') as rule_fl:
                     json.dump(self.rule_list, rule_fl, indent=2)
-                # output the ratios before adjustment:
-                with open(self.output_dir + 'ratios.txt', 'w') as file:
-                # Write each element of the list to a new line in the file
-                    for item in self.ratios:
-                        file.write(str(item) + '\n')
                 break
 
     def test(self, sess, print_paths=False, save_model=True, beam=True):
@@ -837,8 +824,6 @@ if __name__ == '__main__':
                 best_metric = trainer.best_metric
                 best_permutation = permutation
             tf.compat.v1.reset_default_graph()
-
-        print(f"Best permutation: {best_permutation}")
 
         # Testing on test set with best model
         best_permutation['old_output_dir'] = best_permutation['output_dir']

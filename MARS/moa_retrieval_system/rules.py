@@ -55,7 +55,7 @@ def p2h_probability(mpath, empirical_probs):
     return prob
 
 
-def update_confs_P2H(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.001, max_ratio=1000, ratios=[]):
+def update_confs_P2H(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.001, max_ratio=1000):
     """Updates the confidences in the rule list based on P2H empirical probabilities computed during the batch
     :param rule_dict: the rules and corresponding confidences
     :param empirical_probs: the dictionary of batch-specific empirical probabilities of length-2 metapaths
@@ -70,15 +70,14 @@ def update_confs_P2H(rule_dict, empirical_probs, alpha=0.1, min_ratio=0.001, max
             # get the P2H probability
             p2h_prob = p2h_probability(mpath[2::], empirical_probs)
             normed_prob = p2h_prob / (expected ** (len(mpath[2::])-1))  ## normalize it by the prob we expect
-            ratios.append(normed_prob)  # store the ratio for debugging
             # get new confidence value
             adjustment = map_ratio_to_penalty(normed_prob, alpha, min_ratio, max_ratio)
             new_conf = old_conf + (old_conf * adjustment)
             rule_dict[rule_head][rule_body_num][0] = str(max(min(1, new_conf), 0))  # bounds it between 0 and 1
-    return rule_dict, ratios
+    return rule_dict
 
 
-def update_confs_basic(rule_dict, no_rule_instances, rule_count, alpha=0.1, min_ratio=0.001, max_ratio=1000, ratios=[]):
+def update_confs_basic(rule_dict, no_rule_instances, rule_count, alpha=0.1, min_ratio=0.001, max_ratio=1000):
     """Updates confidences the basic way, based on number of occurrences of each rule
     :param rule_dict: the rules and corresponding confidences
     :param no_rule_instances: the number of instances of each rule
@@ -93,19 +92,18 @@ def update_confs_basic(rule_dict, no_rule_instances, rule_count, alpha=0.1, min_
         for rule_body_num, num_instances in rule_bodies.items():
             observed_prob = num_instances / rule_count
             normed_prob = observed_prob / expected_prob
-            ratios.append(normed_prob)  # store the ratio for debugging
             adjustment = map_ratio_to_penalty(normed_prob, alpha, min_ratio, max_ratio)
             old_conf = float(rule_dict[rule_head][rule_body_num][0])
             new_conf = old_conf + (old_conf * adjustment)
             rule_dict[rule_head][rule_body_num][0] = str(max(min(1, new_conf), 0))  # bounds it between 0 and 1
 
-    return rule_dict, ratios
+    return rule_dict
 
 
 def update_confs_mixed(rule_dict, no_rule_instances, rule_count, empirical_probs,
                        alpha=0.1, min_ratio_naive=0.001, max_ratio_naive=1000, 
                        min_ratio_p2h=0.001, max_ratio_p2h=1000, 
-                       mixing_ratio=0.5, ratios=[]):
+                       mixing_ratio=0.5):
     """Updates the confidences in the rule list based on a mix between 
                     P2H empirical probabilities and frequency-based probabilities
     :param rule_dict: the rules and corresponding confidences
@@ -130,7 +128,6 @@ def update_confs_mixed(rule_dict, no_rule_instances, rule_count, empirical_probs
             # frequency-based updates:
             observed_naive = num_instances / rule_count
             normed_naive = observed_naive / expected_naive
-            ratios.append(normed_naive)  # store the ratio for debugging
             adjustment_naive = map_ratio_to_penalty(normed_naive, alpha, min_ratio_naive, max_ratio_naive)
             adjustment_dict[rule_body_num] = adjustment_naive
 
@@ -138,7 +135,6 @@ def update_confs_mixed(rule_dict, no_rule_instances, rule_count, empirical_probs
         for rule_body_num, mpath in enumerate(rule_dict[rule_head]):
             p2h_prob = p2h_probability(mpath[2::], empirical_probs)
             normed_p2h = p2h_prob / (expected_p2h ** (len(mpath[2::])-1))  ## normalize it by the prob we expect
-            ratios.append(normed_p2h)  # store the ratio for debugging
             # get new confidence value
             adjustment_p2h = map_ratio_to_penalty(normed_p2h, alpha, min_ratio_p2h, max_ratio_p2h)
             adjustment_dict[rule_body_num] = mix_penalties(adjustment_dict[rule_body_num], 
@@ -149,7 +145,7 @@ def update_confs_mixed(rule_dict, no_rule_instances, rule_count, empirical_probs
             new_conf = old_conf + (old_conf * adjustment)
             rule_dict[rule_head][rule_body_num][0] = str(max(min(1, new_conf), 0))
 
-    return rule_dict, ratios
+    return rule_dict
 
     
 
@@ -236,7 +232,6 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, Lambda,
     :param rollouts: number of rollouts
     :param mixing_ratio: the ratio of the first penalty to the second penalty; default of 0.5 means equal weighting
     """
-    ratios = []
     rule_count = 0
     rule_count_body = 0
     if update_confs == 2 or update_confs == 3:
@@ -299,16 +294,16 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, Lambda,
             min_ratio_p2h = len(empirical_probs) / (batch_size * rollouts)
             max_ratio_p2h = len(empirical_probs) * batch_size * rollouts
 
-            rule_list, ratios = update_confs_mixed(rule_list, no_rule_instances, rule_count, empirical_probs, 
+            rule_list = update_confs_mixed(rule_list, no_rule_instances, rule_count, empirical_probs, 
                                                    alpha, min_ratio_naive, max_ratio_naive, 
-                                                   min_ratio_p2h, max_ratio_p2h, mixing_ratio, ratios)
+                                                   min_ratio_p2h, max_ratio_p2h, mixing_ratio)
 
     # the naive / simple option
     if update_confs == 1 and rule_count > 0:
         num_rules = len(sum([val for val in rule_list.values()], []))
         min_ratio = num_rules / (batch_size * rollouts)
         max_ratio = num_rules * batch_size * rollouts
-        rule_list, ratios = update_confs_basic(rule_list, no_rule_instances, rule_count, alpha, min_ratio, max_ratio, ratios)
+        rule_list = update_confs_basic(rule_list, no_rule_instances, rule_count, alpha, min_ratio, max_ratio)
 
     # the P2H option
     if update_confs == 2:
@@ -317,8 +312,8 @@ def modify_rewards(rule_list, arguments, query_rel_string, obj_string, Lambda,
             empirical_probs = {key: val/total_count for key, val in empirical_nums.items()}
             min_ratio = len(empirical_probs) / (batch_size * rollouts)
             max_ratio = len(empirical_probs) * batch_size * rollouts
-            rule_list, ratios = update_confs_P2H(rule_list, empirical_probs, alpha, min_ratio, max_ratio, ratios)
+            rule_list = update_confs_P2H(rule_list, empirical_probs, alpha, min_ratio, max_ratio)
 
     
 
-    return rewards, rule_count, rule_count_body, rule_list, ratios
+    return rewards, rule_count, rule_count_body, rule_list

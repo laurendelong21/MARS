@@ -6,7 +6,6 @@ def read_options():
     parser.add_argument('--input_dir', default='', type=str)
     parser.add_argument('--base_output_dir', default='', type=str)
     parser.add_argument('--rule_file', default='rules.txt', type=str)
-    parser.add_argument('--subgraphs_file', default='subgraphs.txt', type=str)
     parser.add_argument('--pretrained_embeddings_dir', default='', type=str)
     parser.add_argument('--load_model', default=0, type=int)
     parser.add_argument('--model_load_path', default='', type=str)
@@ -38,6 +37,7 @@ def read_options():
     parser.add_argument('--update_confs', default=0, type=int, nargs='+')
     parser.add_argument('--alpha', default=0.1, type=float, nargs='+')
     parser.add_argument('--mixing_ratio', default=0.5, type=float, nargs='+')
+    parser.add_argument('--class_threshhold', default=None, type=int, nargs='+')
 
     try:
         parsed = vars(parser.parse_args())
