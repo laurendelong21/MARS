@@ -134,10 +134,12 @@ class Env(object):
                                                 relation_vocab=params['relation_vocab'],
                                                 path_len=self.path_len,
                                                 nx_graph=self.grapher.return_directed_graph(),
-                                                mode=mode)
+                                                mode=mode,
+                                                output_dir=output_dir)
         
         if mode != 'train':       
             self.total_no_examples = self.batcher.store.shape[0]
+            self.batcher.write_set_file()
 
 
     def get_episodes(self):
