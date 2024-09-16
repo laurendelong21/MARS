@@ -1,1 +1,1 @@
-{"C": "Compound", "G": "Gene", "BP": "Biological Process", "u": "upregulates", "d": "downregulates", "i": "interacts", "p": "participates", "t": "induces", "A": "DNA-binding", "B": "Hydrolase", "D": "Receptor", "E": "Transferase"}
+{"C": "Compound", "G": "Gene", "BP": "Biological Process", "u": "upregulates", "d": "downregulates", "i": "interacts", "p": "participates", "t": "induces", "A": "DNA-binding", "B": "Receptor", "D": "Transferase"}
