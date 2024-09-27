@@ -14,12 +14,24 @@ This repository accompanies the source code and data relevant for the the paper 
 
 **MARS** is an acrynonym for **m**echanism-of-**a**ction **r**etrieval **s**ystem and is a [neurosymbolic AI](https://en.wikipedia.org/wiki/Neuro-symbolic_AI) approach to decipher MoAs for drug discovery.
 
+# Table of Content
+* [Overview](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-overview-)
+* [Cloning and Building](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-cloning-and-building-mars-)
+* [Graphs](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-data-formats-)
+* [Running] (https://github.com/laurendelong21/MARS?tab=readme-ov-file#-running-mars-)
+* [Replicate studies](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-replicate studies-)
+* [Additional source](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-other-resources-)
+
 
 ## Overview
 
 Neurosymbolic (NeSy) artificial intelligence describes the combination of logic or rule-based techniques with neural networks. Compared to neural approaches, NeSy methods often possess enhanced interpretability, which is particularly promising for biomedical applications like drug discovery. However, since interpretability is broadly defined, there are no clear guidelines for assessing the biological plausibility of model interpretations. To assess interpretability in the context of drug discovery, we devise a novel prediction task, called drug mechanism-of-action (MoA) deconvolution, with an associated, tailored knowledge graph (KG), *MoA-net*. We also develop the **MoA Retrieval System (MARS)**, a NeSy approach which leverages logical rules with learned rule weights. Using this interpretable feature alongside domain knowledge, we find that MARS and other NeSy approaches on KGs are susceptible to reasoning shortcuts, in which the prediction of true labels is driven by "degree-bias" rather than the domain-based rules. We demonstrate ways to identify and mitigate this, and, consequently, MARS retrieves more insightful MoA predictions alongside potential drug candidates.
 
-## Running MARS locally
+In our approach, we built a benchmark dataset called *MoA-Net*, that can be used by graph based algorithms for MoA deconvolution. The figure below shows: A) the graph schema or data model of *MoA-Net* and B) the node and edge statistics of *MoA-Net*.
+
+![MoAnet](figures/Neurosymbolic_schema.png)
+
+## Cloning and building MARS
 
 To run MARS locally, please clone the repository and create a virtual enviornment as show below:
 ```
@@ -37,8 +49,7 @@ $ source mars/bin/activate
 $ pip install -r requirements.txt
 ```
 
-
-# Data formats
+## Data formats
 
 ### MoA-Net
 
