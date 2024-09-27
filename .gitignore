@@ -10,3 +10,4 @@ datasets/*/graph.txt
 env/
 
 confidence_eval.ipynb
+run_hetionet.sh run_moa_no_inverse.sh run_moa_permuted.sh run_moa_protclass.sh run_moa.sh
