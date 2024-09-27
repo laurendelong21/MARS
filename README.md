@@ -2,6 +2,10 @@
 
 This is the code corresponding to MARS, the mechanism-of-action retrieval system for drug discovery.
 
+Ready to run?
+
+:arrow_right: Jump directly to **running MARS**[#run].
+
 <br>
 <h2> Installation and Setup </h2>
 
@@ -101,6 +105,7 @@ To run MARS, use one of the config files or create your own. For an explanation 
 
 <br>
 <h2> Run MARS: </h2>
+<a name="run"></a>
 
 Once you're ready to run MARS, use the `run.sh` bash script, followed by the proper configuration file:
 
@@ -133,13 +138,16 @@ For instance, if the user ran 5 iterations of a certain configuration:
 ./replicates.sh configs/${config_file}.sh 5
 ```
 <br>
-<h2> Analyze Results: </h2>
+<h3> Analyze Results: </h3>
 
-The user could then analyze the results within the corresponding directory, simply by running the following for the same configuration file:
+If replicates are conducted, the user could then analyze the results within the corresponding directory, simply by running the following for the same configuration file:
 
 ```
 ./process_results.sh configs/${config_file}.sh
 ```
+
+**Note** that this analysis only works with > 1 replicate.
+
 <br>
 <h2> Implementation:</h2>
 
