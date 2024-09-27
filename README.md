@@ -5,7 +5,7 @@ Mechanism-of-Action Retrieval System (MARS)
 <br>
 </h1>
 
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://github.com/laurendelong21/MARS/blob/main/LICENSE)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)]()
 ![Maturity level-1](https://img.shields.io/badge/Maturity%20Level-ML--1-yellow)
 [![PyPI pyversions](https://img.shields.io/badge/python-%3E%3D3.8-brightgreen)](https://img.shields.io/badge/python-%3E%3D3.8-brightgreen)
 
