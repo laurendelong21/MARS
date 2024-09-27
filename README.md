@@ -3,55 +3,55 @@
 <h1 align="center">
 Mechanism-of-Action Retrieval System (MARS)
 <br>
-</h1>
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)]()
 ![Maturity level-1](https://img.shields.io/badge/Maturity%20Level-ML--1-yellow)
 [![PyPI pyversions](https://img.shields.io/badge/python-%3E%3D3.8-brightgreen)](https://img.shields.io/badge/python-%3E%3D3.8-brightgreen)
 
-This is the code corresponding to MARS, the mechanism-of-action retrieval system for drug discovery.
+</h1>
 
-Ready to run? :arrow_right: Jump directly to [**running MARS**](#run).
+This repository accompanies the source code and data relevant for the the paper titled **"MARS: A neurosymbolic approach for interpretable drug discovery"**.
 
-<h2> Installation and Setup </h2>
+**MARS** is an acrynonym for **m**echanism-of-**a**ction **r**etrieval **s**ystem and is a [neurosymbolic AI](https://en.wikipedia.org/wiki/Neuro-symbolic_AI) approach to decipher MoAs for drug discovery.
 
-<h3>  Installation: </h3>
 
-Clone or move the MARS repository to the desired location. Then, create a virtual environment via the next steps.
+## Overview
 
-<h3>  Dependencies and Virtual Environment: </h3>
+Neurosymbolic (NeSy) artificial intelligence describes the combination of logic or rule-based techniques with neural networks. Compared to neural approaches, NeSy methods often possess enhanced interpretability, which is particularly promising for biomedical applications like drug discovery. However, since interpretability is broadly defined, there are no clear guidelines for assessing the biological plausibility of model interpretations. To assess interpretability in the context of drug discovery, we devise a novel prediction task, called drug mechanism-of-action (MoA) deconvolution, with an associated, tailored knowledge graph (KG), *MoA-net*. We also develop the **MoA Retrieval System (MARS)**, a NeSy approach which leverages logical rules with learned rule weights. Using this interpretable feature alongside domain knowledge, we find that MARS and other NeSy approaches on KGs are susceptible to reasoning shortcuts, in which the prediction of true labels is driven by "degree-bias" rather than the domain-based rules. We demonstrate ways to identify and mitigate this, and, consequently, MARS retrieves more insightful MoA predictions alongside potential drug candidates.
 
-The dependencies are specified in [ENV.yml](ENV.yml) as well as [requirements.txt](requirements.txt) The user can use either of the following to create
-a virtual environment:
+## Running MARS locally
 
+To run MARS locally, please clone the repository and create a virtual enviornment as show below:
 ```
-conda env create -n ENV_NAME --file ENV.yml
-```
-
-```
-python3 -m venv env
-
-source env/bin/activate
-
-pip install -r requirements.txt
+$ git clone https://github.com/laurendelong21/MARS.git
+$ cd MARS
+$ conda env create -n ENV_NAME --file ENV.yml
 ```
 
-<h2> Data Format </h2>
+Optionally, users can make use of the [requirements.txt](requirements.txt) file to achieve the same:
+```
+$ git clone https://github.com/laurendelong21/MARS.git
+$ cd MARS
+$ python3 -m venv mars
+$ source mars/bin/activate
+$ pip install -r requirements.txt
+```
 
-<h3> MoA-Net </h3>
 
-The creation of MoA-Net is within the `MoA-Net` repository. This is the other repository included within this zip file. Links are hidden for anonymity.
+# Data formats
 
-:100: MoA-Net data files are *ready to run*. To skip data formatting instructions, jump directly to [**running MARS**](#run).
+### MoA-Net
 
-<h3> Triple format </h3>
+The creation of MoA-Net is within the `MoA-Net` repository. This is the other repository included within this zip file. Links are hidden for anonymity and will be added post-review.
+
+### Triple format
 
 - KG triples need to be written in the format ```subject predicate object```, with tabs as separators.
 - Furthermore, MARS uses inverse relations, so it is important to add the inverse triple for each fact in the KG. 
     - The prefix  ```_``` is used before a predicate to signal the inverse relation
     - e.g., the inverse triple for ```Drug induces Biological Process``` is ```Drug _induces Biological Process```.
 
-<h3> File format </h3>
+### File format
 
 Each dataset directory should have the following structure:
 ```
@@ -102,58 +102,46 @@ Where:
 
 - (optional) ```validation_paths.json``` is also exclusively for the results processing steps. It can be included if there are certain paths, such as drug mechanisms-of-action, which should also be checked amonst the test-set paths. In other words, "did the agent traverse these specific paths between these pairs of nodes?"
 
-<h3>  Hyperparameter Configurations: </h3>
 
-To run MARS, use one of the config files or create your own. For an explanation of each hyperparameter, refer to the [README file in the configs folder](configs/README.md).
+## Running MARS
 
-
-<h2> Run MARS: </h2>
-<a name="run"></a>
-
-Once you're ready to run MARS, use the `run.sh` bash script, followed by the proper configuration file:
-
+To run MARS, you need to run the [main script](run.sh) with a configuration file present in the [config](config) folder using the following command:
 ```
-cd PoLo
-
-./run.sh configs/${config_file}.sh
+$ ./run.sh configs/${config_file}.sh
 ```
 
-The permissions for the ```run.sh``` file are typically editable for all, but in case they aren't, run:
+**Creating customize config file**
+
+> To create your own config file, detailed explainantion for the parameters can be found in the [README file in the configs folder](configs/README.md).
+
+
+**Invalid permissions to run code**
+
+> The permissions for the ```run.sh``` file are typically editable for all, but in case they aren't, please run:
 ```
 chmod a+x ./run.sh
 ```
 
+## Replicate studies
+
 If you want to run replicates of the same configuration, you can use the replicates bash script, with the first argument being the configuration file, and the second being the number of replicates:
-
 ```
-cd PoLo
-
-./replicates.sh configs/${config_file}.sh {n_replicates}
+$ ./replicates.sh configs/${config_file}.sh {n_replicates}
 ```
 
-<h2> MARS in Replicates: </h2>
-
-MARS also includes a results analysis module, which can be run if 2+ iterations have been run within a folder.
-
-For instance, if the user ran 5 iterations of a certain configuration:
-
-```
-./replicates.sh configs/${config_file}.sh 5
-```
-
-<h3> Analyze Results: </h3>
-
-If replicates are conducted, the user could then analyze the results within the corresponding directory, simply by running the following for the same configuration file:
+If `n_replicates > 2`, you can then analyze the results within the corresponding directory, simply by running the following for the same configuration file:
 
 ```
 ./process_results.sh configs/${config_file}.sh
 ```
 
-**Note** that this analysis only works with > 1 replicate.
-
-
-<h2> Implementation:</h2>
+## Other resources
 
 This implementation is based on code from: 
 - [PoLo (Neural Multi-Hop Reasoning With Logical Rules on Biomedical Knowledge Graphs)](https://arxiv.org/abs/2103.10367), which is also based upon 
 - [MINERVA](https://github.com/shehzaadzd/MINERVA) from the paper [Go for a Walk and Arrive at the Answer - Reasoning over Paths in Knowledge Bases using Reinforcement Learning](https://arxiv.org/abs/1711.05851).
+
+<!-- ## Citation
+If you have found our work useful, please consider citing or use the software citation generator:
+
+>  -->
