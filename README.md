@@ -2,9 +2,11 @@
 
 This is the code corresponding to MARS, the mechanism-of-action retrieval system for drug discovery.
 
+<br>
+
 Ready to run?
 
-:arrow_right: Jump directly to **running MARS**[#run].
+:arrow_right: Jump directly to [**running MARS**](#run).
 
 <br>
 <h2> Installation and Setup </h2>
@@ -38,6 +40,8 @@ pip install -r requirements.txt
 <h3> MoA-Net </h3>
 
 The creation of MoA-Net is within the `MoA-Net` repository. This is the other repository included within this zip file. Links are hidden for anonymity.
+
+:100: MoA-Net data files are *ready to run*. To skip data formatting instructions, jump directly to [**running MARS**](#run).
 
 <br>
 <h3> Triple format </h3>
