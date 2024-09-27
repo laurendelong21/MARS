@@ -9,7 +9,7 @@ from collections import defaultdict
 
 class RelationEntityBatcher(object):
     def __init__(self, input_dir, batch_size, entity_vocab, relation_vocab, 
-                 path_len, nx_graph, mode="train"):
+                 path_len, nx_graph, mode="train", output_dir=None):
         """Creates the training or test dataset
         :param input_dir: the input directory where the data files are
         :param batch_size: the size of the sampled batch (specified by user in configs)
@@ -18,8 +18,10 @@ class RelationEntityBatcher(object):
         :param path_len: the maximum path length to consider
         :param nx_graph = the networkx graph object representing the whole KG
         :param mode: whether it should be for the training set or the test set
+        :param output_dir: the output directory where the test/val set will be written to
         """
         self.input_dir = input_dir
+        self.output_dir = output_dir
         # get the appropriate training or test data, split beforehand
         self.input_file = input_dir+'{}.txt'.format(mode)
         self.batch_size = batch_size
@@ -31,6 +33,12 @@ class RelationEntityBatcher(object):
         self.mode = mode
         self.create_triple_store(self.input_file)
         print(f"{self.mode} set batcher loaded.")
+
+    def write_set_file(self):
+        """Writes the test/val set to a file for later use"""
+        if not self.output_dir:
+            raise ValueError("No output directory specified")
+        np.save(self.output_dir + f'{self.mode}.npy', self.store)
 
     def get_next_batch(self):
         """generator which yields the next batch of data"""

@@ -1,0 +1,1 @@
+{"CtBP": [[0.5, "CtBP", "CdG", "GpBP"], [0.5, "CtBP", "CuG", "GpBP"], [0.5, "CtBP", "CdG", "GiG", "GpBP"], [0.5, "CtBP", "CuG", "GiG", "GpBP"], [0.5, "CtBP", "CdG", "GiG", "GiG", "GpBP"], [0.5, "CtBP", "CuG", "GiG", "GiG", "GpBP"]]}
