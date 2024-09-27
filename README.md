@@ -2,19 +2,15 @@
 
 This is the code corresponding to MARS, the mechanism-of-action retrieval system for drug discovery.
 
-
-<h2> Credits</h2>
-
-This implementation is based on code from: 
-- [PoLo (Neural Multi-Hop Reasoning With Logical Rules on Biomedical Knowledge Graphs)](https://arxiv.org/abs/2103.10367), which is also based upon 
-- [MINERVA](https://github.com/shehzaadzd/MINERVA) from the paper [Go for a Walk and Arrive at the Answer - Reasoning over Paths in Knowledge Bases using Reinforcement Learning](https://arxiv.org/abs/1711.05851).
-
+<br>
 <h2> Installation and Setup </h2>
 
+<br>
 <h3>  Installation: </h3>
 
-TODO
+Clone or move the MARS repository to the desired location. Then, create a virtual environment via the next steps.
 
+<br>
 <h3>  Dependencies and Virtual Environment: </h3>
 
 The dependencies are specified in [ENV.yml](ENV.yml) as well as [requirements.txt](requirements.txt) The user can use either of the following to create
@@ -31,22 +27,28 @@ source env/bin/activate
 
 pip install -r requirements.txt
 ```
-
+<br>
 <h2> Data Format </h2>
 
+<br>
 <h3> MoA-Net </h3>
 
-The creation of MoA-Net is within [another repository](https://github.com/laurendelong21/MoA-Net).
+The creation of MoA-Net is within the `MoA-Net` repository. This is the other repository included within this zip file. Links are hidden for anonymity.
 
+<br>
 <h3> Triple format </h3>
 
-KG triples need to be written in the format ```subject predicate object```, with tabs as separators. Furthermore, MARS uses inverse relations, so it is important to add the inverse triple for each fact in the KG. The prefix  ```_``` is used before a predicate to signal the inverse relation, e.g., the inverse triple for ```Drug induces Biological Process``` is ```Drug _induces Biological Process```.
+- KG triples need to be written in the format ```subject predicate object```, with tabs as separators.
+- Furthermore, MARS uses inverse relations, so it is important to add the inverse triple for each fact in the KG. 
+    - The prefix  ```_``` is used before a predicate to signal the inverse relation
+    - e.g., the inverse triple for ```Drug induces Biological Process``` is ```Drug _induces Biological Process```.
 
+<br>
 <h3> File format </h3>
 
 Each dataset directory should have the following structure:
 ```
-dataset
+dataset_name
     ├── train.txt
     ├── dev.txt
     ├── test.txt
@@ -69,7 +71,17 @@ Where:
 
 - ```graph.txt``` contains all triples of the KG except for ```dev.txt```, ```test.txt```, the inverses of ```dev.txt```, and the inverses of ```test.txt```.
 
-    For *MoA-Net*, the complete graph is split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
+    **NOTE** for the generation of ```graph.txt```:
+
+    For *MoA-Net*, the complete graph is split into ```graph_triples.txt``` (forward triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
+
+    These two files **need to be combined into one file** (with the name ```graph.txt```) before running the code.
+
+    To do this, you have to create a file called ```graph.txt```, as explained above:
+
+    ```
+    cat datasets/MOA-net/graph_triples.txt datasets/MOA-net/graph_inverses.txt > datasets/MOA-net/graph.txt
+    ```
 
 - ```rules.txt``` contains the rules as a dictionary, where the keys are the head relations. The rules for a specific relation are stored as a list of lists (sorted by decreasing confidence), where a rule is denoted as ```[confidence, head relation, body relation, ..., body relation]```.
 
@@ -82,25 +94,12 @@ Where:
     - (optional) ```meta_mapping.json``` is only used in the results processing step. It is a dictionary mapping each node and edge type to a longer word, in case it is abbreviated in the dataset (e.g., ```"C": "Compound"```).
 
 - (optional) ```validation_paths.json``` is also exclusively for the results processing steps. It can be included if there are certain paths, such as drug mechanisms-of-action, which should also be checked amonst the test-set paths. In other words, "did the agent traverse these specific paths between these pairs of nodes?"
-
+<br>
 <h3>  Hyperparameter Configurations: </h3>
 
 To run MARS, use one of the config files or create your own. For an explanation of each hyperparameter, refer to the [README file in the configs folder](configs/README.md).
 
-<h3>  Large Files: </h3>
-
-**Note**: MOA-net graphs are split into ```graph_triples.txt``` (no inverse triples) and ```graph_inverses.txt``` (inverse triples) because of the file size constraints on GitHub.
-
-These two files **need to be combined into one file** (with the name ```graph.txt```) before running the code.
-
-To do this, you have to create a file called ```graph.txt```, as explained above:
-
-```
-cat datasets/MOA-net/graph_triples.txt datasets/MOA-net/graph_inverses.txt > datasets/MOA-net/graph.txt
-```
-
-
-
+<br>
 <h2> Run MARS: </h2>
 
 Once you're ready to run MARS, use the `run.sh` bash script, followed by the proper configuration file:
@@ -123,8 +122,8 @@ cd PoLo
 
 ./replicates.sh configs/${config_file}.sh {n_replicates}
 ```
-
-<h2> Analyze Results: </h2>
+<br>
+<h2> MARS in Replicates: </h2>
 
 MARS also includes a results analysis module, which can be run if 2+ iterations have been run within a folder.
 
@@ -133,9 +132,17 @@ For instance, if the user ran 5 iterations of a certain configuration:
 ```
 ./replicates.sh configs/${config_file}.sh 5
 ```
+<br>
+<h2> Analyze Results: </h2>
 
 The user could then analyze the results within the corresponding directory, simply by running the following for the same configuration file:
 
 ```
 ./process_results.sh configs/${config_file}.sh
 ```
+<br>
+<h2> Implementation:</h2>
+
+This implementation is based on code from: 
+- [PoLo (Neural Multi-Hop Reasoning With Logical Rules on Biomedical Knowledge Graphs)](https://arxiv.org/abs/2103.10367), which is also based upon 
+- [MINERVA](https://github.com/shehzaadzd/MINERVA) from the paper [Go for a Walk and Arrive at the Answer - Reasoning over Paths in Knowledge Bases using Reinforcement Learning](https://arxiv.org/abs/1711.05851).
