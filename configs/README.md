@@ -1,5 +1,7 @@
 # Parameter Configuration
 
+Here we enlist all the parameters required for configuring MARS.
+
 ```--input_dir```: str. Directory path where the ```graph.txt```, ```train.txt```, ```dev.txt```, and ```test.txt``` files are
 located.
 
