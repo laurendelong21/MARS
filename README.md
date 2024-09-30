@@ -12,7 +12,7 @@ Mechanism-of-Action Retrieval System (MARS)
 
 This repository accompanies the source code and data relevant for the the paper titled **"MARS: A neurosymbolic approach for interpretable drug discovery"**.
 
-**MARS** is an acrynonym for **m**echanism-of-**a**ction **r**etrieval **s**ystem and is a [neurosymbolic AI](https://en.wikipedia.org/wiki/Neuro-symbolic_AI) approach to decipher MoAs for drug discovery.
+**MARS** is an acrynonym for **m**echanism-of-**a**ction **r**etrieval **s**ystem and is a [neurosymbolic](https://en.wikipedia.org/wiki/Neuro-symbolic_AI) approach to decipher MoAs for drug discovery.
 
 # Table of Content
 * [Overview](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-overview-)
