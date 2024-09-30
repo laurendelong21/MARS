@@ -46,9 +46,9 @@ def main():
     print('+++++++++  OVERALL METRICS:  +++++++++')
     print(metrics_df)
 
-    print('\n')
-    print('+++++++++  METRICS BY PATH LENGTH:  +++++++++')
-    print(metrics_by_len)
+    #print('\n')
+    #print('+++++++++  METRICS BY PATH LENGTH:  +++++++++')
+    #print(metrics_by_len)
 
 
 if __name__ == '__main__':
