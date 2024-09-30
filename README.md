@@ -18,8 +18,8 @@ This repository accompanies the source code and data relevant for the the paper 
 * [Overview](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-overview-)
 * [Cloning and Building](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-cloning-and-building-mars-)
 * [Graphs](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-data-formats-)
-* [Running] (https://github.com/laurendelong21/MARS?tab=readme-ov-file#-running-mars-)
-* [Replicate studies](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-replicate studies-)
+* [Running](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-running-mars-)
+* [Replicate studies](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-replicate-studies)
 * [Additional source](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-other-resources-)
 
 
@@ -123,7 +123,7 @@ $ ./run.sh configs/${config_file}.sh
 
 **Creating customize config file**
 
-> To create your own config file, detailed explainantion for the parameters can be found in the [README file in the configs folder](configs/README.md).
+> To create your own config file, detailed explanantion for the parameters can be found in the [README file in the configs folder](configs/README.md).
 
 
 **Invalid permissions to run code**
