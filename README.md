@@ -15,14 +15,15 @@ This repository accompanies the source code and data relevant for the the paper 
 **MARS** is an acrynonym for **m**echanism-of-**a**ction **r**etrieval **s**ystem and is a [neurosymbolic](https://en.wikipedia.org/wiki/Neuro-symbolic_AI) approach to decipher MoAs for drug discovery.
 
 # Table of Content
-* [Overview](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-overview-)
-* [Cloning and Building](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-cloning-and-building-mars-)
-* [Graphs](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-data-formats-)
-* [Running](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-running-mars-)
-* [Replicate studies](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-replicate-studies)
-* [Additional source](https://github.com/laurendelong21/MARS?tab=readme-ov-file#-other-resources-)
+* [Overview](#overview)
+* [Cloning and Building](#build)
+* [Graphs](#graphs)
+* [Running](#run)
+* [Replicate studies](#replicates)
+* [Additional source](#sources)
 
 
+<a name="overview"></a>
 ## Overview
 
 Neurosymbolic (NeSy) artificial intelligence describes the combination of logic or rule-based techniques with neural networks. Compared to neural approaches, NeSy methods often possess enhanced interpretability, which is particularly promising for biomedical applications like drug discovery. However, since interpretability is broadly defined, there are no clear guidelines for assessing the biological plausibility of model interpretations. To assess interpretability in the context of drug discovery, we devise a novel prediction task, called drug mechanism-of-action (MoA) deconvolution, with an associated, tailored knowledge graph (KG), *MoA-net*. We also develop the **MoA Retrieval System (MARS)**, a NeSy approach which leverages logical rules with learned rule weights. Using this interpretable feature alongside domain knowledge, we find that MARS and other NeSy approaches on KGs are susceptible to reasoning shortcuts, in which the prediction of true labels is driven by "degree-bias" rather than the domain-based rules. We demonstrate ways to identify and mitigate this, and, consequently, MARS retrieves more insightful MoA predictions alongside potential drug candidates.
@@ -31,24 +32,27 @@ In our approach, we built a benchmark dataset called *MoA-Net*, that can be used
 
 ![MoAnet](figures/Neurosymbolic_schema.png)
 
+
+<a name="build"></a>
 ## Cloning and building MARS
 
 To run MARS locally, please clone the repository and create a virtual enviornment as show below:
 ```
-$ git clone https://github.com/laurendelong21/MARS.git
+$ git clone https://github.com/{Removed}/MARS.git
 $ cd MARS
 $ conda env create -n ENV_NAME --file ENV.yml
 ```
 
 Optionally, users can make use of the [requirements.txt](requirements.txt) file to achieve the same:
 ```
-$ git clone https://github.com/laurendelong21/MARS.git
+$ git clone https://github.com/{Removed}/MARS.git
 $ cd MARS
 $ python3 -m venv mars
 $ source mars/bin/activate
 $ pip install -r requirements.txt
 ```
 
+<a name="graphs"></a>
 ## Data formats
 
 ### MoA-Net
@@ -114,6 +118,7 @@ Where:
 - (optional) ```validation_paths.json``` is also exclusively for the results processing steps. It can be included if there are certain paths, such as drug mechanisms-of-action, which should also be checked amonst the test-set paths. In other words, "did the agent traverse these specific paths between these pairs of nodes?"
 
 
+<a name="run"></a>
 ## Running MARS
 
 To run MARS, you need to run the [main script](run.sh) with a configuration file present in the [config](config) folder using the following command:
@@ -133,6 +138,7 @@ $ ./run.sh configs/${config_file}.sh
 chmod a+x ./run.sh
 ```
 
+<a name="replicates"></a>
 ## Replicate studies
 
 If you want to run replicates of the same configuration, you can use the replicates bash script, with the first argument being the configuration file, and the second being the number of replicates:
@@ -146,6 +152,7 @@ If `n_replicates > 2`, you can then analyze the results within the corresponding
 ./process_results.sh configs/${config_file}.sh
 ```
 
+<a name="resources"></a>
 ## Other resources
 
 This implementation is based on code from: 
