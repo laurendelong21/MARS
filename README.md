@@ -57,7 +57,7 @@ $ pip install -r requirements.txt
 
 ### MoA-Net
 
-The creation of MoA-Net is within the `MoA-Net` repository. This is the other repository included within this zip file. Links are hidden for anonymity and will be added post-review.
+The creation of MoA-Net is within the [`MoA-Net` repository](https://github.com/laurendelong21/MoA-Net).
 
 ### Triple format
 
