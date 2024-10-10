@@ -10,7 +10,7 @@ Mechanism-of-Action Retrieval System (MARS)
 
 </h1>
 
-This repository accompanies the source code and data relevant for the the paper titled **"MARS: A neurosymbolic approach for interpretable drug discovery"**.
+This repository accompanies the source code and data relevant for the the paper titled [**"MARS: A neurosymbolic approach for interpretable drug discovery"**](https://arxiv.org/abs/2410.05289).
 
 **MARS** is an acrynonym for **m**echanism-of-**a**ction **r**etrieval **s**ystem and is a [neurosymbolic](https://en.wikipedia.org/wiki/Neuro-symbolic_AI) approach to decipher MoAs for drug discovery.
 
@@ -20,13 +20,13 @@ This repository accompanies the source code and data relevant for the the paper 
 * [Graphs](#graphs)
 * [Running](#run)
 * [Replicate studies](#replicates)
-* [Additional source](#sources)
+* [Additional resources](#sources)
 
 
 <a name="overview"></a>
 ## Overview
 
-Neurosymbolic (NeSy) artificial intelligence describes the combination of logic or rule-based techniques with neural networks. Compared to neural approaches, NeSy methods often possess enhanced interpretability, which is particularly promising for biomedical applications like drug discovery. However, since interpretability is broadly defined, there are no clear guidelines for assessing the biological plausibility of model interpretations. To assess interpretability in the context of drug discovery, we devise a novel prediction task, called drug mechanism-of-action (MoA) deconvolution, with an associated, tailored knowledge graph (KG), *MoA-net*. We also develop the **MoA Retrieval System (MARS)**, a NeSy approach which leverages logical rules with learned rule weights. Using this interpretable feature alongside domain knowledge, we find that MARS and other NeSy approaches on KGs are susceptible to reasoning shortcuts, in which the prediction of true labels is driven by "degree-bias" rather than the domain-based rules. We demonstrate ways to identify and mitigate this, and, consequently, MARS retrieves more insightful MoA predictions alongside potential drug candidates.
+Neurosymbolic (NeSy) artificial intelligence describes the combination of logic or rule-based techniques with neural networks. Compared to neural approaches, NeSy methods often possess enhanced interpretability, which is particularly promising for biomedical applications like drug discovery. However, since interpretability is broadly defined, there are no clear guidelines for assessing the biological plausibility of model interpretations. To assess interpretability in the context of drug discovery, we devise a novel prediction task, called drug mechanism-of-action (MoA) deconvolution, with an associated, tailored knowledge graph (KG), *MoA-net*. We also develop the [**MoA Retrieval System (MARS)**](https://arxiv.org/abs/2410.05289), a NeSy approach which leverages logical rules with learned rule weights. Using this interpretable feature alongside domain knowledge, we find that MARS and other NeSy approaches on KGs are susceptible to reasoning shortcuts, in which the prediction of true labels is driven by "degree-bias" rather than the domain-based rules. We demonstrate ways to identify and mitigate this, and, consequently, MARS retrieves more insightful MoA predictions alongside potential drug candidates.
 
 In our approach, we built a benchmark dataset called *MoA-Net*, that can be used by graph based algorithms for MoA deconvolution. The figure below shows: A) the graph schema or data model of *MoA-Net* and B) the node and edge statistics of *MoA-Net*.
 
@@ -159,7 +159,15 @@ This implementation is based on code from:
 - [PoLo (Neural Multi-Hop Reasoning With Logical Rules on Biomedical Knowledge Graphs)](https://arxiv.org/abs/2103.10367), which is also based upon 
 - [MINERVA](https://github.com/shehzaadzd/MINERVA) from the paper [Go for a Walk and Arrive at the Answer - Reasoning over Paths in Knowledge Bases using Reinforcement Learning](https://arxiv.org/abs/1711.05851).
 
-<!-- ## Citation
-If you have found our work useful, please consider citing or use the software citation generator:
+## Citation
+If you found our work useful, please consider citing our preprint:
 
->  -->
+    @article{delong2024mars,
+      title={MARS: A neurosymbolic approach for interpretable drug discovery}, 
+      author={Lauren Nicole DeLong and Yojana Gadiya and Paola Galdi and Jacques D. Fleuriot and Daniel Domingo-Fernández},
+      year={2024},
+      eprint={2410.05289},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2410.05289}, 
+    }
