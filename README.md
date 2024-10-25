@@ -38,14 +38,14 @@ In our approach, we built a benchmark dataset called *MoA-Net*, that can be used
 
 To run MARS locally, please clone the repository and create a virtual enviornment as show below:
 ```
-$ git clone https://github.com/{Removed}/MARS.git
+$ git clone https://github.com/laurendelong21/MARS.git
 $ cd MARS
 $ conda env create -n ENV_NAME --file ENV.yml
 ```
 
 Optionally, users can make use of the [requirements.txt](requirements.txt) file to achieve the same:
 ```
-$ git clone https://github.com/{Removed}/MARS.git
+$ git clone https://github.com/laurendelong21/MARS.git
 $ cd MARS
 $ python3 -m venv mars
 $ source mars/bin/activate
