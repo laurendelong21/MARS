@@ -150,34 +150,34 @@ class RelationEntityGrapher(object):
         """
         If class_threshhold is passed, this will reduce the graph by removing edges of any classes above the threshhold.
         """
-        edge_types = self.get_edge_counter()
+        #edge_types = self.get_edge_counter()
         count = 0
 
-        for edge_type in edge_types.keys():
-            if edge_types[edge_type] <= self.class_threshhold:
-                continue
+        #for edge_type in edge_types.keys():
+         #   if edge_types[edge_type] <= self.class_threshhold:
+          #      continue
 
-            G_sub = self.get_subgraph({edge_type})
-            sub_nodes = list(G_sub)
+            #G_sub = self.get_subgraph({edge_type})
+        sub_nodes = list(self.G.nodes())
 
-            print(f'Pruning edges of type {self.rev_relation_vocab[edge_type]} to <= {self.class_threshhold} edges...')
+        #print(f'Pruning edges of type {self.rev_relation_vocab[edge_type]} to <= {self.class_threshhold} edges...')
 
-            while G_sub.number_of_edges() > self.class_threshhold:
-                
-                node_with_highest_degree = max(sub_nodes, key=lambda n: G_sub.out_degree(n))  # get the node with the most participating edges of this type
-                # Find the neighbor of node_with_highest_degree with the largest degree
-                neighbors = [node for node in nx.neighbors(G_sub, node_with_highest_degree)]
-                neighbor_of_highest_degree = max(neighbors, key=lambda n: G_sub.out_degree(n))
-                # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
-                G_sub.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
-                self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
-                if edge_type in self.paired_relation_vocab:
-                    self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
-                count += 1
-                if count % 1000 == 0:
-                    print(f'Number of edges left in graph: {self.G.number_of_edges()}')
+        while self.G.number_of_edges() > self.class_threshhold:
+            
+            node_with_highest_degree = max(sub_nodes, key=lambda n: self.G.out_degree(n))  # get the node with the most participating edges of this type
+            # Find the neighbor of node_with_highest_degree with the largest degree
+            neighbors = [node for node in nx.neighbors(self.G, node_with_highest_degree)]
+            neighbor_of_highest_degree = max(neighbors, key=lambda n: self.G.out_degree(n))
+            # remove the edge between prot_with_highest_degree and neighbor_of_highest_degree
+            #G_sub.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
+            self.G.remove_edge(node_with_highest_degree, neighbor_of_highest_degree)
+            #if edge_type in self.paired_relation_vocab:
+             #   self.G.remove_edge(neighbor_of_highest_degree, node_with_highest_degree)
+            count += 1
+            if count % 1000 == 0:
+                print(f'Number of edges left in graph: {self.G.number_of_edges()}')
 
-            print(f'Finished with edge type: {self.rev_relation_vocab[edge_type]}.')
+        #print(f'Finished with edge type: {self.rev_relation_vocab[edge_type]}.')
 
         self.remove_isolated_nodes()
 
