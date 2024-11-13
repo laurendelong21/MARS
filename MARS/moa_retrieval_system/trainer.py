@@ -813,12 +813,18 @@ if __name__ == '__main__':
             logfile.setFormatter(fmt)
             logger.addHandler(logfile)
 
+            # profile each run
+            profiler_log_file = permutation['output_dir'] + 'profile'
+            tf.profiler.experimental.start(profiler_log_file)
+
             # Training
             trainer = Trainer(permutation)
             with tf.compat.v1.Session(config=config) as sess:
                 sess.run(trainer.initialize())
                 trainer.initialize_pretrained_embeddings(sess=sess)
                 trainer.train(sess)
+
+            tf.profiler.experimental.stop()  # stop profiler
 
             if (best_permutation is None) or (trainer.best_metric > best_metric):
                 best_metric = trainer.best_metric
